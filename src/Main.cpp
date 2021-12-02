@@ -1,11 +1,10 @@
 #include "Main.h"
 
 int main(int argc, const char* argv[]){  
-    std::cout<<"Ciao";
-    jgl::Matrix3d* mat = new jgl::Matrix3d(2, 1, 2, 0, 3, -1, 4, 1, 1);
-    jgl::Matrix3d* inv = mat->cpy()->inv();
-    jgl::Matrix3d* idt = mat->mul(inv);
 
+    jgl::Matrix3d* mat = new jgl::Matrix3d(M_PI);
+
+/*
     initializeGameLibrary();
 
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
@@ -35,7 +34,7 @@ int main(int argc, const char* argv[]){
     }
 
     terminateGameLibrary();
-    
+    */
     return 0;
 }
 

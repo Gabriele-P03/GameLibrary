@@ -37,6 +37,11 @@ namespace jgl{
             Matrix3d(Matrix3d* mat3d);
 
             /**
+             * Create a new rotation matrix from the given yaw (rotation around z-axis)
+             */ 
+            Matrix3d(double yaw); 
+
+            /**
              * Create a new matrix from the given string.
              * Each box of a row is separated by comma.
              * Each row is separated by semi-colon
@@ -128,6 +133,12 @@ namespace jgl{
              * @return the inverse matrix of this one
              */ 
             Matrix3d* inv();
+
+            /**
+             * Multiplies this matrix for a rotation matrix of the given angle, around z-axis
+             * @return this matrix
+             */ 
+            Matrix3d* rotate(double radians);
  
             /**
              * Returh this matrix as string

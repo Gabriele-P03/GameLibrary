@@ -38,6 +38,13 @@ jgl::Matrix3d::Matrix3d(std::string* fromString){
     }
 }
 
+jgl::Matrix3d::Matrix3d(double yaw) : jgl::Matrix3d(        
+        cos(yaw), -sin(yaw), 0,
+        sin(yaw), cos(yaw), 0,
+        0, 0, 1){
+
+}
+
 jgl::Matrix3d::Matrix3d() : jgl::Matrix3d::Matrix3d(0, 0, 0, 
                                                     0, 0, 0, 
                                                     0, 0, 0){
@@ -207,12 +214,12 @@ jgl::Matrix3d* jgl::Matrix3d::inv(){
         idt->matrix[2][1] += -2*idt->matrix[0][1];
         idt->matrix[2][2] += -2*idt->matrix[0][2];
 
-        this->matrix[2][0] += 0.333333*this->matrix[1][0];
-        this->matrix[2][1] += 0.333333*this->matrix[1][1];
-        this->matrix[2][2] += 0.333333*this->matrix[1][2];
-        idt->matrix[2][0] += 0.333333*idt->matrix[1][0];
-        idt->matrix[2][1] += 0.333333*idt->matrix[1][1];
-        idt->matrix[2][2] += 0.333333*idt->matrix[1][2];
+        this->matrix[2][0] += 0.333333333*this->matrix[1][0];
+        this->matrix[2][1] += 0.333333333*this->matrix[1][1];
+        this->matrix[2][2] += 0.333333333*this->matrix[1][2];
+        idt->matrix[2][0] += 0.333333333*idt->matrix[1][0];
+        idt->matrix[2][1] += 0.333333333*idt->matrix[1][1];
+        idt->matrix[2][2] += 0.333333333*idt->matrix[1][2];
 
         this->matrix[1][0] += -0.3*this->matrix[2][0];
         this->matrix[1][1] += -0.3*this->matrix[2][1];
@@ -228,12 +235,12 @@ jgl::Matrix3d* jgl::Matrix3d::inv(){
         idt->matrix[0][1] += 0.6*idt->matrix[2][1];
         idt->matrix[0][2] += 0.6*idt->matrix[2][2];
 
-        this->matrix[0][0] += -0.333333*this->matrix[1][0];
-        this->matrix[0][1] += -0.333333*this->matrix[1][1];
-        this->matrix[0][2] += -0.333333*this->matrix[1][2];
-        idt->matrix[0][0] += -0.333333*idt->matrix[1][0];
-        idt->matrix[0][1] += -0.333333*idt->matrix[1][1];
-        idt->matrix[0][2] += -0.333333*idt->matrix[1][2];
+        this->matrix[0][0] += -0.333333333*this->matrix[1][0];
+        this->matrix[0][1] += -0.333333333*this->matrix[1][1];
+        this->matrix[0][2] += -0.333333333*this->matrix[1][2];
+        idt->matrix[0][0] += -0.333333333*idt->matrix[1][0];
+        idt->matrix[0][1] += -0.333333333*idt->matrix[1][1];
+        idt->matrix[0][2] += -0.333333333*idt->matrix[1][2];
 
         for(int x = 0; x < 3; x++){
             double k = 1/this->matrix[x][x];
@@ -247,4 +254,9 @@ jgl::Matrix3d* jgl::Matrix3d::inv(){
     }
 
     return nullptr;
+}
+
+jgl::Matrix3d* jgl::Matrix3d::rotate(double radians){
+
+    return this->mul(new jgl::Matrix3d(radians));
 }
