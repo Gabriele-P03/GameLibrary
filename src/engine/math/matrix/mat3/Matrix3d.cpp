@@ -5,18 +5,12 @@ jgl::Matrix3d::Matrix3d(double x1y1, double x1y2, double x1y3, double x2y1, doub
     this->matrix[1][0] = x2y1; this->matrix[1][1] = x2y2; this->matrix[1][2] = x2y3;
     this->matrix[2][0] = x3y1; this->matrix[2][1] = x3y2; this->matrix[2][2] = x3y3;
 }
-
-jgl::Matrix3d::Matrix3d(double** x1y1){
-    this->set(x1y1);
-}
-
 jgl::Matrix3d::Matrix3d(Matrix3d* mat3d) : jgl::Matrix3d(
     mat3d->matrix[0][0],  mat3d->matrix[0][1],  mat3d->matrix[0][2],
     mat3d->matrix[1][0],  mat3d->matrix[1][1],  mat3d->matrix[1][2],
     mat3d->matrix[2][0],  mat3d->matrix[2][1],  mat3d->matrix[2][2]){
 
 }
-
 jgl::Matrix3d::Matrix3d(std::string* fromString){
 
     std::string buffer = *fromString;
@@ -37,22 +31,24 @@ jgl::Matrix3d::Matrix3d(std::string* fromString){
         }
     }
 }
-
 jgl::Matrix3d::Matrix3d(double yaw) : jgl::Matrix3d(        
-        cos(yaw), -sin(yaw), 0,
-        sin(yaw), cos(yaw), 0,
+        cos(yaw), sin(yaw), 0,
+        -sin(yaw), cos(yaw), 0,
         0, 0, 1){
 
 }
-
 jgl::Matrix3d::Matrix3d() : jgl::Matrix3d::Matrix3d(0, 0, 0, 
                                                     0, 0, 0, 
                                                     0, 0, 0){
 }
 
+
+
 jgl::Matrix3d* jgl::Matrix3d::cpy(){
     return new jgl::Matrix3d(this);
 }
+
+
 
 jgl::Matrix3d* jgl::Matrix3d::set(double** mat3d){
     for(int x = 0; x < 3; x++){
@@ -63,7 +59,6 @@ jgl::Matrix3d* jgl::Matrix3d::set(double** mat3d){
 
     return this;
 }
-
 jgl::Matrix3d* jgl::Matrix3d::set(Matrix3d* mat3d){
 
     for(int x = 0; x < 3; x++){
@@ -74,8 +69,6 @@ jgl::Matrix3d* jgl::Matrix3d::set(Matrix3d* mat3d){
 
     return this;
 }
-
-
 jgl::Matrix3d* jgl::Matrix3d::set(int x, int y, double value){
     if(x < 0 || x > 2 || y < 0 || y > 2){
         std::cout<<"JGL Matrix3D index error...";
@@ -88,6 +81,7 @@ jgl::Matrix3d* jgl::Matrix3d::set(int x, int y, double value){
 }
 
 
+
 double jgl::Matrix3d::get(int x, int y){
 
     if(x < 0 || x > 2 || y < 0 || y > 2){
@@ -98,6 +92,8 @@ double jgl::Matrix3d::get(int x, int y){
     }
 }
 
+
+
 std::string* jgl::Matrix3d::toString(){
     return new std::string(
         std::to_string(this->matrix[0][0]) + "," + std::to_string(this->matrix[0][1]) + "," + std::to_string(this->matrix[0][2]) + ";" + 
@@ -105,6 +101,8 @@ std::string* jgl::Matrix3d::toString(){
         std::to_string(this->matrix[2][0]) + "," + std::to_string(this->matrix[2][1]) + "," + std::to_string(this->matrix[2][2]) + ";" 
     );
 }
+
+
 
 jgl::Matrix3d* jgl::Matrix3d::addAll(double value){
     for(int x = 0; x < 3; x++){
@@ -115,7 +113,6 @@ jgl::Matrix3d* jgl::Matrix3d::addAll(double value){
 
     return this;
 }
-
 jgl::Matrix3d* jgl::Matrix3d::add(Matrix3d* mat3d){
     for(int x = 0; x < 3; x++){
         for(int y = 0; y < 3; y++){
@@ -125,7 +122,6 @@ jgl::Matrix3d* jgl::Matrix3d::add(Matrix3d* mat3d){
 
     return this;
 }
-
 jgl::Matrix3d* jgl::Matrix3d::add(int x, int y, double value){
 
     if(x < 0 || x > 2 || y < 0 || y > 2){
@@ -138,6 +134,8 @@ jgl::Matrix3d* jgl::Matrix3d::add(int x, int y, double value){
     return this;
 }
 
+
+
 jgl::Matrix3d* jgl::Matrix3d::mulAll(double value){
     for(int x = 0; x < 3; x++){
         for(int y = 0; y < 3; y++){
@@ -147,7 +145,6 @@ jgl::Matrix3d* jgl::Matrix3d::mulAll(double value){
 
     return this;
 }
-
 jgl::Matrix3d* jgl::Matrix3d::mul(Matrix3d* mat3d){
 
     this->set( new jgl::Matrix3d(
@@ -166,7 +163,6 @@ jgl::Matrix3d* jgl::Matrix3d::mul(Matrix3d* mat3d){
 
     return this;
 }
-
 jgl::Matrix3d* jgl::Matrix3d::mul(int x, int y, double value){
 
     if(x < 0 || x > 2 || y < 0 || y > 2){
@@ -178,6 +174,8 @@ jgl::Matrix3d* jgl::Matrix3d::mul(int x, int y, double value){
 
     return this;
 }
+
+
 
 double jgl::Matrix3d::det(){
 
@@ -191,6 +189,8 @@ double jgl::Matrix3d::det(){
         matrix[0][0]*matrix[1][2]*matrix[2][1];
 }
 
+
+
 jgl::Matrix3d* jgl::Matrix3d::idt(){
     this->set(new Matrix3d());
     this->set(0, 0, 1);
@@ -198,6 +198,8 @@ jgl::Matrix3d* jgl::Matrix3d::idt(){
     this->set(2, 2, 1);
     return this;
 }
+
+
 
 jgl::Matrix3d* jgl::Matrix3d::inv(){
 
@@ -256,7 +258,55 @@ jgl::Matrix3d* jgl::Matrix3d::inv(){
     return nullptr;
 }
 
-jgl::Matrix3d* jgl::Matrix3d::rotate(double radians){
 
+
+jgl::Matrix3d* jgl::Matrix3d::rotate(double radians){
     return this->mul(new jgl::Matrix3d(radians));
+}
+jgl::Matrix3d* jgl::Matrix3d::setToRotation(double radians){
+    return this->set(new jgl::Matrix3d(radians));
+}
+double jgl::Matrix3d::getRotation(){
+    
+    if(asin(this->matrix[0][1]) < 0){
+        return M_PI*2 - acos(this->matrix[0][0]);
+    }else{
+        return acos(this->matrix[0][0]);
+    }
+}
+
+
+
+jgl::Matrix3d* jgl::Matrix3d::scale(double x, double y){
+    return this->mul(new jgl::Matrix3d(x, 0, 0, 0, y, 0, 0, 0, 1));
+}
+jgl::Matrix3d* jgl::Matrix3d::scale(jgl::Vector2d* vec2d){
+    return this->scale(vec2d->getX(), vec2d->getY());
+}
+jgl::Vector2d* jgl::Matrix3d::getScale(){
+    return new jgl::Vector2d(this->matrix[0][0], this->matrix[1][1]);
+}
+jgl::Matrix3d* jgl::Matrix3d::setToScaling(double x, double y){
+    return this->set(new jgl::Matrix3d(x, 0, 0, 0, y, 0, 0, 0, 1));
+}
+jgl::Matrix3d* jgl::Matrix3d::setToScaling(jgl::Vector2d* vec2d){
+    return this->setToScaling(vec2d->getX(), vec2d->getY());
+}
+
+
+
+jgl::Matrix3d* jgl::Matrix3d::translate(double x, double y){
+    return this->mul(new jgl::Matrix3d(1, 0, 0, 0, 1, 0, x, y, 1));
+}
+jgl::Matrix3d* jgl::Matrix3d::translate(jgl::Vector2d* vec2d){
+    return this->translate(vec2d->getX(), vec2d->getY());
+}
+jgl::Vector2d* jgl::Matrix3d::getTranslation(){
+    return new jgl::Vector2d(this->matrix[2][0], this->matrix[2][1]);
+}
+jgl::Matrix3d* jgl::Matrix3d::setToTranslation(double x, double y){
+    return this->set(new jgl::Matrix3d(1, 0, 0, 0, 1, 0, x, y, 1));
+}
+jgl::Matrix3d* jgl::Matrix3d::setToTranslation(jgl::Vector2d* vec2d){
+    return this->setToTranslation(vec2d->getX(), vec2d->getY());
 }

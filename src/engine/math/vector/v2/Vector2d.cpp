@@ -116,9 +116,7 @@ bool jgl::Vector2d::obtuseAngle(jgl::Vector2d* vec2d){
 }
 
 void jgl::Vector2d::rotate(double _rad){
-    double q = std::cos(_rad);
-    float x = q*this->x - sin(_rad)*this->y;
-    this->setX( x );
+    this->setX( cos(_rad)*this->x - sin(_rad)*this->y );
     this->setY( sin(_rad)*this->x + cos(_rad)*this->y );
 }
 

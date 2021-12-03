@@ -2,8 +2,11 @@
 
 int main(int argc, const char* argv[]){  
 
-    jgl::Matrix3d* mat = new jgl::Matrix3d(M_PI);
+    jgl::Matrix3d* mat = new jgl::Matrix3d(M_PI_2);
+    double rad = mat->getRotation();
 
+    mat->setToRotation(M_PI_2*3);
+    rad = mat->getRotation();
 /*
     initializeGameLibrary();
 
