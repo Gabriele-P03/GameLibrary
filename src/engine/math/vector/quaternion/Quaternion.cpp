@@ -9,6 +9,7 @@ jgl::Quaternion::Quaternion(double x, double y, double z, double w){
 jgl::Quaternion::Quaternion(Quaternion* q) : Quaternion(q->x, q->y, q->z, q->w){}
 jgl::Quaternion::Quaternion() : Quaternion(0, 0, 0, 0){}
 
+/*
 jgl::Quaternion::Quaternion(jgl::Vector3d* vec3d){
 
     double tetha = vec3d->angleRad(nullptr);
@@ -21,7 +22,7 @@ jgl::Quaternion::Quaternion(jgl::Vector3d* vec3d){
     this->x = vec3d->getX() * sinTetha;
     this->y = vec3d->getY() * sinTetha;
     this->z = vec3d->getZ() * sinTetha;
-}
+}*/
 
 jgl::Quaternion* jgl::Quaternion::add(double x, double y, double z, double w){
     this->x += x;

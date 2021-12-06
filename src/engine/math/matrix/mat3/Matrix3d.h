@@ -8,17 +8,21 @@
 
 namespace jgl{
     
+    class Vector2d;
+
     class Matrix3d{
 
-        private:
-            double matrix[3][3];
-
         public:
+            double matrix[3][3];
 
             /**
              * Create a new empty matrix
              */ 
             Matrix3d();
+            /**
+             * Create a new matrix from the given array. Its size must be 9
+             */ 
+            Matrix3d(double* values);
             /**
              * Create a new matrix from the given values.
              */ 
@@ -48,23 +52,39 @@ namespace jgl{
             Matrix3d* cpy();
 
 
-
             /**
-             * Set this matrix with the given values
+             * Set this matrix as the given array. Its size must be 16
+             * @param values double array
+             * @return this matrix
              */ 
-            Matrix3d* set(double** matrix);
+            Matrix3d* set(double* values);
             /**
              * Set this matrix as the given one
+             * @param mat3d matrix
+             * @return this matrix
              */ 
             Matrix3d* set(Matrix3d* mat3d);
             /**
              * Set matrix[x][y] as value
+             * @param x coord
+             * @param y coord
+             * @param value new value at x, y
+             * @return this matrix
+             * @throw error if index is less than 0 or greater than 2
              */ 
             Matrix3d* set(int x, int y, double value);
+            /**
+             * Set all values as the given one
+             * @param value new value to be set at all matrix 
+             * @return this matrix
+             */ 
+            Matrix3d* setAll(double value);
 
 
 
             /**
+             * @param x
+             * @param y
              * @return value stored at the given index
              * @throw error if index is less than 0 or greater than 2
              */ 
@@ -75,11 +95,13 @@ namespace jgl{
             /**
              * Add value to all matrix
              * @param value
+             * @return this matrix
              */ 
             Matrix3d* addAll(double value);
             /**
              * Add matrix to this one
-             * @param mat3d
+             * @param mat3d matrix
+             * @return this matrix
              */ 
             Matrix3d* add(Matrix3d* mat3d);
             /**
@@ -87,6 +109,8 @@ namespace jgl{
              * @param x
              * @param y
              * @param value
+             * @return this matrix
+             * @throw error if index is less than 0 or greater than 2
              */ 
             Matrix3d* add(int x, int y, double value);
 
@@ -96,19 +120,22 @@ namespace jgl{
              * Mul value to all matrix.
              * This is scalar multiplication
              * @param value
+             * @return this matrix
              */ 
             Matrix3d* mulAll(double value);
             /**
              * Mul matrix to this one
              * @param mat3d
+             * @return this matrix
              */ 
             Matrix3d* mul(Matrix3d* mat3d);
             /**
              * Add value to this matrix[x][y]
              * This is scalar multiplication
-             * @param x
-             * @param y
+             * @param x coord
+             * @param y coord
              * @param value
+             * @return this matrix
              */ 
             Matrix3d* mul(int x, int y, double value);
 

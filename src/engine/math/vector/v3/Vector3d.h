@@ -1,11 +1,14 @@
-#ifndef Vector3d_H
-#define Vector3d_H
+#ifndef Vector3D_H
+#define Vector3D_H
 
 #include <iostream>
 #include <string>
 #include "../../JMath.h"
+#include "../../matrix/mat4/Matrix4d.h"
 
 namespace jgl{
+
+    class Matrix4d;
 
     class Vector3d
     {
@@ -17,29 +20,30 @@ namespace jgl{
             Vector3d();
             Vector3d(double x, double y, double z);
             Vector3d(Vector3d* vec3d);
+            Vector3d(Matrix4d* mat4d);
             Vector3d(std::string* fromString);
             
             double getX();
             double getY();
             double getZ();
 
-            void setX(double x);
-            void setY(double y);
-            void setZ(double z);
-            void set(Vector3d* vec3d);
-            void setAll(double x, double y, double z);
+            Vector3d* setX(double x);
+            Vector3d* setY(double y);
+            Vector3d* setZ(double z);
+            Vector3d* set(Vector3d* vec3d);
+            Vector3d* setAll(double x, double y, double z);
 
-            void addX(double x);
-            void addY(double y);
-            void addZ(double z);
-            void add(Vector3d* vec3d);
-            void addAll(double x, double y, double z);
+            Vector3d* addX(double x);
+            Vector3d* addY(double y);
+            Vector3d* addZ(double z);
+            Vector3d* add(Vector3d* vec3d);
+            Vector3d* addAll(double x, double y, double z);
 
-            void mulX(double x);
-            void mulY(double y);
-            void mulZ(double z);
-            void mul(Vector3d* vec3d);
-            void mulAll(double x, double y, double z);
+            Vector3d* mulX(double x);
+            Vector3d* mulY(double y);
+            Vector3d* mulZ(double z);
+            Vector3d* mul(Vector3d* vec3d);
+            Vector3d* mulAll(double x, double y, double z);
 
             Vector3d* cpy();
     
@@ -93,20 +97,31 @@ namespace jgl{
             bool obtuseAngle(jgl::Vector3d* vec3d);
 
             //Rotate vector taking as pivot (0, 0, 0), counter-clockwise
-            void rotate(double _rad, jgl::Vector3d* axis);
+            Vector3d* rotate(double _rad, jgl::Vector3d* axis);
 
             //Rotate vector around podouble by vec3d
-            void rotateAround(jgl::Vector3d* vec3d, double _rad, jgl::Vector3d* axis);
+            Vector3d* rotateAround(jgl::Vector3d* vec3d, double _rad, jgl::Vector3d* axis);
 
             //Return the vector as string (x, y, z)
             std::string* toString();
 
-             static jgl::Vector3d xAxis;
-             static jgl::Vector3d yAxis;
-             static jgl::Vector3d zAxis;
+
+
+            //Get the transformation matrix of this vector, containing only rotation and translation
+            Matrix4d* getTransformationMatrix();
+            //Get the rotation matrix of this vector
+            Matrix4d* getRotationMatrix();
+            //Get the translation matrix of this vector
+            Matrix4d* getTranslationMatrix();
+            //Get the scaling matrix of this vector
+            Matrix4d* getScalingMatrix();
+
+
+
+            static Vector3d xAxis;
+            static Vector3d yAxis;
+            static Vector3d zAxis;
     };  
 }
-
-
 
 #endif

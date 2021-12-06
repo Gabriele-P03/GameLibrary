@@ -2,7 +2,7 @@
 #define QUATERNION_H
 
 #include <cmath>
-#include "../v3/Vector3d.h"
+//#include "../v3/Vector3d.h"
 
 namespace jgl{
 
@@ -15,7 +15,7 @@ namespace jgl{
             Quaternion();
             Quaternion(double x, double y, double z, double w);
             Quaternion(Quaternion* quaternion);
-            Quaternion(jgl::Vector3d* vec3d);
+            //Quaternion(jgl::Vector3d* vec3d);
             ~Quaternion();
 
             jgl::Quaternion* add(double x, double y, double z, double w);
@@ -42,7 +42,7 @@ namespace jgl{
             double getAngle();
 
             //Return the angle this quaternion represents around the given axis
-            double getAngleAround(jgl::Vector3d* vec3d);
+            //double getAngleAround(jgl::Vector3d* vec3d);
 
             //Return the eular angle, which is the rotation around X-axis 
             double getPitch();

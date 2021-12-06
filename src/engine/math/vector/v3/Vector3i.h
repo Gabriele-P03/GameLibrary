@@ -7,6 +7,7 @@
 
 namespace jgl{
 
+
     class Vector3i
     {
         private:
@@ -23,23 +24,23 @@ namespace jgl{
             int getY();
             int getZ();
 
-            void setX(int x);
-            void setY(int y);
-            void setZ(int z);
-            void set(Vector3i* vec3i);
-            void setAll(int x, int y, int z);
+            Vector3i* setX(int x);
+            Vector3i* setY(int y);
+            Vector3i* setZ(int z);
+            Vector3i* set(Vector3i* vec3i);
+            Vector3i* setAll(int x, int y, int z);
 
-            void addX(int x);
-            void addY(int y);
-            void addZ(int z);
-            void add(Vector3i* vec3i);
-            void addAll(int x, int y, int z);
+            Vector3i* addX(int x);
+            Vector3i* addY(int y);
+            Vector3i* addZ(int z);
+            Vector3i* add(Vector3i* vec3i);
+            Vector3i* addAll(int x, int y, int z);
 
-            void mulX(int x);
-            void mulY(int y);
-            void mulZ(int z);
-            void mul(Vector3i* vec3i);
-            void mulAll(int x, int y, int z);
+            Vector3i* mulX(int x);
+            Vector3i* mulY(int y);
+            Vector3i* mulZ(int z);
+            Vector3i* mul(Vector3i* vec3i);
+            Vector3i* mulAll(int x, int y, int z);
 
             Vector3i* cpy();
     
@@ -93,10 +94,10 @@ namespace jgl{
             bool obtuseAngle(jgl::Vector3i* vec3i);
 
             //Rotate vector taking as pivot (0, 0, 0), counter-clockwise
-            void rotate(double _rad, jgl::Vector3i* axis);
+            Vector3i* rotate(double _rad, jgl::Vector3i* axis);
 
             //Rotate vector around point by vec3i
-            void rotateAround(jgl::Vector3i* vec3i, double _rad, jgl::Vector3i* axis);
+            Vector3i* rotateAround(jgl::Vector3i* vec3i, double _rad, jgl::Vector3i* axis);
 
             //Return the vector as string (x, y, z)
             std::string* toString();

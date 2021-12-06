@@ -1,4 +1,4 @@
-#include "Matrix3d.hpp"
+#include "Matrix3d.h"
 
 jgl::Matrix3d::Matrix3d(double x1y1, double x1y2, double x1y3, double x2y1, double x2y2, double x2y3, double x3y1, double x3y2, double x3y3){
     this->matrix[0][0] = x1y1; this->matrix[0][1] = x1y2; this->matrix[0][2] = x1y3;
@@ -41,6 +41,12 @@ jgl::Matrix3d::Matrix3d() : jgl::Matrix3d::Matrix3d(0, 0, 0,
                                                     0, 0, 0, 
                                                     0, 0, 0){
 }
+jgl::Matrix3d::Matrix3d(double* values) : jgl::Matrix3d::Matrix3d(
+        values[0], values[1], values[2],
+        values[3], values[4], values[5],
+        values[6], values[7], values[8] 
+    ){
+}
 
 
 
@@ -50,10 +56,10 @@ jgl::Matrix3d* jgl::Matrix3d::cpy(){
 
 
 
-jgl::Matrix3d* jgl::Matrix3d::set(double** mat3d){
+jgl::Matrix3d* jgl::Matrix3d::set(double* values){
     for(int x = 0; x < 3; x++){
         for(int y = 0; y < 3; y++){
-            this->matrix[x][y] = mat3d[x][y];
+            this->matrix[x][y] = values[x*3 + y];
         }
     }
 
@@ -75,6 +81,15 @@ jgl::Matrix3d* jgl::Matrix3d::set(int x, int y, double value){
         exit(-1);
     }else{
         this->matrix[x][y] = value;
+    }
+
+    return this;
+}
+jgl::Matrix3d* jgl::Matrix3d::setAll(double value){
+    for(int x = 0; x < 3; x++){
+        for(int y = 0; y < 3; y++){
+            this->matrix[x][y] = value;
+        }
     }
 
     return this;
@@ -184,8 +199,8 @@ double jgl::Matrix3d::det(){
         matrix[0][1]*matrix[1][2]*matrix[2][0] +
         matrix[0][2]*matrix[1][0]*matrix[2][1] -
 
-        matrix[0][2]*matrix[1][1]*matrix[2][0] + 
-        matrix[0][1]*matrix[1][0]*matrix[2][2] +
+        matrix[0][2]*matrix[1][1]*matrix[2][0] - 
+        matrix[0][1]*matrix[1][0]*matrix[2][2] -
         matrix[0][0]*matrix[1][2]*matrix[2][1];
 }
 
@@ -207,48 +222,97 @@ jgl::Matrix3d* jgl::Matrix3d::inv(){
     if(this->det() != 0){
         jgl::Matrix3d* idt = new jgl::Matrix3d();
         idt->idt();
-        this->matrix[1][0] = 0;
 
-        this->matrix[2][0] += -2*this->matrix[0][0];
-        this->matrix[2][1] += -2*this->matrix[0][1];
-        this->matrix[2][2] += -2*this->matrix[0][2];
-        idt->matrix[2][0] += -2*idt->matrix[0][0];
-        idt->matrix[2][1] += -2*idt->matrix[0][1];
-        idt->matrix[2][2] += -2*idt->matrix[0][2];
+        double tmp;
 
-        this->matrix[2][0] += 0.333333333*this->matrix[1][0];
-        this->matrix[2][1] += 0.333333333*this->matrix[1][1];
-        this->matrix[2][2] += 0.333333333*this->matrix[1][2];
-        idt->matrix[2][0] += 0.333333333*idt->matrix[1][0];
-        idt->matrix[2][1] += 0.333333333*idt->matrix[1][1];
-        idt->matrix[2][2] += 0.333333333*idt->matrix[1][2];
+        //Be sure that x0y0 is not 0
+        if(this->matrix[0][0] != 0){
+            tmp = 1/this->matrix[0][0];
+            for(int y = 0; y < 3; y++){
+                this->matrix[0][y] *= tmp;
+                idt->matrix[0][y] *= tmp;
+            } 
+        }else{
+            //x0y0 is 0, then first and second row must be swapped
+            for(int y = 0; y < 3; y++){
+                tmp = this->matrix[0][y];
+                this->matrix[0][y] = this->matrix[1][y];
+                this->matrix[1][y] = tmp;
 
-        this->matrix[1][0] += -0.3*this->matrix[2][0];
-        this->matrix[1][1] += -0.3*this->matrix[2][1];
-        this->matrix[1][2] += -0.3*this->matrix[2][2];
-        idt->matrix[1][0] += -0.3*idt->matrix[2][0];
-        idt->matrix[1][1] += -0.3*idt->matrix[2][1];
-        idt->matrix[1][2] += -0.3*idt->matrix[2][2];
+                tmp = idt->matrix[0][y];
+                idt->matrix[0][y] = idt->matrix[1][y];
+                idt->matrix[1][y] = tmp;
+            } 
+        }
 
-        this->matrix[0][0] += 0.6*this->matrix[2][0];
-        this->matrix[0][1] += 0.6*this->matrix[2][1];
-        this->matrix[0][2] += 0.6*this->matrix[2][2];
-        idt->matrix[0][0] += 0.6*idt->matrix[2][0];
-        idt->matrix[0][1] += 0.6*idt->matrix[2][1];
-        idt->matrix[0][2] += 0.6*idt->matrix[2][2];
+        //Nullify x1y0
+        if(this->matrix[1][0] != 0){
+            tmp = this->matrix[1][0] ;
+            for(int y = 0; y < 3; y++){
+                this->matrix[1][y] -= tmp*this->matrix[0][y];
+                idt->matrix[1][y] -= tmp*idt->matrix[0][y];
+            }
+        }
 
-        this->matrix[0][0] += -0.333333333*this->matrix[1][0];
-        this->matrix[0][1] += -0.333333333*this->matrix[1][1];
-        this->matrix[0][2] += -0.333333333*this->matrix[1][2];
-        idt->matrix[0][0] += -0.333333333*idt->matrix[1][0];
-        idt->matrix[0][1] += -0.333333333*idt->matrix[1][1];
-        idt->matrix[0][2] += -0.333333333*idt->matrix[1][2];
+        //Nullify x2y0
+        if(this->matrix[2][0] != 0){
+            tmp = this->matrix[2][0] ;
+            for(int y = 0; y < 3; y++){
+                this->matrix[2][y] -= tmp*this->matrix[0][y];
+                idt->matrix[2][y] -= tmp*idt->matrix[0][y];
+            }
+        }
 
-        for(int x = 0; x < 3; x++){
-            double k = 1/this->matrix[x][x];
-            for(int y = 0; y < 3; y++){           
-                this->mul(x, y, k);
-                idt->mul(x, y, k);
+        //Null x2y1, but before be sure that x1y1 is 1
+        if(this->matrix[1][1] != 1){
+            tmp = 1/this->matrix[1][1];
+            for(int y = 0; y < 3; y++){
+                this->matrix[1][y] *= tmp;
+                idt->matrix[1][y] *= tmp;
+            }
+        }
+        if(this->matrix[2][1] != 0){
+            tmp = this->matrix[2][1];
+            for(int y = 0; y < 3; y++){
+                this->matrix[2][y] -= tmp*this->matrix[1][y];
+                idt->matrix[2][y] -= tmp*idt->matrix[1][y];
+            }
+        }
+
+        //Be sure that x2y2 is 1
+        if(this->matrix[2][2] != 1){
+            tmp = 1/this->matrix[2][2];
+            for(int y = 0; y < 3; y++){
+                this->matrix[2][y] *= tmp;
+                idt->matrix[2][y] *= tmp;
+            }
+        }
+
+        //Now, let's nullify top-right corner
+        //Begin from x1y2
+        if(this->matrix[1][2] != 0){
+            tmp = this->matrix[1][2];
+            for(int y = 0; y < 3; y++){
+                this->matrix[1][y] -= tmp*this->matrix[2][y];
+                idt->matrix[1][y] -= tmp*idt->matrix[2][y];
+            }
+        }
+
+        //Nullify x0y2
+        if(this->matrix[0][2] != 0){
+            tmp = this->matrix[0][2];
+            for(int y = 0; y < 3; y++){
+                this->matrix[0][y] -= tmp*this->matrix[2][y];
+                idt->matrix[0][y] -= tmp*idt->matrix[2][y];
+            }
+        }
+
+        //Nullify x0y1
+        if(this->matrix[0][1] != 0){
+            tmp = this->matrix[0][1];
+            for(int y = 0; y < 3; y++){
+                this->matrix[0][y] -= tmp*this->matrix[1][y];
+                idt->matrix[0][y] -= tmp*idt->matrix[1][y];
             }
         }
 
@@ -296,16 +360,16 @@ jgl::Matrix3d* jgl::Matrix3d::setToScaling(jgl::Vector2d* vec2d){
 
 
 jgl::Matrix3d* jgl::Matrix3d::translate(double x, double y){
-    return this->mul(new jgl::Matrix3d(1, 0, 0, 0, 1, 0, x, y, 1));
+    return this->mul(new jgl::Matrix3d(1, 0, x, 0, 1, y, 0, 0, 1));
 }
 jgl::Matrix3d* jgl::Matrix3d::translate(jgl::Vector2d* vec2d){
     return this->translate(vec2d->getX(), vec2d->getY());
 }
 jgl::Vector2d* jgl::Matrix3d::getTranslation(){
-    return new jgl::Vector2d(this->matrix[2][0], this->matrix[2][1]);
+    return new jgl::Vector2d(this->matrix[0][2], this->matrix[1][2]);
 }
 jgl::Matrix3d* jgl::Matrix3d::setToTranslation(double x, double y){
-    return this->set(new jgl::Matrix3d(1, 0, 0, 0, 1, 0, x, y, 1));
+    return this->set(new jgl::Matrix3d(1, 0, x, 0, 1, y, 0, 0, 1));
 }
 jgl::Matrix3d* jgl::Matrix3d::setToTranslation(jgl::Vector2d* vec2d){
     return this->setToTranslation(vec2d->getX(), vec2d->getY());

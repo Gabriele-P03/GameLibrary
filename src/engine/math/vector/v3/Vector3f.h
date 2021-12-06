@@ -1,11 +1,13 @@
-#ifndef Vector3f_H
-#define Vector3f_H
+#ifndef Vector3F_H
+#define Vector3F_H
 
 #include <iostream>
 #include <string>
 #include "../../JMath.h"
+#include "../../matrix/mat4/Matrix4d.h"
 
 namespace jgl{
+
 
     class Vector3f
     {
@@ -23,23 +25,23 @@ namespace jgl{
             float getY();
             float getZ();
 
-            void setX(float x);
-            void setY(float y);
-            void setZ(float z);
-            void set(Vector3f* vec3f);
-            void setAll(float x, float y, float z);
+            Vector3f* setX(float x);
+            Vector3f* setY(float y);
+            Vector3f* setZ(float z);
+            Vector3f* set(Vector3f* vec3f);
+            Vector3f* setAll(float x, float y, float z);
 
-            void addX(float x);
-            void addY(float y);
-            void addZ(float z);
-            void add(Vector3f* vec3f);
-            void addAll(float x, float y, float z);
+            Vector3f* addX(float x);
+            Vector3f* addY(float y);
+            Vector3f* addZ(float z);
+            Vector3f* add(Vector3f* vec3f);
+            Vector3f* addAll(float x, float y, float z);
 
-            void mulX(float x);
-            void mulY(float y);
-            void mulZ(float z);
-            void mul(Vector3f* vec3f);
-            void mulAll(float x, float y, float z);
+            Vector3f* mulX(float x);
+            Vector3f* mulY(float y);
+            Vector3f* mulZ(float z);
+            Vector3f* mul(Vector3f* vec3f);
+            Vector3f* mulAll(float x, float y, float z);
 
             Vector3f* cpy();
     
@@ -93,20 +95,31 @@ namespace jgl{
             bool obtuseAngle(jgl::Vector3f* vec3f);
 
             //Rotate vector taking as pivot (0, 0, 0), counter-clockwise
-            void rotate(double _rad, jgl::Vector3f* axis);
+            Vector3f* rotate(double _rad, jgl::Vector3f* axis);
 
             //Rotate vector around pofloat by vec3f
-            void rotateAround(jgl::Vector3f* vec3f, double _rad, jgl::Vector3f* axis);
+            Vector3f* rotateAround(jgl::Vector3f* vec3f, double _rad, jgl::Vector3f* axis);
 
             //Return the vector as string (x, y, z)
             std::string* toString();
 
-             static Vector3f xAxis;
-             static Vector3f yAxis;
-             static Vector3f zAxis;
+
+
+            //Get the transformation matrix of this vector, containing only rotation and translation
+            Matrix4d* getTransformationMatrix();
+            //Get the rotation matrix of this vector
+            Matrix4d* getRotationMatrix();
+            //Get the translation matrix of this vector
+            Matrix4d* getTranslationMatrix();
+            //Get the scaling matrix of this vector
+            Matrix4d* getScalingMatrix();
+
+
+
+            static Vector3f xAxis;
+            static Vector3f yAxis;
+            static Vector3f zAxis;
     };  
 }
-
-
 
 #endif

@@ -4,22 +4,19 @@
 #include <iostream>
 #include <string>
 
-
 #define GLEW_STATIC
 #include <GL/glew.h>
-
-#include <cmath>
 
 #include "engine/input/key/KeyInput.h"
 #include "engine/graphics/shader/Shader.h"
 #include "files/Files.h"
 #include "engine/graphics/shader/Shader.h"
 #include "engine/graphics/shader/cubeShader/CubeShader.hpp"
-#include "engine/math/matrix/mat3/Matrix3d.hpp"
+#include "engine/math/matrix/mat4/Matrix4d.h"
+#include "engine/math/matrix/mat3/Matrix3d.h"
 #include "engine/parser/json/JsonReader.h"
 #include "engine/parser/json/JsonWriter.h"
 #include "engine/audio/Audio.h"
-#include "engine/graphics/texture/PNGDecoder.hpp"
 
 //This will be the main window of the game
 GLFWwindow* window;
