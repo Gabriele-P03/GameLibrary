@@ -217,104 +217,36 @@ jgl::Matrix3d* jgl::Matrix3d::idt(){
 
 
 jgl::Matrix3d* jgl::Matrix3d::inv(){
-
-    //The inverse matrix is available only if det is not 0
-    if(this->det() != 0){
-        jgl::Matrix3d* idt = new jgl::Matrix3d();
-        idt->idt();
-
+        if(this->det() != 0){
         double tmp;
+        jgl::Matrix3d* idt = (new jgl::Matrix3d())->idt();
 
-        //Be sure that x0y0 is not 0
-        if(this->matrix[0][0] != 0){
-            tmp = 1/this->matrix[0][0];
-            for(int y = 0; y < 3; y++){
-                this->matrix[0][y] *= tmp;
-                idt->matrix[0][y] *= tmp;
-            } 
-        }else{
-            //x0y0 is 0, then first and second row must be swapped
-            for(int y = 0; y < 3; y++){
-                tmp = this->matrix[0][y];
-                this->matrix[0][y] = this->matrix[1][y];
-                this->matrix[1][y] = tmp;
+        //x0y0 as 1
+        this->setIdentityMatrix(idt, 0);
 
-                tmp = idt->matrix[0][y];
-                idt->matrix[0][y] = idt->matrix[1][y];
-                idt->matrix[1][y] = tmp;
-            } 
-        }
+        //x1y0 nullify
+        this->substractRow(idt, 1, 0, 0);
+        //x1y1 as 1
+        this->setIdentityMatrix(idt, 1);
 
-        //Nullify x1y0
-        if(this->matrix[1][0] != 0){
-            tmp = this->matrix[1][0] ;
-            for(int y = 0; y < 3; y++){
-                this->matrix[1][y] -= tmp*this->matrix[0][y];
-                idt->matrix[1][y] -= tmp*idt->matrix[0][y];
-            }
-        }
+        //x2y0 nullify
+        this->substractRow(idt, 2, 0, 0);
+        //x2y1 nullify
+        this->substractRow(idt, 2, 1, 1);
+        //x2y2 as 1
+        this->setIdentityMatrix(idt, 2); 
 
-        //Nullify x2y0
-        if(this->matrix[2][0] != 0){
-            tmp = this->matrix[2][0] ;
-            for(int y = 0; y < 3; y++){
-                this->matrix[2][y] -= tmp*this->matrix[0][y];
-                idt->matrix[2][y] -= tmp*idt->matrix[0][y];
-            }
-        }
+        /**
+         * Let's manupulate top-right stair
+         */
 
-        //Null x2y1, but before be sure that x1y1 is 1
-        if(this->matrix[1][1] != 1){
-            tmp = 1/this->matrix[1][1];
-            for(int y = 0; y < 3; y++){
-                this->matrix[1][y] *= tmp;
-                idt->matrix[1][y] *= tmp;
-            }
-        }
-        if(this->matrix[2][1] != 0){
-            tmp = this->matrix[2][1];
-            for(int y = 0; y < 3; y++){
-                this->matrix[2][y] -= tmp*this->matrix[1][y];
-                idt->matrix[2][y] -= tmp*idt->matrix[1][y];
-            }
-        }
+        //x1y2 nullify
+        this->substractRow(idt, 1, 2, 2);
 
-        //Be sure that x2y2 is 1
-        if(this->matrix[2][2] != 1){
-            tmp = 1/this->matrix[2][2];
-            for(int y = 0; y < 3; y++){
-                this->matrix[2][y] *= tmp;
-                idt->matrix[2][y] *= tmp;
-            }
-        }
-
-        //Now, let's nullify top-right corner
-        //Begin from x1y2
-        if(this->matrix[1][2] != 0){
-            tmp = this->matrix[1][2];
-            for(int y = 0; y < 3; y++){
-                this->matrix[1][y] -= tmp*this->matrix[2][y];
-                idt->matrix[1][y] -= tmp*idt->matrix[2][y];
-            }
-        }
-
-        //Nullify x0y2
-        if(this->matrix[0][2] != 0){
-            tmp = this->matrix[0][2];
-            for(int y = 0; y < 3; y++){
-                this->matrix[0][y] -= tmp*this->matrix[2][y];
-                idt->matrix[0][y] -= tmp*idt->matrix[2][y];
-            }
-        }
-
-        //Nullify x0y1
-        if(this->matrix[0][1] != 0){
-            tmp = this->matrix[0][1];
-            for(int y = 0; y < 3; y++){
-                this->matrix[0][y] -= tmp*this->matrix[1][y];
-                idt->matrix[0][y] -= tmp*idt->matrix[1][y];
-            }
-        }
+        //x0y2 nullify
+        this->substractRow(idt, 0, 2, 2);
+        //x0y1 nullify
+        this->substractRow(idt, 0, 1, 1);
 
         return idt;
     }
@@ -373,4 +305,49 @@ jgl::Matrix3d* jgl::Matrix3d::setToTranslation(double x, double y){
 }
 jgl::Matrix3d* jgl::Matrix3d::setToTranslation(jgl::Vector2d* vec2d){
     return this->setToTranslation(vec2d->getX(), vec2d->getY());
+}
+
+
+/**
+ * Here private methods for computing matrix
+ * Check private area in header file for more info
+ */ 
+
+
+void jgl::Matrix3d::setIdentityMatrix(jgl::Matrix3d* &idt, int x){
+
+    double tmp;
+    /*
+        Check if x,x is already 1. If it is 0, row will be swapped with the next one if the next one is not the third
+    */
+    if( (tmp = this->matrix[x][x]) != 0 && tmp != 1){
+        tmp = this->matrix[x][x];
+        for(int y = 0; y < 3; y++){
+            this->matrix[x][y] /= tmp;
+            idt->matrix[x][y] /= tmp;
+        }
+    }else if(tmp == 0){
+        //Swap
+        for(int y = 0; y < 3; y++){
+            tmp = this->matrix[x][y];
+            this->matrix[x][y] = this->matrix[x+1][y];
+            this->matrix[x+1][y] = tmp;
+
+            tmp = idt->matrix[x][y];
+            idt->matrix[x][y] = idt->matrix[x+1][y];
+            idt->matrix[x+1][y] = tmp;
+        }
+    }
+}
+
+void jgl::Matrix3d::substractRow(jgl::Matrix3d* &idt, int x, int y, int row){
+
+    double tmp;
+    //Check if it is already 0
+    if( (tmp = this->matrix[x][y]) != 0 ){
+        for(int y = 0; y < 3; y++){
+            this->matrix[x][y] -= tmp*this->matrix[row][y];
+            idt->matrix[x][y] -= tmp*idt->matrix[row][y];
+        }
+    }
 }

@@ -156,96 +156,103 @@ double jgl::Matrix4d::det(){
 
 jgl::Matrix4d* jgl::Matrix4d::inv(){
 
+    if(this->det() != 0){
+        double tmp;
         jgl::Matrix4d* idt = (new jgl::Matrix4d())->idt();
 
-        //Substract the first row from the second
-        for(int y = 0; y < 4; y++){
-            this->matrix[1][y] -= this->matrix[0][y];
-            idt->matrix[1][y] -= idt->matrix[0][y];
-        }
+        //x0y0 as 1
+        this->setIdentityMatrix(idt, 0);
 
-        //Substract the first row from the third
-        for(int y = 0; y < 4; y++){
-            this->matrix[2][y] -= this->matrix[0][y];
-            idt->matrix[2][y] -= idt->matrix[0][y];
-        }
+        //x1y0 nullify
+        this->substractRow(idt, 1, 0, 0);
+        //x1y1 as 1
+        this->setIdentityMatrix(idt, 1);
 
-        //Add the first row to the fourth
-        for(int y = 0; y < 4; y++){
-            this->matrix[3][y] += this->matrix[0][y];
-            idt->matrix[3][y] += idt->matrix[0][y];
-        }
+        //x2y0 nullify
+        this->substractRow(idt, 2, 0, 0);
+        //x2y1 nullify
+        this->substractRow(idt, 2, 1, 1);
+        //x2y2 as 1
+        this->setIdentityMatrix(idt, 2); 
 
-        //Switch the second row and the fourth
-        double tmp;
-        for(int y = 0; y < 4; y++){
-            tmp = this->matrix[1][y];
-            this->matrix[1][y] = this->matrix[3][y];
-            this->matrix[3][y] = tmp;
-            tmp = idt->matrix[1][y];
-            idt->matrix[1][y] = idt->matrix[3][y];
-            idt->matrix[3][y] = tmp;
-        }
+        //x3y0 nullify
+        this->substractRow(idt, 3, 0, 0);
+        //x3y1 nullify
+        this->substractRow(idt, 3, 1, 1);
+        //x3y2 nullify
+        this->substractRow(idt, 3, 2, 2);
+        //x3y3 as 1
+        this->setIdentityMatrix(idt, 3);
 
-        //Multiply the second row by 1/2
-        for(int y = 0; y < 4; y++){
-            this->matrix[1][y] *= 0.5;
-            idt->matrix[1][y] *= 0.5;
-        }
 
-        //Substract the second row from the first
-        for(int y = 0; y < 4; y++){
-            this->matrix[0][y] -= this->matrix[1][y];
-            idt->matrix[0][y] -= idt->matrix[1][y];
-        }
+        /**
+         * Let's manupulate top-right stair
+         */
 
-        //Add two times the second row to the third
-        for(int y = 0; y < 4; y++){
-            this->matrix[2][y] += 2*this->matrix[1][y];
-            idt->matrix[2][y] += 2*idt->matrix[1][y];
-        }
+        //x2y3 nullify
+        this->substractRow(idt, 2, 3, 3);
 
-        //Multiply the third row by 1/2
-        for(int y = 0; y < 4; y++){
-            this->matrix[2][y] *= 0.5;
-            idt->matrix[2][y] *= 0.5;
-        }
+        //x1y3 nullify 
+        this->substractRow(idt, 1, 3, 3);
+        //x1y2 nullify
+        this->substractRow(idt, 1, 2, 2);
 
-        //Substract the third row from the second
-        for(int y = 0; y < 4; y++){
-            this->matrix[1][y] -= this->matrix[2][y];
-            idt->matrix[1][y] -= idt->matrix[2][y];
-        }
+        //x0y3 nullify
+        this->substractRow(idt, 0, 3, 3);
+        //x0y2 nullify
+        this->substractRow(idt, 0, 2, 2);
+        //x0y1 nullify
+        this->substractRow(idt, 0, 1, 1);
 
-        //Add two times the third row to the fourth
-        for(int y = 0; y < 4; y++){
-            this->matrix[3][y] += 2*this->matrix[2][y];
-            idt->matrix[3][y] += 2*idt->matrix[2][y];
-        }
-
-        //Multiply the third row by 1/4
-        for(int y = 0; y < 4; y++){
-            this->matrix[3][y] *= 0.25;
-            idt->matrix[3][y] *= 0.25;
-        }
-
-        //Add the fourth row to the first
-        for(int y = 0; y < 4; y++){
-            this->matrix[0][y] += this->matrix[3][y];
-            idt->matrix[0][y] += idt->matrix[3][y];
-        }
-
-        //Add the fourth row to the second
-        for(int y = 0; y < 4; y++){
-            this->matrix[1][y] += this->matrix[3][y];
-            idt->matrix[1][y] += idt->matrix[3][y];
-        }
-
-        //Substract the fourth row from the third
-        for(int y = 0; y < 4; y++){
-            this->matrix[2][y] -= this->matrix[3][y];
-            idt->matrix[2][y] -= idt->matrix[3][y];
-        }
-    
         return idt;
+    }
+
+    return nullptr;
+}
+
+
+
+
+/**
+ * Here private methods for computing matrix
+ * Check private area in header file for more info
+ */ 
+
+
+void jgl::Matrix4d::setIdentityMatrix(jgl::Matrix4d* &idt, int x){
+
+    double tmp;
+    /*
+        Check if x,x is already 1. If it is 0, row will be swapped with the next one if the next one is not the third
+    */
+    if( (tmp = this->matrix[x][x]) != 0 && tmp != 1){
+        tmp = this->matrix[x][x];
+        for(int y = 0; y < 4; y++){
+            this->matrix[x][y] /= tmp;
+            idt->matrix[x][y] /= tmp;
+        }
+    }else if(tmp == 0){
+        //Swap
+        for(int y = 0; y < 4; y++){
+            tmp = this->matrix[x][y];
+            this->matrix[x][y] = this->matrix[x+1][y];
+            this->matrix[x+1][y] = tmp;
+
+            tmp = idt->matrix[x][y];
+            idt->matrix[x][y] = idt->matrix[x+1][y];
+            idt->matrix[x+1][y] = tmp;
+        }
+    }
+}
+
+void jgl::Matrix4d::substractRow(jgl::Matrix4d* &idt, int x, int y, int row){
+
+    double tmp;
+    //Check if it is already 0
+    if( (tmp = this->matrix[x][y]) != 0 ){
+        for(int y = 0; y < 4; y++){
+            this->matrix[x][y] -= tmp*this->matrix[row][y];
+            idt->matrix[x][y] -= tmp*idt->matrix[row][y];
+        }
+    }
 }

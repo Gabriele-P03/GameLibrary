@@ -12,6 +12,30 @@ namespace jgl{
 
     class Matrix3d{
 
+        private:
+
+            /**
+             * For calculating inverse matrix
+             * On the main diagonal values must be 1. This method checks if tha value at x,x is 1, else it will divide
+             * all row by value at x, x. 
+             * 
+             * @param mat matrix to be computing
+             * @param idt matrix which will become the inverse one
+             * @param x coord for identify value on main diagonal
+             */ 
+            void setIdentityMatrix(Matrix3d* &idt, int x);
+
+            /**
+             * For calculating inverse matrix
+             * Nullify the value at x,y substracting itself at all row's value
+             *
+             * @param idt matrix which will become the inverse 
+             * @param x
+             * @param y
+             * @param row index of the row to be substract from x one
+             */
+            void substractRow(Matrix3d* &idt, int x, int y, int row);
+
         public:
             double matrix[3][3];
 

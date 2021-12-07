@@ -2,7 +2,7 @@
 
 int main(int argc, const char* argv[]){  
 
-    jgl::Matrix3d* mat = new jgl::Matrix3d(1, 2, 3,  3,2,1,  1,3,2);
+    jgl::Matrix3d* mat = new jgl::Matrix3d(0,2,4, 1,3,2, 3,2,1);
     jgl::Matrix3d* inv = mat->inv();
 
 /*
