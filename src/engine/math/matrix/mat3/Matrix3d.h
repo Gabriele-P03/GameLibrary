@@ -62,6 +62,23 @@ namespace jgl{
              */ 
             Matrix3d(double yaw); 
             /**
+             * Create a new transformation matrix which represents the given postition, rotation around z-axis and scale.
+             * 
+             * If your position vector is not unit-vector, you should use Matrix3d#Matrix3d(double yaw, Vector3d* position) else
+             * you may pass as position the versor of your postion vector and as scale its length
+             * @param yaw
+             * @param position
+             * @param scale
+             */
+            Matrix3d(double yaw, Vector2d* position, double scale);
+            /**
+             * Create a new transformation matrix which represents the given position and rotation around z-axis.
+             * Scale will be calculated by the given position, then you should not pass a unit-vector
+             * @param yaw
+             * @param position
+             */
+            Matrix3d(double yaw, Vector2d* position);  
+            /**
              * Create a new matrix from the given string.
              * Each box of a row is separated by comma.
              * Each row is separated by semi-colon
@@ -227,9 +244,9 @@ namespace jgl{
              */ 
             Matrix3d* setToScaling(Vector2d* vec2d);
             /**
-             * @return vector containing scale of this matrix
+             * @return scale of the vector which matrix represents
              */ 
-            Vector2d* getScale();
+            double getScale();
 
 
 

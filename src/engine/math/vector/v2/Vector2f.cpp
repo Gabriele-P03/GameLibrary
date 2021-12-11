@@ -11,11 +11,6 @@ jgl::Vector2f::Vector2f(std::string* fromString){
     this->x = atoi(fromString->substr(0, fromString->find(',')).c_str());
     this->y = atoi(fromString->substr(fromString->find(',')+1, fromString->size()).c_str());
 }
-jgl::Vector2f::Vector2f(jgl::Matrix3d* mat3d) : jgl::Vector2f(
-        mat3d->matrix[0][0] + mat3d->matrix[0][1] + mat3d->matrix[0][2],
-        mat3d->matrix[1][0] + mat3d->matrix[1][1] + mat3d->matrix[1][2]
-    ){   
-}
 
 
 
@@ -50,13 +45,9 @@ jgl::Vector2f* jgl::Vector2f::cpy(){return new jgl::Vector2f(this->x, this->y);}
 
 
 jgl::Vector2f* jgl::Vector2f::vrs(){
-
-    jgl::Vector2f* vec = this->cpy();
     double md = this->lenght();
-
-    vec->mulAll(1/md, 1/md);
-
-    return vec;
+    this->mulAll(1/md, 1/md);
+    return this;
 }
 
 
@@ -190,12 +181,6 @@ jgl::Matrix3d* jgl::Vector2f::getTranslationMatrix(){
 jgl::Matrix3d* jgl::Vector2f::getScalingMatrix(){
     return (new jgl::Matrix3d())->setToScaling(this->x, this->y);
 }
-jgl::Matrix3d* jgl::Vector2f::getTransformationMatrix(){
-    return (new jgl::Matrix3d())
-                ->setToTranslation(this->x, this->y)
-                ->rotate(this->angleRad(&jgl::Vector2f::xAxis));
-}
-
 
 
 

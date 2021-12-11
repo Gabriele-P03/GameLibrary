@@ -7,6 +7,8 @@
 
 namespace jgl{
 
+    class Matrix3d;
+
     class Vector2f
     {
         private:
@@ -14,11 +16,26 @@ namespace jgl{
 
         public:   
 
+            /**
+             * Create a vector 0, 0
+             */ 
             Vector2f();
+            /**
+             * Create a new vector with the given value
+             * @param x
+             * @param y
+             */ 
             Vector2f(float x, float y);
+            /**
+             * Create a new vector as the given one
+             * @param vec2f
+             */ 
             Vector2f(Vector2f* vec2f);
+            /**
+             * Create a new vector from the given string "x,y"
+             * @param fromString
+             */ 
             Vector2f(std::string* fromString);
-            Vector2f(Matrix3d* mat3d);
             
 
 
@@ -142,8 +159,6 @@ namespace jgl{
 
 
 
-            //Get the transformation matrix of this vector, containing only rotation and translation
-            Matrix3d* getTransformationMatrix();
             //Get the rotation matrix of this vector
             Matrix3d* getRotationMatrix();
             //Get the translation matrix of this vector

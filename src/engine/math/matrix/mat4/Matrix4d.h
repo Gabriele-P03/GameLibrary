@@ -8,6 +8,7 @@
 
 namespace jgl{
 
+    class Quaternion;
     class Vector3d;
 
     class Matrix4d{
@@ -169,7 +170,34 @@ namespace jgl{
              * @return determinant of this matrix
              */ 
             double det();
-    };
+
+
+            /**
+             * As they already know, a matrix 4*4 used as rotation one contains
+             * right vector in the first col, up one in the secondo and forward one in the third
+             * Set this matrix as a rotation one
+             * @param yaw
+             * @param pitch
+             * @param roll
+             * @return this matrix
+             */ 
+            Matrix4d* setToRotation(jgl::Vector3d* direction, jgl::Vector3d* up);
+            /**
+             * Rotate this matrix by the given eular angles
+             * @param yaw
+             * @param pitch
+             * @param roll
+             * @return this matrix
+             */ 
+            Matrix4d* rotate(double yaw, double pitch, double roll);
+
+
+
+            /**
+             * @return the quaternion which represents the rotation of this rotation matrix 
+             */
+            Quaternion* getQuaternion();  
+    };      
 }
 
 #endif

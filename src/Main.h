@@ -12,6 +12,7 @@
 #include "files/Files.h"
 #include "engine/graphics/shader/Shader.h"
 #include "engine/graphics/shader/cubeShader/CubeShader.hpp"
+#include "engine/math/vector/v2/Vector2d.h"
 #include "engine/math/matrix/mat4/Matrix4d.h"
 #include "engine/math/matrix/mat3/Matrix3d.h"
 #include "engine/parser/json/JsonReader.h"

@@ -2,9 +2,13 @@
 #define QUATERNION_H
 
 #include <cmath>
-//#include "../v3/Vector3d.h"
+#include "../../matrix/mat4/Matrix4d.h"
+#include "../v3/Vector3d.h"
 
 namespace jgl{
+
+    class Vector3d;
+    class Matrix4d;
 
     class Quaternion{
 
@@ -15,8 +19,8 @@ namespace jgl{
             Quaternion();
             Quaternion(double x, double y, double z, double w);
             Quaternion(Quaternion* quaternion);
-            //Quaternion(jgl::Vector3d* vec3d);
-            ~Quaternion();
+            Quaternion(jgl::Vector3d* vec3d);
+            Quaternion(jgl::Matrix4d* mat);
 
             jgl::Quaternion* add(double x, double y, double z, double w);
             jgl::Quaternion* add(Quaternion* quaternion);

@@ -16,11 +16,26 @@ namespace jgl{
 
         public:   
 
+            /**
+             * Create a vector 0, 0
+             */ 
             Vector2d();
+            /**
+             * Create a new vector with the given value
+             * @param x
+             * @param y
+             */ 
             Vector2d(double x, double y);
-            Vector2d(Vector2d* vec2d);
+            /**
+             * Create a new vector as the given one
+             * @param vec2d
+             */ 
+            Vector2d(Vector2d* vec2f);
+            /**
+             * Create a new vector from the given string "x,y"
+             * @param fromString
+             */ 
             Vector2d(std::string* fromString);
-            Vector2d(Matrix3d* mat3d);
             
 
 
@@ -144,8 +159,6 @@ namespace jgl{
 
 
 
-            //Get the transformation matrix of this vector, containing only rotation and translation
-            Matrix3d* getTransformationMatrix();
             //Get the rotation matrix of this vector
             Matrix3d* getRotationMatrix();
             //Get the translation matrix of this vector

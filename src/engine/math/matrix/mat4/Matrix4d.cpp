@@ -154,6 +154,49 @@ double jgl::Matrix4d::det(){
 }
 
 
+
+jgl::Matrix4d* jgl::Matrix4d::setToRotation(jgl::Vector3d* direction, jgl::Vector3d* up){
+
+    jgl::Vector3d* right = up->crs(direction);
+    jgl::Vector3d* newUp = direction->crs(right);
+
+    this->matrix[0][0] = right->getX();
+    this->matrix[0][1] = newUp->getX();
+    this->matrix[0][2] = direction->getX();
+
+    this->matrix[1][0] = right->getY();
+    this->matrix[1][1] = newUp->getY();
+    this->matrix[1][2] = direction->getY();
+
+    this->matrix[2][0] = right->getZ();
+    this->matrix[2][1] = newUp->getZ();
+    this->matrix[2][2] = direction->getZ();
+
+    for(int i = 0; i < 4; i++){
+        this->matrix[3][i] = 0;
+        this->matrix[i][3] = 0;
+    }
+
+    this->matrix[3][3] = 1;
+
+    return this;
+}
+
+
+
+jgl::Quaternion* jgl::Matrix4d::getQuaternion(){
+    
+    double qw = sqrt(1+this->matrix[0][0]+this->matrix[1][1]+this->matrix[2][2])/2;
+    return new jgl::Quaternion(
+        (this->matrix[2][1]-this->matrix[1][2])/(4*qw),
+        (this->matrix[0][2]-this->matrix[2][0])/(4*qw),
+        (this->matrix[1][0]-this->matrix[0][1])/(4*qw),
+        qw
+    );
+}
+
+
+
 jgl::Matrix4d* jgl::Matrix4d::inv(){
 
     if(this->det() != 0){

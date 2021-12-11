@@ -2,9 +2,11 @@
 
 int main(int argc, const char* argv[]){  
 
-    jgl::Matrix3d* mat = new jgl::Matrix3d(0,2,4, 1,3,2, 3,2,1);
-    jgl::Matrix3d* inv = mat->inv();
-
+    jgl::Vector2d* vec2d = new jgl::Vector2d(2, 1);
+    jgl::Matrix3d* mat3d = new jgl::Matrix3d(M_PI, vec2d);
+    double angl = mat3d->getRotation();
+    double scale = mat3d->getScale();
+    jgl::Vector2d* provaV = mat3d->getTranslation();
 /*
     initializeGameLibrary();
 

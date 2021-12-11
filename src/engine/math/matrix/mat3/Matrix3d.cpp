@@ -47,7 +47,14 @@ jgl::Matrix3d::Matrix3d(double* values) : jgl::Matrix3d::Matrix3d(
         values[6], values[7], values[8] 
     ){
 }
+jgl::Matrix3d::Matrix3d(double yaw, jgl::Vector2d* position, double scale){
+    this->setToTranslation(position);
+    this->rotate(yaw);
+    this->scale(scale, scale);
+}
+jgl::Matrix3d::Matrix3d(double yaw, jgl::Vector2d* position) : jgl::Matrix3d(yaw, position->cpy()->vrs(), position->lenght()){
 
+}
 
 
 jgl::Matrix3d* jgl::Matrix3d::cpy(){
@@ -263,11 +270,13 @@ jgl::Matrix3d* jgl::Matrix3d::setToRotation(double radians){
     return this->set(new jgl::Matrix3d(radians));
 }
 double jgl::Matrix3d::getRotation(){
-    
-    if(asin(this->matrix[0][1]) < 0){
+
+    double scalingFactor = this->getScale();
+
+    if(asin(this->matrix[0][1]*(1/scalingFactor)) < 0){
         return M_PI*2 - acos(this->matrix[0][0]);
     }else{
-        return acos(this->matrix[0][0]);
+        return acos(this->matrix[0][0]*(1/scalingFactor));
     }
 }
 
@@ -279,8 +288,8 @@ jgl::Matrix3d* jgl::Matrix3d::scale(double x, double y){
 jgl::Matrix3d* jgl::Matrix3d::scale(jgl::Vector2d* vec2d){
     return this->scale(vec2d->getX(), vec2d->getY());
 }
-jgl::Vector2d* jgl::Matrix3d::getScale(){
-    return new jgl::Vector2d(this->matrix[0][0], this->matrix[1][1]);
+double jgl::Matrix3d::getScale(){
+    return sqrt(pow(this->matrix[0][0],2) + pow(this->matrix[0][1],2));
 }
 jgl::Matrix3d* jgl::Matrix3d::setToScaling(double x, double y){
     return this->set(new jgl::Matrix3d(x, 0, 0, 0, y, 0, 0, 0, 1));
