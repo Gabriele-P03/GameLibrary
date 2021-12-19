@@ -18,6 +18,9 @@ jgl::Vector3d::Vector3d(std::string* fromString){
     this->y = atoi(fromString->substr(firstIndex+1, lastIndex).c_str());
     this->z = atoi(fromString->substr(lastIndex+1, fromString->size()).c_str());
 }
+jgl::Vector3d::Vector3d(jgl::Matrix4d* mat4d) : jgl::Vector3d(mat4d->getRotation()){}
+jgl::Vector3d::Vector3d(jgl::Quaternion* quaternion) : jgl::Vector3d(quaternion->getDirectionVector()){}
+//jgl::Vector3d::Vector3d(double yaw, double pitch, double roll){}
 
 
 
@@ -225,3 +228,13 @@ std::string* jgl::Vector3d::toString(){
 }
 
 
+
+jgl::Matrix4d* jgl::Vector3d::getRotationMatrix(){
+    return new jgl::Matrix4d(this);
+}
+jgl::Matrix4d* jgl::Vector3d::getScalingMatrix(){
+    return (new jgl::Matrix4d)->setToScale(this);
+}
+jgl::Matrix4d* jgl::Vector3d::getTranslationMatrix(){
+    return (new jgl::Matrix4d)->setToTranslation(this);
+}

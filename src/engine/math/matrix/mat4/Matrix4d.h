@@ -53,10 +53,16 @@ namespace jgl{
             Matrix4d(Matrix4d* mat4d);
             //Create a new rotation matrix from the given quaternion
             Matrix4d(Quaternion* rotation);
-            //Create a new matrix from the given rotation, translation and scale
-            Matrix4d(Vector3d* position, Quaternion* rotation, Vector3d* scale);
-
-
+            //Create a new matrix from the given rotation, translation and scale. Translation vector must be unit-vector
+            Matrix4d(Vector3d* position, Quaternion* rotation, double scale);
+            //Create a new matrix from the given rotation and translation vector. Scale will be calculated from vector
+            Matrix4d(Vector3d* position, Quaternion* rotation);
+            //Create a new rotation matrix from the given direction vector. As Vector3d#getRotationMatrix(). It uses yAxis as Up 
+            Matrix4d(Vector3d* direction);
+            //Create a new rotation matrix by the given eluer angles
+            Matrix4d(double yaw, double pitch, double roll);
+            //Create a new matrix by the given string as row separated by ';' and col by ','
+            Matrix4d(std::string* fromString);
 
             /**
              * @return a copy of this matrix
@@ -172,31 +178,63 @@ namespace jgl{
             double det();
 
 
-            /**
-             * As they already know, a matrix 4*4 used as rotation one contains
-             * right vector in the first col, up one in the secondo and forward one in the third
-             * Set this matrix as a rotation one
-             * @param yaw
-             * @param pitch
-             * @param roll
-             * @return this matrix
-             */ 
-            Matrix4d* setToRotation(jgl::Vector3d* direction, jgl::Vector3d* up);
-            /**
-             * Rotate this matrix by the given eular angles
-             * @param yaw
-             * @param pitch
-             * @param roll
-             * @return this matrix
-             */ 
-            Matrix4d* rotate(double yaw, double pitch, double roll);
 
+            /**
+             * Set this matrix as a rotation one by the given quaternion 
+             * @param quaternion
+             * @return this matrix
+             */ 
+            Matrix4d* setToRotation(Quaternion* rotation);
+            /**
+             * Set this matrix as a rotation one by the given direction vector
+             * @param direction
+             * @param up should be 0,1,0 (y-axis)
+             * @return this matrix
+             */ 
+            Matrix4d* setToRotation(Vector3d* direction, Vector3d* up);
+            /**
+             * @return the direction vector which this rotation matrix represents
+             */
+            Vector3d* getRotation(); 
+
+
+
+            /**
+             * Set this matrix as a translating one by the given position vector
+             * @param position position vector
+             * @return this matrix
+             */
+            Matrix4d* setToTranslation(Vector3d* position);
+            /**
+             * @return the position vector which this matrix represents 
+             */ 
+            Vector3d* getTranslation(); 
+
+
+
+            /**
+             * Set this matrix as a scaling one by the given scale vector
+             * @param scale scale vector
+             * @return this matrix
+             */ 
+            Matrix4d* setToScale(Vector3d* scale);
+            /**
+             * @return the scale vector this matrix represent
+             */ 
+            Vector3d* getScale();
 
 
             /**
              * @return the quaternion which represents the rotation of this rotation matrix 
              */
-            Quaternion* getQuaternion();  
+            Quaternion* getQuaternion(); 
+
+
+
+            /**
+             * @return a string representing this matrix separating rows by ';' and cols by ','
+             */  
+            std::string* toString();
     };      
 }
 

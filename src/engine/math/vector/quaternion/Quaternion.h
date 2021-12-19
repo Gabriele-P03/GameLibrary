@@ -12,27 +12,39 @@ namespace jgl{
 
     class Quaternion{
 
-        private:
+        public:
             double x, y, z, w;
         
-        public:
+            //Create a new quaternion as 0,0,0,0
             Quaternion();
+            //Create a new quaternion as x,y,z,w
             Quaternion(double x, double y, double z, double w);
+            //Create a new quaternion as the given one
             Quaternion(Quaternion* quaternion);
-            Quaternion(jgl::Vector3d* vec3d);
-            Quaternion(jgl::Matrix4d* mat);
+            //Create a new quaternion by the given axis unit-vector and angle in radians
+            Quaternion(jgl::Vector3d* axis, double _rad);
+            //Create a new quaternion by the given euler angles
+            Quaternion(double yaw, double pitch, double roll);
+            //Create a new quaternion by the given rotation matrix
+            Quaternion(Matrix4d* matrix4d);
+            //Create a new quaternion by the given direction vector, passing before from matrix constructor with a vector
+            Quaternion(Vector3d* vec3d);
+            //Create a new quaternion by the given string as x,y,z,w
+            Quaternion(std::string* fromString);
 
-            jgl::Quaternion* add(double x, double y, double z, double w);
-            jgl::Quaternion* add(Quaternion* quaternion);
 
-            jgl::Quaternion* mul(double x, double y, double z, double w);
-            jgl::Quaternion* mul(Quaternion* quaternion);
 
-            jgl::Quaternion* set(double x, double y, double z, double w);
-            jgl::Quaternion* set(Quaternion* quaternion);
+            Quaternion* add(double x, double y, double z, double w);
+            Quaternion* add(Quaternion* quaternion);
 
-            jgl::Quaternion* conjugate();
-            jgl::Quaternion* cpy();
+            Quaternion* mul(double x, double y, double z, double w);
+            Quaternion* mul(Quaternion* quaternion);
+
+            Quaternion* set(double x, double y, double z, double w);
+            Quaternion* set(Quaternion* quaternion);
+
+            Quaternion* conjugate();
+            Quaternion* cpy();
 
             double dot(Quaternion* q);
 
@@ -44,16 +56,20 @@ namespace jgl{
 
             //Return the angle this quaternion represents 
             double getAngle();
-
-            //Return the angle this quaternion represents around the given axis
-            //double getAngleAround(jgl::Vector3d* vec3d);
-
-            //Return the eular angle, which is the rotation around X-axis 
+            
             double getPitch();
-            //return the eular angle, which is the rotation around Z-axis
-            double getRoll();
-            //return the eular angle, which is the rotation around Y-axis
             double getYaw();
+            double getRoll();
+
+            double getX();
+            double getY();
+            double getZ();
+            double getW();
+
+            /**
+             * @return the direction vector represented by this quaternion
+             */ 
+            Vector3d* getDirectionVector();
     };
 }
 

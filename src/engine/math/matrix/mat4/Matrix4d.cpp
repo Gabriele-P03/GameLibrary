@@ -14,11 +14,35 @@ jgl::Matrix4d::Matrix4d(jgl::Matrix4d* mat4d) : jgl::Matrix4d(
         mat4d->matrix[3][0], mat4d->matrix[3][1], mat4d->matrix[3][2], mat4d->matrix[3][3] 
     ){
 }
-jgl::Matrix4d::Matrix4d(jgl::Vector3d* position, jgl::Quaternion* rotation, jgl::Vector3d* scale){
-    
+jgl::Matrix4d::Matrix4d(jgl::Vector3d* position, jgl::Quaternion* rotation, double scale){
+    this->setToTranslation(position);
 }
-jgl::Matrix4d::Matrix4d(jgl::Quaternion* rotation) : jgl::Matrix4d(new jgl::Vector3d(), rotation, new jgl::Vector3d()){}
+jgl::Matrix4d::Matrix4d(Vector3d* position, Quaternion* rotation) : jgl::Matrix4d(position->cpy()->vrs(), rotation, position->lenght()){}
+jgl::Matrix4d::Matrix4d(jgl::Quaternion* rotation) : jgl::Matrix4d(new jgl::Vector3d(), rotation, 1){}
+jgl::Matrix4d::Matrix4d(jgl::Vector3d* direction){
+    this->setToRotation(direction, &jgl::Vector3d::yAxis);
+}       
+jgl::Matrix4d::Matrix4d(double yaw, double pitch, double roll){
+    double sy = sin(yaw), cy = cos(yaw), sp = sin(pitch), cp = cos(pitch), sr = sin(roll), cr = cos(roll);
 
+    this->set( new double[16]{  
+                cp*cy, -cp*sy*cr+sp*sr, cp*sy*sr+sp*cr, 0,
+                sy,     cy*cr,          -cy*sr, 0,
+                -sp*cy, sp*sy*cr+cp*sr, -sp*sy*sr+cp*cr, 0,
+                0,0,0,1
+            }
+    );
+}
+jgl::Matrix4d::Matrix4d(std::string* fromString){
+    std::string cpy = std::string(*fromString);
+
+    for(int x = 0; x < 4; x++){
+        for(int y = 0; y < 4; y++){
+            this->matrix[x][y] = atoi(cpy.substr(0, cpy.find_first_of(',')).c_str());
+        }
+        cpy = cpy.substr(cpy.find_first_of(';'));
+    }
+}
 
 
 jgl::Matrix4d* jgl::Matrix4d::cpy(){return new jgl::Matrix4d(this);}
@@ -39,7 +63,7 @@ jgl::Matrix4d* jgl::Matrix4d::set(double* values){
     return this;
 }
 jgl::Matrix4d* jgl::Matrix4d::set(int x, int y, double value){
-    if(x < 0 || x > 3 || y < 3 || y > 3){
+    if(x < 0 || x > 3 || y < 0 || y > 3){
         std::cout<<"JGL Matrix3D index error...";
         exit(-1);
     }else{
@@ -155,44 +179,103 @@ double jgl::Matrix4d::det(){
 
 
 
+jgl::Matrix4d* jgl::Matrix4d::setToRotation(jgl::Quaternion* rotation){
+    return this->idt()
+    ->set(0, 0, (1-2*rotation->y*rotation->y - 2*rotation->z*rotation->z))
+    ->set(0, 1, (2*rotation->x*rotation->y - 2*rotation->z*rotation->w))
+    ->set(0, 2, (2*rotation->x*rotation->z + 2*rotation->w*rotation->y))
+
+    ->set(1, 0, (2*rotation->x*rotation->y + 2*rotation->z*rotation->w))
+    ->set(1, 1, (1-2*rotation->x*rotation->x - 2*rotation->z*rotation->z))
+    ->set(1, 2, (2*rotation->y*rotation->z - 2*rotation->w*rotation->x))
+
+    ->set(2, 0, (2*rotation->x*rotation->z - 2*rotation->w*rotation->y))
+    ->set(2, 1, (2*rotation->y*rotation->z + 2*rotation->w*rotation->x))
+    ->set(2, 2, (1-2*rotation->x*rotation->x - 2*rotation->y*rotation->y));
+}
 jgl::Matrix4d* jgl::Matrix4d::setToRotation(jgl::Vector3d* direction, jgl::Vector3d* up){
+    jgl::Vector3d* right = direction->crs(up);
+    right->vrs();
+    jgl::Vector3d* newUp = right->crs(direction);
+    newUp->vrs();
 
-    jgl::Vector3d* right = up->crs(direction);
-    jgl::Vector3d* newUp = direction->crs(right);
-
-    this->matrix[0][0] = right->getX();
-    this->matrix[0][1] = newUp->getX();
+    this->matrix[0][0] = right->getX(); 
+    this->matrix[0][1] = newUp->getX(); 
     this->matrix[0][2] = direction->getX();
-
-    this->matrix[1][0] = right->getY();
-    this->matrix[1][1] = newUp->getY();
+    this->matrix[0][3] = 0;
+    
+    this->matrix[1][0] = right->getY(); 
+    this->matrix[1][1] = newUp->getY(); 
     this->matrix[1][2] = direction->getY();
+    this->matrix[1][3] = 0;
 
-    this->matrix[2][0] = right->getZ();
-    this->matrix[2][1] = newUp->getZ();
+    this->matrix[2][0] = right->getZ(); 
+    this->matrix[2][1] = newUp->getZ(); 
     this->matrix[2][2] = direction->getZ();
+    this->matrix[2][3] = 0;
 
-    for(int i = 0; i < 4; i++){
-        this->matrix[3][i] = 0;
-        this->matrix[i][3] = 0;
-    }
-
+    this->matrix[3][0] = 0; 
+    this->matrix[3][1] = 0; 
+    this->matrix[3][2] = 0;
     this->matrix[3][3] = 1;
 
     return this;
+ }
+jgl::Vector3d* jgl::Matrix4d::getRotation(){
+    return new jgl::Vector3d(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
+}
+
+
+
+jgl::Matrix4d* jgl::Matrix4d::setToTranslation(jgl::Vector3d* position){
+    return this->idt()->set(0, 3, position->getX())->set(1, 3, position->getY())->set(2, 3, position->getZ());
+}
+jgl::Vector3d* jgl::Matrix4d::getTranslation(){
+    return new jgl::Vector3d(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
+}
+
+
+jgl::Matrix4d* jgl::Matrix4d::setToScale(jgl::Vector3d* scale){
+    return this->idt()->set(0, 0, scale->getX())->set(1, 1, scale->getY())->set(2, 2, scale->getZ());
+}
+jgl::Vector3d* jgl::Matrix4d::getScale(){
+    return new jgl::Vector3d(this->matrix[0][0], this->matrix[1][1], this->matrix[2][2]);
 }
 
 
 
 jgl::Quaternion* jgl::Matrix4d::getQuaternion(){
-    
-    double qw = sqrt(1+this->matrix[0][0]+this->matrix[1][1]+this->matrix[2][2])/2;
-    return new jgl::Quaternion(
-        (this->matrix[2][1]-this->matrix[1][2])/(4*qw),
-        (this->matrix[0][2]-this->matrix[2][0])/(4*qw),
-        (this->matrix[1][0]-this->matrix[0][1])/(4*qw),
-        qw
-    );
+    jgl::Quaternion q;
+    float trace = this->matrix[0][0] + this->matrix[1][1] + this->matrix[2][2]; // I removed + 1.0f; see discussion with Ethan
+    if( trace > 0 ) {
+            float s = 0.5f / sqrtf(trace+ 1.0f);
+            q.w = 0.25f / s;
+            q.x = ( this->matrix[2][1] - this->matrix[1][2] ) * s;
+            q.y = ( this->matrix[0][2] - this->matrix[2][0] ) * s;
+            q.z = ( this->matrix[1][0] - this->matrix[0][1] ) * s;
+    } else {
+        if ( this->matrix[0][0] > this->matrix[1][1] && this->matrix[0][0] > this->matrix[2][2] ) {
+            float s = 2.0f * sqrtf( 1.0f + this->matrix[0][0] - this->matrix[1][1] - this->matrix[2][2]);
+            q.w = (this->matrix[2][1] - this->matrix[1][2] ) / s;
+            q.x = 0.25f * s;
+            q.y = (this->matrix[0][1] + this->matrix[1][0] ) / s;
+            q.z = (this->matrix[0][2] + this->matrix[2][0] ) / s;
+        } else if (this->matrix[1][1] > this->matrix[2][2]) {
+        float s = 2.0f * sqrtf( 1.0f + this->matrix[1][1] - this->matrix[0][0] - this->matrix[2][2]);
+            q.w = (this->matrix[0][2] - this->matrix[2][0] ) / s;
+            q.x = (this->matrix[0][1] + this->matrix[1][0] ) / s;
+            q.y = 0.25f * s;
+            q.z = (this->matrix[1][2] + this->matrix[2][1] ) / s;
+        } else {
+            float s = 2.0f * sqrtf( 1.0f + this->matrix[2][2] - this->matrix[0][0] - this->matrix[1][1] );
+            q.w = (this->matrix[1][0] - this->matrix[0][1] ) / s;
+            q.x = (this->matrix[0][2] + this->matrix[2][0] ) / s;
+            q.y = (this->matrix[1][2] + this->matrix[2][1] ) / s;
+            q.z = 0.25f * s;
+        }
+    }
+
+    return q.cpy();
 }
 
 
@@ -253,6 +336,15 @@ jgl::Matrix4d* jgl::Matrix4d::inv(){
     return nullptr;
 }
 
+
+std::string* jgl::Matrix4d::toString(){
+    return new std::string(
+        std::to_string(this->matrix[0][0]) + "," + std::to_string(this->matrix[0][1]) + "," + std::to_string(this->matrix[0][2]) + "," + std::to_string(this->matrix[0][3]) + ";" +
+        std::to_string(this->matrix[1][0]) + "," + std::to_string(this->matrix[1][1]) + "," + std::to_string(this->matrix[1][2]) + "," + std::to_string(this->matrix[1][3]) + ";" +
+        std::to_string(this->matrix[2][0]) + "," + std::to_string(this->matrix[2][1]) + "," + std::to_string(this->matrix[2][2]) + "," + std::to_string(this->matrix[2][3]) + ";" +
+        std::to_string(this->matrix[3][0]) + "," + std::to_string(this->matrix[3][1]) + "," + std::to_string(this->matrix[3][2]) + "," + std::to_string(this->matrix[3][3])
+    );
+}
 
 
 

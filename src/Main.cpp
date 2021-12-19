@@ -1,12 +1,11 @@
 #include "Main.h"
 
+using namespace jgl;
+
 int main(int argc, const char* argv[]){  
 
-    jgl::Vector2d* vec2d = new jgl::Vector2d(2, 1);
-    jgl::Matrix3d* mat3d = new jgl::Matrix3d(M_PI, vec2d);
-    double angl = mat3d->getRotation();
-    double scale = mat3d->getScale();
-    jgl::Vector2d* provaV = mat3d->getTranslation();
+    Matrix4d* mat = new Matrix4d(M_PI_4, 0, 0);
+
 /*
     initializeGameLibrary();
 

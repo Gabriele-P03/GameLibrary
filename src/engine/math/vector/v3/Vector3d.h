@@ -9,6 +9,7 @@
 namespace jgl{
 
     class Matrix4d;
+    class Quaternion;
 
     class Vector3d
     {
@@ -21,6 +22,7 @@ namespace jgl{
             Vector3d(double x, double y, double z);
             Vector3d(Vector3d* vec3d);
             Vector3d(Matrix4d* mat4d);
+            Vector3d(Quaternion* quaternion);
             Vector3d(std::string* fromString);
             
             double getX();
@@ -107,13 +109,11 @@ namespace jgl{
 
 
 
-            //Get the transformation matrix of this vector, containing only rotation and translation
-            Matrix4d* getTransformationMatrix();
-            //Get the rotation matrix of this vector
+            //Get the rotation matrix of this direction vector. Call vrs() before
             Matrix4d* getRotationMatrix();
-            //Get the translation matrix of this vector
+            //Get the translation matrix of this position vector. Call vrs() before
             Matrix4d* getTranslationMatrix();
-            //Get the scaling matrix of this vector
+            //Get the scaling matrix of this scale vector. Call vrs() before
             Matrix4d* getScalingMatrix();
 
 

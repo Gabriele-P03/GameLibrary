@@ -105,17 +105,6 @@ namespace jgl{
 
 
 
-            //Get the transformation matrix of this vector, containing only rotation and translation
-            Matrix4d* getTransformationMatrix();
-            //Get the rotation matrix of this vector
-            Matrix4d* getRotationMatrix();
-            //Get the translation matrix of this vector
-            Matrix4d* getTranslationMatrix();
-            //Get the scaling matrix of this vector
-            Matrix4d* getScalingMatrix();
-
-
-
             static Vector3f xAxis;
             static Vector3f yAxis;
             static Vector3f zAxis;
