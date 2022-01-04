@@ -1,15 +1,15 @@
-#ifndef Vector2F_H
-#define Vector2F_H
+#ifndef Vector2D_H
+#define Vector2D_H
 
 #include <string>
 #include "../../JMath.h"
-#include "../../matrix/mat3/Matrix3d.h"
+#include "../../matrix/mat3/Matrix3.h"
 
 namespace jgl{
 
-    class Matrix3d;
+    class Matrix3;
 
-    class Vector2f
+    class Vector2d
     {
         private:
             float x, y;
@@ -19,23 +19,23 @@ namespace jgl{
             /**
              * Create a vector 0, 0
              */ 
-            Vector2f();
+            Vector2d();
             /**
              * Create a new vector with the given value
              * @param x
              * @param y
              */ 
-            Vector2f(float x, float y);
+            Vector2d(float x, float y);
             /**
              * Create a new vector as the given one
-             * @param vec2f
+             * @param vec2d
              */ 
-            Vector2f(Vector2f* vec2f);
+            Vector2d(Vector2d* vec2f);
             /**
              * Create a new vector from the given string "x,y"
              * @param fromString
              */ 
-            Vector2f(std::string* fromString);
+            Vector2d(std::string* fromString);
             
 
 
@@ -44,61 +44,61 @@ namespace jgl{
 
 
 
-            Vector2f* setX(float x);
-            Vector2f* setY(float y);
-            Vector2f* set(Vector2f* vec2f);
-            Vector2f* setAll(float x, float y);
+            Vector2d* setX(float x);
+            Vector2d* setY(float y);
+            Vector2d* set(Vector2d* vec2d);
+            Vector2d* setAll(float x, float y);
 
 
 
-            Vector2f* addX(float x);
-            Vector2f* addY(float y);
-            Vector2f* add(Vector2f* vec2f);
-            Vector2f* addAll(float x, float y);
+            Vector2d* addX(float x);
+            Vector2d* addY(float y);
+            Vector2d* add(Vector2d* vec2d);
+            Vector2d* addAll(float x, float y);
 
 
 
-            Vector2f* mulX(float x);
-            Vector2f* mulY(float y);
-            Vector2f* mul(Vector2f* vec2f);
-            Vector2f* mulAll(float x, float y);
+            Vector2d* mulX(float x);
+            Vector2d* mulY(float y);
+            Vector2d* mul(Vector2d* vec2d);
+            Vector2d* mulAll(float x, float y);
 
 
 
-            Vector2f* cpy();
+            Vector2d* cpy();
     
 
 
             //Versor of the vector
-            jgl::Vector2f* vrs();
+            jgl::Vector2d* vrs();
 
 
 
             //Return lenght (module/norm) of the vector
-            double lenght();
+            float lenght();
 
 
 
             //Return the distance from the given vector
-            double dst(jgl::Vector2f* vec2f);
+            float dst(jgl::Vector2d* vec2d);
 
 
 
             //Return dot product
-            double dot(jgl::Vector2f* vec2f);
+            float dot(jgl::Vector2d* vec2d);
 
 
 
             //Return the cross product.
             //Cross product is not defined in 2d space, anyway we can imagine Z value as 0 
-            double crs(jgl::Vector2f* vec2f);
+            float crs(jgl::Vector2d* vec2d);
 
 
 
             //Return the angle between two vector in radiants
-            double angleRad(jgl::Vector2f* vec2f);
+            float angleRad(jgl::Vector2d* vec2d);
             //Return the angle between two vector in grades
-            double angleGrd(jgl::Vector2f* vec2f);
+            float angleGrd(jgl::Vector2d* vec2d);
 
 
 
@@ -108,49 +108,49 @@ namespace jgl{
 
 
             //Return if the vectors are equal (parallel and lenght)
-            bool equals(jgl::Vector2f* vec2f);
+            bool equals(jgl::Vector2d* vec2d);
 
 
 
             //Return if the vectors are perpendicular
-            bool isPerpendicular(jgl::Vector2f* vec2f);
+            bool isPerpendicular(jgl::Vector2d* vec2d);
 
 
 
             //Return if the vectors are parallel
-            bool isParallel(jgl::Vector2f* vec2f);
+            bool isParallel(jgl::Vector2d* vec2d);
 
 
 
             //Return if the vectors has the same directions
-            bool sameDirection(jgl::Vector2f* vec2f);
+            bool sameDirection(jgl::Vector2d* vec2d);
 
 
 
             //Return if the vectors has opposite direction
-            bool oppositeDirection(jgl::Vector2f* vec2f);
+            bool oppositeDirection(jgl::Vector2d* vec2d);
 
 
 
             //Return if the vectors form an acute angle
             //If the dot product is positive, they form acute one
-            bool acuteAngle(jgl::Vector2f* vec2f);
+            bool acuteAngle(jgl::Vector2d* vec2d);
 
 
 
             //Return if the vectors form an obtuse angle
             //If the dot product is negative, they form acute one
-            bool obtuseAngle(jgl::Vector2f* vec2f);
+            bool obtuseAngle(jgl::Vector2d* vec2d);
 
 
 
             //Rotate vector taking as pivot (0, 0), counter-clockwise, start from x-axis right 
-            Vector2f* rotate(double _rad);
+            Vector2d* rotate(float _rad);
 
 
 
-            //Rotate vector around pofloat by vec2f
-            Vector2f* rotateAround(jgl::Vector2f* vec2f, double _rad);
+            //Rotate vector around pofloat by vec2d
+            Vector2d* rotateAround(jgl::Vector2d* vec2d, float _rad);
 
 
 
@@ -160,16 +160,16 @@ namespace jgl{
 
 
             //Get the rotation matrix of this vector
-            Matrix3d* getRotationMatrix();
+            Matrix3* getRotationMatrix();
             //Get the translation matrix of this vector
-            Matrix3d* getTranslationMatrix();
+            Matrix3* getTranslationMatrix();
             //Get the scaling matrix of this vector
-            Matrix3d* getScalingMatrix();
+            Matrix3* getScalingMatrix();
 
 
 
-            static Vector2f xAxis;
-            static Vector2f yAxis;
+            static Vector2d xAxis;
+            static Vector2d yAxis;
     };   
 }
 

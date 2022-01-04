@@ -15,9 +15,9 @@ namespace jpl{
 
 
             JsonWriter(std::fstream* file, jpl::JsonObject* obj);
-            JsonWriter(std::string path, jpl::JsonObject* obj);
+            JsonWriter(std::string* path, jpl::JsonObject* obj);
             JsonWriter(std::fstream* file);
-            JsonWriter(std::string path);
+            JsonWriter(std::string* path);
             JsonWriter();
 
             void write();

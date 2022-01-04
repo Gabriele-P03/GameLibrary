@@ -1,7 +1,7 @@
 #include "JsonFile.h"
 
-jpl::JsonFile::JsonFile(std::string filePath, std::ios_base::openmode open_mode){
-    getLocalFile(filePath.c_str(), open_mode, &this->file);
+jpl::JsonFile::JsonFile(std::string* filePath, std::ios_base::openmode open_mode){
+    getLocalFile(filePath, open_mode, &this->file);
     opened = true;
     this->saveLenght();
     this->mainObject = new jpl::JsonObject();

@@ -11,10 +11,7 @@ std::vector<unsigned int*> jpl::Shader::shaderPrograms;
 jpl::Shader::Shader(std::string* pathToVertexFile, std::string* pathToFragmentFile){
 
     this->genMainBuffers();
-    this->createShader(
-                        std::string(readFile(pathToVertexFile->c_str())->c_str()), 
-                        std::string(readFile(pathToFragmentFile->c_str())->c_str())
-    );
+    this->createShader(*readFile(pathToVertexFile), *readFile(pathToFragmentFile));
 }
 
 jpl::Shader::Shader(const char* vertexCode, const char* fragmentCode){
@@ -127,13 +124,12 @@ void jpl::Shader::bind(){
 
         glBindVertexArray(0);
     }
-
-    glBindVertexArray(*this->VAO);
 }
 
 void jpl::Shader::draw(){
     this->useProgram();
     this->bind();
+    glBindVertexArray(*this->VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
 }
 

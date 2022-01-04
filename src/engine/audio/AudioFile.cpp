@@ -1,8 +1,8 @@
 #include "AudioFile.h"
 
-jpl::AudioFile::AudioFile(const char* path){
+jpl::AudioFile::AudioFile(std::string* pathToFile){
     this->file = new std::fstream();
-    getInternalFile(path, std::ios_base::in, &file);
+    getInternalFile(pathToFile, std::ios_base::in, &file);
     this->read(file);
 }
 

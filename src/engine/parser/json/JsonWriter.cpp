@@ -1,6 +1,6 @@
 #include "JsonWriter.h"
 
-jpl::JsonWriter::JsonWriter(std::string filePath, jpl::JsonObject* obj) : jpl::JsonFile(filePath, std::ios_base::out){
+jpl::JsonWriter::JsonWriter(std::string* filePath, jpl::JsonObject* obj) : jpl::JsonFile(filePath, std::ios_base::out){
     this->mainObject = obj;
 }
 
@@ -8,7 +8,7 @@ jpl::JsonWriter::JsonWriter(std::fstream* file, jpl::JsonObject* obj) : jpl::Jso
     this->mainObject = obj;
 }
 
-jpl::JsonWriter::JsonWriter(std::string filePath) : jpl::JsonFile(filePath, std::ios_base::out){}
+jpl::JsonWriter::JsonWriter(std::string* filePath) : jpl::JsonFile(filePath, std::ios_base::out){}
 jpl::JsonWriter::JsonWriter(std::fstream* file) : jpl::JsonFile(file){}
 
 void jpl::JsonWriter::write(){

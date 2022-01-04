@@ -11,13 +11,16 @@
 #include "engine/graphics/shader/Shader.h"
 #include "files/Files.h"
 #include "engine/graphics/shader/Shader.h"
-#include "engine/graphics/shader/cubeShader/CubeShader.hpp"
-#include "engine/math/vector/v2/Vector2d.h"
-#include "engine/math/matrix/mat4/Matrix4d.h"
-#include "engine/math/matrix/mat3/Matrix3d.h"
+#include "engine/graphics/shader/planeShader/TextureShader.hpp"
+#include "engine/math/vector/v2/Vector2f.h"
+#include "engine/math/matrix/mat4/Matrix4.h"
+#include "engine/math/matrix/mat3/Matrix3.h"
 #include "engine/parser/json/JsonReader.h"
 #include "engine/parser/json/JsonWriter.h"
 #include "engine/audio/Audio.h"
+#include "engine/graphics/texture/Texture.hpp"
+#include "engine/graphics/shader/textShader/TextShader.hpp"
+#include "engine/utils/WindowInfo.hpp"
 
 //This will be the main window of the game
 GLFWwindow* window;

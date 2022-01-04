@@ -54,7 +54,7 @@ namespace jpl{
 
             std::fstream* file;
             
-            AudioFile(const char* path);
+            AudioFile(std::string* pathToFile);
             AudioFile(std::fstream* file);
 
             //Read the header and then the data raw

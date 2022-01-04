@@ -4,9 +4,7 @@ using namespace jgl;
 
 int main(int argc, const char* argv[]){  
 
-    Matrix4d* mat = new Matrix4d(M_PI_4, 0, 0);
 
-/*
     initializeGameLibrary();
 
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
@@ -14,10 +12,16 @@ int main(int argc, const char* argv[]){
 
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    jpl::Audio* audio = new jpl::Audio(new jpl::AudioFile("a.wav"));
+    jpl::Audio* audio = new jpl::Audio(new jpl::AudioFile(new std::string("a.wav")));
     audio->play();
 
-    jpl::CubeShader* cubeShader = new  jpl::CubeShader();
+    jpl::TextureShader* shader = new jpl::TextureShader();
+    jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
+
+    jpl::TextShader* shader1 = new jpl::TextShader();
+    std::string* buf = new std::string("Aia");
+
+
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -28,15 +32,17 @@ int main(int argc, const char* argv[]){
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-  
-        cubeShader->draw();
         
+    
+        //shader->rotation->idt();
+        //shader->draw(texture, 0, 0, 100, 100, 1, 1, 73, 79);
+        shader1->render(buf, 0, 0);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     terminateGameLibrary();
-    */
+    
     return 0;
 }
 
@@ -59,6 +65,7 @@ void initializeGameLibrary(){
         std::cout<<"Could not initialize GLFW...\n";
         exit(-1);
     }
+
     std::cout<<"Done\n";
 
     initAudio();
@@ -94,10 +101,15 @@ void createWindow(int w, int h, const char* title, GLFWmonitor* monitor, GLFWwin
 
     std::cout<<"\nWindow's values at creation: Width="<<w<<" Height="<<h<<"\n";
     window = glfwCreateWindow(w, h, title, monitor, share);
-
-    std::cout<<"Creation window...Done\nMaking context current...Done\n";
-
+            
+    glfwSetWindowSizeCallback(window, jpl::window_size_callback);
+    std::cout<<"Window Size Callback set\n";
+    glfwSetFramebufferSizeCallback(window, jpl::framebuffer_size_callback);
+    std::cout<<"Framebuffer Size Callback set\n";
+    
+    std::cout<<"Creation window...Done\nMaking context current...";
     glfwMakeContextCurrent(window);
+    std::cout<<"Done!\n";
 
     /*
         In order to use OpenGl functions, we must before initialize GLEW.

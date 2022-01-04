@@ -1,5 +1,5 @@
 /**
- * This is a basic abrìstraction a shader which renders a normal cube.
+ * This is a basic abstraction a shader which renders a normal cube.
  * 
  * Constructor set the 8 vertices (then 8 vertices * 3 float = 24 float) whose cube is composed of 
  * 

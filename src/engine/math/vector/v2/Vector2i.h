@@ -3,7 +3,7 @@
 
 #include <string>
 #include "../../JMath.h"
-#include "../../matrix/mat3/Matrix3d.h"
+#include "../../matrix/mat3/Matrix3.h"
 
 namespace jgl{
 
@@ -57,30 +57,30 @@ namespace jgl{
 
 
             //Return lenght (module/norm) of the vector
-            double lenght();
+            float lenght();
 
 
 
             //Return the distance from the given vector
-            double dst(jgl::Vector2i* vec2i);
+            float dst(jgl::Vector2i* vec2i);
 
 
 
             //Return dot product
-            double dot(jgl::Vector2i* vec2i);
+            float dot(jgl::Vector2i* vec2i);
 
 
 
             //Return the cross product.
             //Cross product is not defined in 2d space, anyway we can imagine Z value as 0 
-            double crs(jgl::Vector2i* vec2i);
+            float crs(jgl::Vector2i* vec2i);
 
 
 
             //Return the angle between two vector in radiants
-            double angleRad(jgl::Vector2i* vec2i);
+            float angleRad(jgl::Vector2i* vec2i);
             //Return the angle between two vector in grades
-            double angleGrd(jgl::Vector2i* vec2i);
+            float angleGrd(jgl::Vector2i* vec2i);
 
 
 
@@ -127,12 +127,12 @@ namespace jgl{
 
 
             //Rotate vector taking as pivot (0, 0), counter-clockwise, start from x-axis right 
-            Vector2i* rotate(double _rad);
+            Vector2i* rotate(float _rad);
 
 
 
             //Rotate vector around point by vec2i
-            Vector2i* rotateAround(jgl::Vector2i* vec2i, double _rad);
+            Vector2i* rotateAround(jgl::Vector2i* vec2i, float _rad);
 
 
 

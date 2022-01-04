@@ -32,7 +32,7 @@ namespace jpl{
 
         public:
 
-            JsonFile(std::string filePath, std::ios_base::openmode open_mode);
+            JsonFile(std::string* filePath, std::ios_base::openmode open_mode);
             JsonFile(std::fstream* file);
             ~JsonFile();
 

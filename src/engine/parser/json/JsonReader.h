@@ -27,7 +27,7 @@ namespace jpl{
             bool readSuccessully;
 
         public:
-            JsonReader(std::string filePath);
+            JsonReader(std::string* filePath);
             ~JsonReader();
 
             //Called on JsonReader constructor in order to parse the json file

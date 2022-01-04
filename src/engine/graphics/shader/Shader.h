@@ -34,7 +34,7 @@
 
 #define GLEW_STATIC
 #include <GL/glew.h>
-
+#include <GLFW/glfw3.h>
 #include <vector>
 
 /**
@@ -73,14 +73,6 @@ namespace jpl{
             unsigned int* indices;
             unsigned int _sizeIndices;
 
-        public:
-
-            //Constructor with path to file
-            Shader(std::string* pathToVertexFile, std::string* pathToFragmentFile);
-
-            //Constructor with code already taken
-            Shader(const char* vertexCode, const char* fragmentCode);
-
             //Generates VBO and VAO
             void genMainBuffers();
 
@@ -105,6 +97,14 @@ namespace jpl{
              * to not call glUseProgram() while it isn't needed
              */ 
             virtual void useProgram();
+
+        public:
+
+            //Constructor with path to file
+            Shader(std::string* pathToVertexFile, std::string* pathToFragmentFile);
+
+            //Constructor with code already taken
+            Shader(const char* vertexCode, const char* fragmentCode);
 
             unsigned int* getVBO();
             unsigned int* getVAO();

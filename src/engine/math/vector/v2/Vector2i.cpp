@@ -47,7 +47,7 @@ jgl::Vector2i* jgl::Vector2i::cpy(){return new jgl::Vector2i(this->x, this->y);}
 jgl::Vector2i* jgl::Vector2i::vrs(){
 
     jgl::Vector2i* vec = this->cpy();
-    double md = this->lenght();
+    float md = this->lenght();
 
     vec->mulAll(1/md, 1/md);
 
@@ -56,15 +56,15 @@ jgl::Vector2i* jgl::Vector2i::vrs(){
 
 
 
-double jgl::Vector2i::dst(jgl::Vector2i* vec2i){
-    double deltaX = this->x-vec2i->x;
-    double deltaY = this->y-vec2i->y;
+float jgl::Vector2i::dst(jgl::Vector2i* vec2i){
+    float deltaX = this->x-vec2i->x;
+    float deltaY = this->y-vec2i->y;
     return sqrt( pow(deltaX, 2) + pow(deltaY, 2));
 }
 
 
 
-double jgl::Vector2i::lenght(){
+float jgl::Vector2i::lenght(){
     return sqrt( pow(this->x, 2) + pow(this->y,2) );
 }
 
@@ -76,28 +76,28 @@ bool jgl::Vector2i::isNull(){
 
 
 
-double jgl::Vector2i::dot(jgl::Vector2i* vec2i){
+float jgl::Vector2i::dot(jgl::Vector2i* vec2i){
     return this->x*vec2i->x + this->y*vec2i->y;
 }
 
 
 
-double jgl::Vector2i::crs(jgl::Vector2i* vec2i){
+float jgl::Vector2i::crs(jgl::Vector2i* vec2i){
     return  this->x*vec2i->y - this->y*vec2i->x;
 }
 
 
 
-double jgl::Vector2i::angleRad(jgl::Vector2i* vec2i){
-    double norm = this->lenght();
-    double ps = this->dot(vec2i);
-    double normParam = vec2i->lenght();
+float jgl::Vector2i::angleRad(jgl::Vector2i* vec2i){
+    float norm = this->lenght();
+    float ps = this->dot(vec2i);
+    float normParam = vec2i->lenght();
     return acos(ps/(norm*normParam));
 }
 
 
 
-double jgl::Vector2i::angleGrd(jgl::Vector2i* vec2i){
+float jgl::Vector2i::angleGrd(jgl::Vector2i* vec2i){
     return this->angleRad(vec2i) * 180 /  M_PI;
 }
 
@@ -130,29 +130,29 @@ bool jgl::Vector2i::sameDirection(jgl::Vector2i* vec2i){
 
 bool jgl::Vector2i::oppositeDirection(jgl::Vector2i* vec2i){
     bool flag = this->crs(vec2i) == 0 && 
-    isNegative(this->x) != isNegative((double)vec2i->x) &&
-    isNegative(this->y) != isNegative((double)vec2i->y);
+    isNegative(this->x) != isNegative((float)vec2i->x) &&
+    isNegative(this->y) != isNegative((float)vec2i->y);
     return flag;
 }
 
 
 
 bool jgl::Vector2i::acuteAngle(jgl::Vector2i* vec2i){
-    double angle = this->dot(vec2i);
+    float angle = this->dot(vec2i);
     return angle > 0 && angle != 0;
 }
 
 
 
 bool jgl::Vector2i::obtuseAngle(jgl::Vector2i* vec2i){
-    double angle = this->dot(vec2i);
+    float angle = this->dot(vec2i);
     return angle < 0 && angle != 0;
 }
 
 
 
-jgl::Vector2i* jgl::Vector2i::rotate(double _rad){
-    double q = std::cos(_rad);
+jgl::Vector2i* jgl::Vector2i::rotate(float _rad){
+    float q = std::cos(_rad);
     float x = q*this->x - sin(_rad)*this->y;
     this->setX( x );
     this->setY( sin(_rad)*this->x + cos(_rad)*this->y );
@@ -161,7 +161,7 @@ jgl::Vector2i* jgl::Vector2i::rotate(double _rad){
 
 
 
-jgl::Vector2i* jgl::Vector2i::rotateAround(jgl::Vector2i* vec2i, double _rad){
+jgl::Vector2i* jgl::Vector2i::rotateAround(jgl::Vector2i* vec2i, float _rad){
     this->addAll(-vec2i->x, -vec2i->y);
     this->rotate(_rad);
     this->add(vec2i);

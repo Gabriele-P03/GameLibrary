@@ -72,23 +72,23 @@ jgl::Vector3i* jgl::Vector3i::cpy(){return new jgl::Vector3i(this->x, this->y, t
 
 jgl::Vector3i* jgl::Vector3i::vrs(){
 
-    double md = this->lenght();
+    float md = this->lenght();
     this->mulAll(1/md, 1/md, 1/md);
     return this;
 }
 
 
 
-double jgl::Vector3i::lenght(){
+float jgl::Vector3i::lenght(){
     return sqrt( pow(this->x, 2) + pow(this->y,2) + pow(this->z, 2));
 }
 
 
 
-double jgl::Vector3i::dst(jgl::Vector3i* vec3i){
-    double deltaX = this->x - vec3i->x;
-    double deltaY = this->y - vec3i->y;
-    double deltaZ = this->z - vec3i->z;
+float jgl::Vector3i::dst(jgl::Vector3i* vec3i){
+    float deltaX = this->x - vec3i->x;
+    float deltaY = this->y - vec3i->y;
+    float deltaZ = this->z - vec3i->z;
 
     return sqrt( deltaX*deltaX + deltaY*deltaY + deltaZ*deltaZ );
 }
@@ -101,7 +101,7 @@ bool jgl::Vector3i::isNull(){
 
 
 
-double jgl::Vector3i::dot(jgl::Vector3i* vec3i){
+float jgl::Vector3i::dot(jgl::Vector3i* vec3i){
     return this->x*vec3i->x + this->y*vec3i->y + this->z*vec3i->z;
 }
 
@@ -117,16 +117,16 @@ jgl::Vector3i* jgl::Vector3i::crs(jgl::Vector3i* vec3i){
 
 
 
-double jgl::Vector3i::angleRad(jgl::Vector3i* vec3i){
-    double normFirst = this->lenght();
-    double normSecond = vec3i->lenght();
+float jgl::Vector3i::angleRad(jgl::Vector3i* vec3i){
+    float normFirst = this->lenght();
+    float normSecond = vec3i->lenght();
 
     return acos( this->cpy()->dot(vec3i)/(normFirst*normSecond) );
 }
 
 
 
-double jgl::Vector3i::angleGrd(jgl::Vector3i* vec3i){
+float jgl::Vector3i::angleGrd(jgl::Vector3i* vec3i){
     return toDegree(this->angleRad(vec3i));
 }
 
@@ -159,28 +159,28 @@ bool jgl::Vector3i::sameDirection(jgl::Vector3i* vec3i){
 
 bool jgl::Vector3i::oppositeDirection(jgl::Vector3i* vec3i){
     bool flag = this->crs(vec3i) == 0 && 
-    isNegative(this->x) != isNegative((double)vec3i->x) &&
-    isNegative(this->y) != isNegative((double)vec3i->y);
+    isNegative(this->x) != isNegative((float)vec3i->x) &&
+    isNegative(this->y) != isNegative((float)vec3i->y);
     return flag;
 }
 
 
 
 bool jgl::Vector3i::acuteAngle(jgl::Vector3i* vec3i){
-    double angle = this->dot(vec3i);
+    float angle = this->dot(vec3i);
     return angle > 0 && angle != 0;
 }
 
 
 
 bool jgl::Vector3i::obtuseAngle(jgl::Vector3i* vec3i){
-    double angle = this->dot(vec3i);
+    float angle = this->dot(vec3i);
     return angle < 0 && angle != 0;
 }
 
 
 
-jgl::Vector3i* jgl::Vector3i::rotate(double _rad, jgl::Vector3i* axis){
+jgl::Vector3i* jgl::Vector3i::rotate(float _rad, jgl::Vector3i* axis){
 
     if(axis->x == 1 && axis->y == 0 && axis->z == 0){
         this->setAll(
@@ -210,7 +210,7 @@ jgl::Vector3i* jgl::Vector3i::rotate(double _rad, jgl::Vector3i* axis){
 
 
 
-jgl::Vector3i* jgl::Vector3i::rotateAround(jgl::Vector3i* vec3i, double _rad, jgl::Vector3i* axis){
+jgl::Vector3i* jgl::Vector3i::rotateAround(jgl::Vector3i* vec3i, float _rad, jgl::Vector3i* axis){
     this->addAll( -(*vec3i).x, -(*vec3i).y, -(*vec3i).z );
     this->rotate(_rad, axis);
     this->add(vec3i);

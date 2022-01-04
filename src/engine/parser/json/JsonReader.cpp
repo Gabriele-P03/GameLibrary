@@ -1,8 +1,8 @@
 #include "JsonReader.h"
 
-jpl::JsonReader::JsonReader(std::string filePath) : jpl::JsonFile::JsonFile(filePath, std::ios_base::in){
+jpl::JsonReader::JsonReader(std::string* filePath) : jpl::JsonFile::JsonFile(filePath, std::ios_base::in){
 
-    this->parse(filePath);
+    this->parse(*filePath);
 }
 
 void jpl::JsonReader::parse(std::string filePath){

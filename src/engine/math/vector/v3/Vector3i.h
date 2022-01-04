@@ -48,22 +48,22 @@ namespace jgl{
             jgl::Vector3i* vrs();
 
             //Return lenght (module/norm) of the vector
-            double lenght();
+            float lenght();
 
             //Return the distance from the given vector
-            double dst(jgl::Vector3i* vec3i);
+            float dst(jgl::Vector3i* vec3i);
 
 
             //Return dot product
-            double dot(jgl::Vector3i* vec3i);
+            float dot(jgl::Vector3i* vec3i);
 
             //Return the cross product
             jgl::Vector3i* crs(jgl::Vector3i* vec3i);
 
             //Return the angle between two vector in radiants
-            double angleRad(jgl::Vector3i* vec3i);
+            float angleRad(jgl::Vector3i* vec3i);
             //Return the angle between two vector in grades
-            double angleGrd(jgl::Vector3i* vec3i);
+            float angleGrd(jgl::Vector3i* vec3i);
 
 
             //Return if the vector is null (lenght = 0)
@@ -94,10 +94,10 @@ namespace jgl{
             bool obtuseAngle(jgl::Vector3i* vec3i);
 
             //Rotate vector taking as pivot (0, 0, 0), counter-clockwise
-            Vector3i* rotate(double _rad, jgl::Vector3i* axis);
+            Vector3i* rotate(float _rad, jgl::Vector3i* axis);
 
             //Rotate vector around point by vec3i
-            Vector3i* rotateAround(jgl::Vector3i* vec3i, double _rad, jgl::Vector3i* axis);
+            Vector3i* rotateAround(jgl::Vector3i* vec3i, float _rad, jgl::Vector3i* axis);
 
             //Return the vector as string (x, y, z)
             std::string* toString();
