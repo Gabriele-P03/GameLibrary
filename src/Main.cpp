@@ -48,9 +48,11 @@ int main(int argc, const char* argv[]){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        shader->rotation->idt();
-        shader->draw(texture, 0, 0, 100, 100, 150, 0, 150, 300);
-        //shader1->render(buf, 300, 300);
+        //shader->rotation->rotate(M_PI_2/18, 0, 0);
+        //shader->draw(texture, 100, 100, false);
+        
+        shader1->render(buf, 300, 300);
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

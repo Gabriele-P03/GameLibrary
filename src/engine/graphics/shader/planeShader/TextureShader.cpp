@@ -23,13 +23,15 @@ jpl::TextureShader::TextureShader(std::string* vertexFilePath, std::string* frag
     };
 
     this->rotation = (new jgl::Matrix4())->idt();
+    this->scale = (new jgl::Matrix4())->idt();
+    this->translation = (new jgl::Matrix4())->idt();
 }
 
 
 
-void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int lastX, int lastY, int offsetX, int offsetY, int w, int h){
+void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h){
 
-    this->calculateTextureCoords(x, y, lastX, lastY, offsetX, offsetY, w, h, texture->getWidth(), texture->getHeight());
+    this->calculateTextureCoords(x, y, widthX, heightY, offsetX, offsetY, w, h, texture->getWidth(), texture->getHeight());
 
     int currentVAO;
     glGetProgramiv(*this->shaderProgram, GL_ARRAY_BUFFER_BINDING, &currentVAO);
@@ -58,7 +60,8 @@ void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int lastX, in
     }
 
     texture->draw();
-    glUniformMatrix4fv(glGetUniformLocation(*this->shaderProgram, "rotation"), 1, GL_FALSE, &this->rotation->matrix[0][0]);
+    jgl::Matrix4* buffer = this->rotation->cpy()->mul(this->scale)->mul(this->translation);
+    glUniformMatrix4fv(glGetUniformLocation(*this->shaderProgram, "transform"), 1, GL_FALSE, &buffer->matrix[0][0]);
 
     
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
@@ -101,13 +104,8 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
 
     double startX = -1.0f + (double)x/(double)widthWindow;
     double startY = -1.0f + (double)y/(double)heightWindow;
-    double lastX = startX + (double)widthX/(double)widthWindow;
-    double lastY = startY + (double)heightY/(double)heightWindow;
-
     double midX = startX + ((double)widthX/2)/(double)widthWindow;
     double midY = startY + ((double)heightY/2)/(double)heightWindow;
-
-
 
     /*
         As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not
@@ -116,12 +114,10 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
     */
     float widthRatio = (float)widthX/(float)widthWindow;
     float heightRatio = (float)heightY/(float)heightWindow;
-    this->rotation->scale( 
+    this->scale->setToScale( 
                 (wT < widthWindow ?  widthRatio : 1/widthRatio), 
                 (hT < heightWindow ? heightRatio : 1/heightRatio),
-                 1.0f);
+                 1.0f, false);
 
-    this->rotation->translate(midX, midY, 0.0f);
-
-
+    this->translation->setToTranslation(midX, midY, 0.0f, false);
 }

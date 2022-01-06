@@ -7,6 +7,12 @@
  * Once you invoke a more detailed method (coords where render textute), it will calculate coords in range [-1;+1].
  * WARNING: This shader NOT check if coords are in range of screen width-height
  * 
+ * Each transformation (Rotation, Scale and Translation) is stored inside own Matrix4.
+ * Scaling and Translation is done by function itselves, you just be care about, if you need it, to rotate via
+ * the Matrix4 rotation (the only one public in this class...) 
+ * 
+ * A single transformation matrix is passed to shader program. It is obtained postmultipling scale to rotation matrix, then translation one
+ * 
  * @author Gabriele-P03
  */ 
 
@@ -47,6 +53,8 @@ namespace jpl{
              */ 
             virtual void calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT);
 
+            jgl::Matrix4* scale;
+            jgl::Matrix4* translation;
 
         public:
 
