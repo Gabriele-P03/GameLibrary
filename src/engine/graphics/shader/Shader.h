@@ -37,6 +37,15 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
+typedef unsigned int JPLstartX;
+typedef unsigned int JPLstartY;
+typedef unsigned int JPLwidthX;
+typedef unsigned int JPLheightY;
+typedef unsigned int JPLstartXTex;
+typedef unsigned int JPLstartYTex;
+typedef unsigned int JPLwidthXTex;
+typedef unsigned int JPLheightYTex;
+
 /**
  * Called by Main's terminating function, it will destroy all buffers, sources and program shaders
  * which are saved inside the vectors declared above

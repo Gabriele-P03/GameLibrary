@@ -1,3 +1,15 @@
+/**
+ * DA FARE:
+ * TEXTURE
+ * TEXT RENDER
+ *  SHAPE RENDER
+ * 
+ * MODEL
+ * 3D RENDER
+ * FISICA
+ * SOCKET
+ */ 
+
 #include "Main.h"
 
 using namespace jgl;
@@ -19,9 +31,12 @@ int main(int argc, const char* argv[]){
     jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
 
     jpl::TextShader* shader1 = new jpl::TextShader();
-    std::string* buf = new std::string("Aia");
+    std::string* buf = new std::string("!");
 
-
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -33,10 +48,9 @@ int main(int argc, const char* argv[]){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-    
-        //shader->rotation->idt();
-        //shader->draw(texture, 0, 0, 100, 100, 1, 1, 73, 79);
-        shader1->render(buf, 0, 0);
+        shader->rotation->idt();
+        shader->draw(texture, 0, 0, 100, 100, 150, 0, 150, 300);
+        //shader1->render(buf, 300, 300);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

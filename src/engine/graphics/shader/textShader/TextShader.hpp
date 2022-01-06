@@ -32,6 +32,8 @@ namespace jpl{
     class TextShader : protected TextureShader{
 
         private:
+        
+            int size, offset;
 
             struct Characters{
                 int x, y;
@@ -75,7 +77,7 @@ namespace jpl{
              * @param size width and height of a box containing char
              * @param offset padding between each box, which must be the same btween rows and cols
              */ 
-            void loadFont(int rows, int cols, int sizeX, int sizeY, int offset);
+            void loadFont(int rows, int cols, int size, int offset);
 
 
             static TextShader* TEXT_SHADER_DEFAULT;

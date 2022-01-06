@@ -5,7 +5,7 @@ jpl::TextShader::TextShader() : jpl::TextShader(
     new std::string("shaders/text/vertex.vs"),
     new std::string("shaders/text/fragment.fs")){
 
-    this->loadFont(7, 13, 73, 79, 1);
+    this->loadFont(11, 11, 16, 1);
 }
 jpl::TextShader::TextShader(std::string* pathToFont) : jpl::TextShader(
     pathToFont,
@@ -27,16 +27,19 @@ jpl::TextShader::TextShader(std::string* pathToFont, std::string* pathToVertex, 
     glEnablei(GL_BLEND, 0);
 }      
 
-void jpl::TextShader::loadFont(int rows, int cols, int sizeX, int sizeY, int offset){
+void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
 
     if(this->font != nullptr){
+            
+        this->size = size;
+        this->offset = offset;
 
             this->chars = new jpl::TextShader::Characters[rows*cols];
 
             for(int x = 0; x < rows; x++){
                 for(int y = 0; y < cols; y++){
-                    this->chars[x*cols + y].x = offset * (y+1) + y * sizeX;
-                    this->chars[x*cols + y].y = offset * (x+1) + x * sizeY; 
+                    this->chars[x*cols + y].x = offset * (y+1) + y * size;
+                    this->chars[x*cols + y].y = offset * (x+1) + x * size; 
                 }
             }
     }else{
@@ -54,7 +57,7 @@ void jpl::TextShader::render(std::string* text, int x, int y){
 
         if(dec >= 33 || dec <= 126){
             this->rotation->idt();
-            this->draw(this->font, x+73*i, y, x+73*(i+1), y+79, this->chars[dec-33].x, this->chars[dec-33].y, 73, 79);
+            this->draw(this->font, x+size*i, y, 0, 0, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
         }
     }
 }

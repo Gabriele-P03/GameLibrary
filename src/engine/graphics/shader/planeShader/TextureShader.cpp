@@ -65,23 +65,23 @@ void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int lastX, in
 }
 
 void jpl::TextureShader::draw(jpl::Texture* texture){
-    this->draw(texture, 0, 0, 0, 0, 0, 0, texture->getWidth(), texture->getHeight());
+    this->draw(texture, 0, 0, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
 }
 void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int lastX, int lastY, bool flag){
     this->draw(texture, x, y, lastX, lastY, 0, 0, texture->getWidth(), texture->getHeight());
 }
 void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, bool flag){
-    this->draw(texture, x, y, 0, 0, 0, 0, texture->getWidth(), texture->getHeight());
+    this->draw(texture, x, y, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
 }
 void jpl::TextureShader::draw(jpl::Texture* texuture, int offsetX, int offsetY, int w, int h){
-    this->draw(texuture, 0, 0, 0, 0, offsetX, offsetY, w, h);
+    this->draw(texuture, 0, 0, w, h, offsetX, offsetY, w, h);
 }
 void jpl::TextureShader::draw(jpl::Texture* texuture, int w, int h){
-    this->draw(texuture, 0, 0, 0, 0, 0, 0, w, h);
+    this->draw(texuture, 0, 0, w, h, 0, 0, w, h);
 }
 
 
-void jpl::TextureShader::calculateTextureCoords(int x, int y, int lastX, int lastY, int offsetX, int offsetY, int w, int h, int wT, int hT){
+void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT){
     int widthWindow, heightWindow;
     glfwGetWindowSize(glfwGetCurrentContext(), &widthWindow, &heightWindow);
 
@@ -99,44 +99,29 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int lastX, int las
     this->vertices[14] = (float)offsetY/(float)hT;
 
 
+    double startX = -1.0f + (double)x/(double)widthWindow;
+    double startY = -1.0f + (double)y/(double)heightWindow;
+    double lastX = startX + (double)widthX/(double)widthWindow;
+    double lastY = startY + (double)heightY/(double)heightWindow;
+
+    double midX = startX + ((double)widthX/2)/(double)widthWindow;
+    double midY = startY + ((double)heightY/2)/(double)heightWindow;
 
 
-    double startX = (double)(x - (double)widthWindow/2)/(double)((double)widthWindow/2); 
-    double startY = (double)(y - (double)heightWindow/2)/(double)((double)heightWindow/2);
 
-    double lX, lY;
-    if(lastX <= 0){ //Means no zoom, then quad must be wrapped to texture width supplied
-        //lX = startX - (double)(w - widthWindow/2)/(double)(widthWindow/2);
-        lX = (double)(w - (double)widthWindow/2)/(double)((double)widthWindow/2);
-    }
+    /*
+        As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not
+        a quad, we need to scale down x and y as the texture supplies.
+        Do not care if your texture width is greater than window's. It will do it...
+    */
+    float widthRatio = (float)widthX/(float)widthWindow;
+    float heightRatio = (float)heightY/(float)heightWindow;
+    this->rotation->scale( 
+                (wT < widthWindow ?  widthRatio : 1/widthRatio), 
+                (hT < heightWindow ? heightRatio : 1/heightRatio),
+                 1.0f);
 
-    if(lastY <= 0){
-        //lY = startY - (double)(h - heightWindow/2)/(double)(heightWindow/2);
-        lY = (double)(h - (double)heightWindow/2)/(double)((double)heightWindow/2);
-    }
-
-    double newX = startX - (startX - lX)/2;
-    double newY = startY - (startY - lY)/2;
-    
-    double screenRatio = (double)widthWindow/(double)heightWindow;  
-    double imageRatio = (double)wT/(double)hT;
-
-    if(imageRatio < screenRatio){
-        if(wT > hT)
-            this->rotation->scale( 1/((double)wT/(double)hT), 1.0f, 1.0f);
-        else if(wT < hT)
-            this->rotation->scale( 1/((double)hT/(double)wT), 1.0f, 1.0f);
-        else
-            this->rotation->scale( 1/screenRatio, 1.0f, 1.0f);
-    }else if(imageRatio > screenRatio){
-        if(wT < hT)
-            this->rotation->scale( 1.0f, 1/((double)hT/(double)wT),  1.0f);
-        else if(wT > hT)
-            this->rotation->scale( 1.0f, 1/((double)wT/(double)hT), 1.0f);
-        else
-            this->rotation->scale( 1.0f, 1/screenRatio, 1.0f);
-    }
-    this->rotation->translate(newX, newY, 0.0f);
+    this->rotation->translate(midX, midY, 0.0f);
 
 
 }

@@ -21,6 +21,7 @@
 #include "../../../input/mouse/MouseInput.h"
 #include <string>
 
+
 namespace jpl{
 
     class TextureShader : protected Shader{
@@ -34,8 +35,8 @@ namespace jpl{
              * for rotating you should invoke other methods
              * @param x x coord of screen
              * @param y y coord of screen
-             * @param lastX last x coords of screen, means width of quad 
-             * @param lastY last y coords of screen, means height of quad
+             * @param widthX width of quad 
+             * @param heightY height of quad
              * @param offsetX
              * @param offsetY
              * @param w
@@ -44,7 +45,7 @@ namespace jpl{
              * @param hT total height of texture
              * @return array of float containing the 4 points of quad of the texture
              */ 
-            virtual void calculateTextureCoords(int x, int y, int lastX, int lastY, int offsetX, int offsetY, int w, int h, int wT, int hT);
+            virtual void calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT);
 
 
         public:
@@ -64,14 +65,14 @@ namespace jpl{
              * @param texture
              * @param x x coord of window to draw begin from
              * @param y y coord of window to draw begin from
-             * @param lastX last x coords of screen
-             * @param lastY last y coords of screen
+             * @param widthX width of quad 
+             * @param heightY height of quad
              * @param offsetX offset x of texture
              * @param offsetY offset y of texture
              * @param w width of texture to draw
              * @param h height of texture to draw
              */ 
-            void draw(Texture* texuture, int x, int y, int lastX, int lastY, int offsetX, int offsetY, int w, int h);
+            void draw(Texture* texuture, int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h);
 
 
             /**
@@ -89,22 +90,22 @@ namespace jpl{
              * @param texture
              * @param x x coord of window to draw begin from
              * @param y y coord of window to draw begin from
-             * @param lastX last x coords of screen
-             * @param lastY last y coords of screen
+             * @param widthX width of quad 
+             * @param heightY height of quad
              * @param flag not used. Just for getting around the definition of two method with same parameters
              */ 
-            void draw(Texture* texuture, int x, int y, int lastX, int lastY, bool flag);
+            void draw(Texture* texuture, int x, int y, int widthX, int heightY, bool flag);
 
 
             /**
              * Draw the texture beginning from bottom-left of window
              * @param texture
-             * @param offsetX offset x of texture
-             * @param offsetY offset y of texture
+             * @param widthX width of quad 
+             * @param heightY height of quad
              * @param w width of texture to draw
              * @param h height of texture to draw
              */ 
-            void draw(Texture* texuture, int offsetX, int offsetY, int w, int h);
+            void draw(Texture* texuture, int widthX, int heightY, int w, int h);
 
             /**
              * Draw the texture beginning from bottom-left of window
