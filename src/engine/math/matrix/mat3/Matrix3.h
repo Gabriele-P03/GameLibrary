@@ -64,7 +64,7 @@ namespace jgl{
             /**
              * Create a new transformation matrix which represents the given postition, rotation around z-axis and scale.
              * 
-             * If your position vector is not unit-vector, you should use Matrix3#Matrix3(float yaw, Vector3d* position) else
+             * If your position vector is not unit-vector, you should use Matrix3#Matrix3(float yaw, Vector3f* position) else
              * you may pass as position the versor of your postion vector and as scale its length
              * @param yaw
              * @param position

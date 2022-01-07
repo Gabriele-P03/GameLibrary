@@ -1,53 +1,53 @@
 #include "Vector3f.h"
 
- jgl::Vector3d jgl::Vector3d::xAxis = jgl::Vector3d(1, 0, 0);
- jgl::Vector3d jgl::Vector3d::yAxis = jgl::Vector3d(0, 1, 0);
- jgl::Vector3d jgl::Vector3d::zAxis = jgl::Vector3d(0, 0, 1);
+ jgl::Vector3f jgl::Vector3f::xAxis = jgl::Vector3f(1, 0, 0);
+ jgl::Vector3f jgl::Vector3f::yAxis = jgl::Vector3f(0, 1, 0);
+ jgl::Vector3f jgl::Vector3f::zAxis = jgl::Vector3f(0, 0, 1);
 
-jgl::Vector3d::Vector3d(float x, float y, float z){
+jgl::Vector3f::Vector3f(float x, float y, float z){
     this->x = x;
     this->y = y;
     this->z = z;
 }
-jgl::Vector3d::Vector3d() : Vector3d(0, 0, 0){}
-jgl::Vector3d::Vector3d(Vector3d* vec3d) : Vector3d( (*vec3d).x, (*vec3d).y, (*vec3d).z ){}
-jgl::Vector3d::Vector3d(std::string* fromString){
+jgl::Vector3f::Vector3f() : Vector3f(0, 0, 0){}
+jgl::Vector3f::Vector3f(Vector3f* vec3d) : Vector3f( (*vec3d).x, (*vec3d).y, (*vec3d).z ){}
+jgl::Vector3f::Vector3f(std::string* fromString){
     float firstIndex = fromString->find_first_of(','), lastIndex = fromString->find_last_of(',');
 
     this->x = atoi(fromString->substr(0, firstIndex).c_str());
     this->y = atoi(fromString->substr(firstIndex+1, lastIndex).c_str());
     this->z = atoi(fromString->substr(lastIndex+1, fromString->size()).c_str());
 }
-jgl::Vector3d::Vector3d(jgl::Matrix4* mat4d) : jgl::Vector3d(mat4d->getRotation()){}
-jgl::Vector3d::Vector3d(jgl::Quaternion* quaternion) : jgl::Vector3d(quaternion->getDirectionVector()){}
-//jgl::Vector3d::Vector3d(float yaw, float pitch, float roll){}
+jgl::Vector3f::Vector3f(jgl::Matrix4* mat4d) : jgl::Vector3f(mat4d->getRotation()){}
+jgl::Vector3f::Vector3f(jgl::Quaternion* quaternion) : jgl::Vector3f(quaternion->getDirectionVector()){}
+//jgl::Vector3f::Vector3f(float yaw, float pitch, float roll){}
 
 
 
-float jgl::Vector3d::getX(){return this->x;}
-float jgl::Vector3d::getY(){return this->y;}
-float jgl::Vector3d::getZ(){return this->z;}
+float jgl::Vector3f::getX(){return this->x;}
+float jgl::Vector3f::getY(){return this->y;}
+float jgl::Vector3f::getZ(){return this->z;}
 
 
 
-jgl::Vector3d* jgl::Vector3d::setX(float x){this->x = x; return this;}
-jgl::Vector3d* jgl::Vector3d::setY(float y){this->y = y; return this;}
-jgl::Vector3d* jgl::Vector3d::setZ(float z){this->z = z; return this;}
-jgl::Vector3d* jgl::Vector3d::setAll(float x, float y, float z){this->x = x; this->y = y; this->z = z; return this;}
-jgl::Vector3d* jgl::Vector3d::set(Vector3d* vec3d){this->setAll( (*vec3d).x, (*vec3d).y, (*vec3d).z ); return this;}
+jgl::Vector3f* jgl::Vector3f::setX(float x){this->x = x; return this;}
+jgl::Vector3f* jgl::Vector3f::setY(float y){this->y = y; return this;}
+jgl::Vector3f* jgl::Vector3f::setZ(float z){this->z = z; return this;}
+jgl::Vector3f* jgl::Vector3f::setAll(float x, float y, float z){this->x = x; this->y = y; this->z = z; return this;}
+jgl::Vector3f* jgl::Vector3f::set(Vector3f* vec3d){this->setAll( (*vec3d).x, (*vec3d).y, (*vec3d).z ); return this;}
 
 
 
-jgl::Vector3d* jgl::Vector3d::addX(float x){this->x += x; return this;}
-jgl::Vector3d* jgl::Vector3d::addY(float y){this-> y += y; return this;}
-jgl::Vector3d* jgl::Vector3d::addZ(float z){this-> z += z; return this;}
-jgl::Vector3d* jgl::Vector3d::add(Vector3d* vec3d){
+jgl::Vector3f* jgl::Vector3f::addX(float x){this->x += x; return this;}
+jgl::Vector3f* jgl::Vector3f::addY(float y){this-> y += y; return this;}
+jgl::Vector3f* jgl::Vector3f::addZ(float z){this-> z += z; return this;}
+jgl::Vector3f* jgl::Vector3f::add(Vector3f* vec3d){
     this->addX( (*vec3d).x ); 
     this->addY( (*vec3d).y );
     this->addZ( (*vec3d).z );
     return this;
 }
-jgl::Vector3d* jgl::Vector3d::addAll(float x, float y, float z){
+jgl::Vector3f* jgl::Vector3f::addAll(float x, float y, float z){
     this->addX(x);
     this->addY(y);
     this->addZ(z);
@@ -56,24 +56,24 @@ jgl::Vector3d* jgl::Vector3d::addAll(float x, float y, float z){
 
 
 
-jgl::Vector3d* jgl::Vector3d::mulX(float x){this->x *= x; return this;}
-jgl::Vector3d* jgl::Vector3d::mulY(float y){this->y *= y; return this;}
-jgl::Vector3d* jgl::Vector3d::mulZ(float z){this->z *= z; return this;}
-jgl::Vector3d* jgl::Vector3d::mul(Vector3d* vec3d){
+jgl::Vector3f* jgl::Vector3f::mulX(float x){this->x *= x; return this;}
+jgl::Vector3f* jgl::Vector3f::mulY(float y){this->y *= y; return this;}
+jgl::Vector3f* jgl::Vector3f::mulZ(float z){this->z *= z; return this;}
+jgl::Vector3f* jgl::Vector3f::mul(Vector3f* vec3d){
     this->mulX( (*vec3d).x );
     this->mulY( (*vec3d).y );
     this->mulZ( (*vec3d).z );
     return this;
 }
-jgl::Vector3d* jgl::Vector3d::mulAll(float x, float y, float z){this->mulX(x); this->mulY(y); this->mulZ(z); return this;}
+jgl::Vector3f* jgl::Vector3f::mulAll(float x, float y, float z){this->mulX(x); this->mulY(y); this->mulZ(z); return this;}
 
 
 
-jgl::Vector3d* jgl::Vector3d::cpy(){return new jgl::Vector3d(this->x, this->y, this->z); return this;}
+jgl::Vector3f* jgl::Vector3f::cpy(){return new jgl::Vector3f(this->x, this->y, this->z); return this;}
 
 
 
-jgl::Vector3d* jgl::Vector3d::vrs(){
+jgl::Vector3f* jgl::Vector3f::vrs(){
 
     float md = this->lenght();
     this->mulAll(1/md, 1/md, 1/md);
@@ -82,13 +82,13 @@ jgl::Vector3d* jgl::Vector3d::vrs(){
 
 
 
-float jgl::Vector3d::lenght(){
+float jgl::Vector3f::lenght(){
     return sqrt( pow(this->x, 2) + pow(this->y,2) + pow(this->z, 2));
 }
 
 
 
-float jgl::Vector3d::dst(jgl::Vector3d* vec3d){
+float jgl::Vector3f::dst(jgl::Vector3f* vec3d){
     float deltaX = this->x - vec3d->x;
     float deltaY = this->y - vec3d->y;
     float deltaZ = this->z - vec3d->z;
@@ -98,20 +98,20 @@ float jgl::Vector3d::dst(jgl::Vector3d* vec3d){
 
 
 
-bool jgl::Vector3d::isNull(){
+bool jgl::Vector3f::isNull(){
     return this->lenght() == 0;
 }
 
 
 
-float jgl::Vector3d::dot(jgl::Vector3d* vec3d){
+float jgl::Vector3f::dot(jgl::Vector3f* vec3d){
     return this->x*vec3d->x + this->y*vec3d->y + this->z*vec3d->z;
 }
 
 
 
-jgl::Vector3d* jgl::Vector3d::crs(jgl::Vector3d* vec3d){
-    return new jgl::Vector3d(
+jgl::Vector3f* jgl::Vector3f::crs(jgl::Vector3f* vec3d){
+    return new jgl::Vector3f(
         this->y*vec3d->z - this->z*vec3d->y,
         this->z*vec3d->x - this->x*vec3d->z,
         this->x*vec3d->y - this->y*vec3d->x 
@@ -120,7 +120,7 @@ jgl::Vector3d* jgl::Vector3d::crs(jgl::Vector3d* vec3d){
 
 
 
-float jgl::Vector3d::angleRad(jgl::Vector3d* vec3d){
+float jgl::Vector3f::angleRad(jgl::Vector3f* vec3d){
     float normFirst = this->lenght();
     float normSecond = vec3d->lenght();
 
@@ -129,38 +129,38 @@ float jgl::Vector3d::angleRad(jgl::Vector3d* vec3d){
 
 
 
-float jgl::Vector3d::angleGrd(jgl::Vector3d* vec3d){
+float jgl::Vector3f::angleGrd(jgl::Vector3f* vec3d){
     return toDegree(this->angleRad(vec3d));
 }
 
 
 
-bool jgl::Vector3d::equals(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::equals(jgl::Vector3f* vec3d){
     return this->isParallel(vec3d) && this->lenght() == vec3d->lenght();
 }
 
 
 
-bool jgl::Vector3d::isPerpendicular(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::isPerpendicular(jgl::Vector3f* vec3d){
     return this->dot(vec3d) == 0;
 }
 
 
 
-bool jgl::Vector3d::isParallel(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::isParallel(jgl::Vector3f* vec3d){
     return this->crs(vec3d) == 0;
 }
 
 
 
-bool jgl::Vector3d::sameDirection(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::sameDirection(jgl::Vector3f* vec3d){
     bool flag = this->crs(vec3d) == 0 && !oppositeDirection(vec3d);
     return flag;
 }
 
 
 
-bool jgl::Vector3d::oppositeDirection(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::oppositeDirection(jgl::Vector3f* vec3d){
     bool flag = this->crs(vec3d) == 0 && 
     isNegative(this->x) != isNegative((float)vec3d->x) &&
     isNegative(this->y) != isNegative((float)vec3d->y);
@@ -169,21 +169,21 @@ bool jgl::Vector3d::oppositeDirection(jgl::Vector3d* vec3d){
 
 
 
-bool jgl::Vector3d::acuteAngle(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::acuteAngle(jgl::Vector3f* vec3d){
     float angle = this->dot(vec3d);
     return angle > 0 && angle != 0;
 }
 
 
 
-bool jgl::Vector3d::obtuseAngle(jgl::Vector3d* vec3d){
+bool jgl::Vector3f::obtuseAngle(jgl::Vector3f* vec3d){
     float angle = this->dot(vec3d);
     return angle < 0 && angle != 0;
 }
 
 
 
-jgl::Vector3d* jgl::Vector3d::rotate(float _rad, jgl::Vector3d* axis){
+jgl::Vector3f* jgl::Vector3f::rotate(float _rad, jgl::Vector3f* axis){
 
     if(axis->x == 1 && axis->y == 0 && axis->z == 0){
         this->setAll(
@@ -213,7 +213,7 @@ jgl::Vector3d* jgl::Vector3d::rotate(float _rad, jgl::Vector3d* axis){
 
 
 
-jgl::Vector3d* jgl::Vector3d::rotateAround(jgl::Vector3d* vec3d, float _rad, jgl::Vector3d* axis){
+jgl::Vector3f* jgl::Vector3f::rotateAround(jgl::Vector3f* vec3d, float _rad, jgl::Vector3f* axis){
     this->addAll( -(*vec3d).x, -(*vec3d).y, -(*vec3d).z );
     this->rotate(_rad, axis);
     this->add(vec3d);
@@ -223,18 +223,18 @@ jgl::Vector3d* jgl::Vector3d::rotateAround(jgl::Vector3d* vec3d, float _rad, jgl
 
 
 
-std::string* jgl::Vector3d::toString(){  
+std::string* jgl::Vector3f::toString(){  
     return new std::string( std::to_string(this->x) + ", " + std::to_string(this->y) + ", " + std::to_string(this->z));
 }
 
 
 
-jgl::Matrix4* jgl::Vector3d::getRotationMatrix(){
+jgl::Matrix4* jgl::Vector3f::getRotationMatrix(){
     return new jgl::Matrix4(this);
 }
-jgl::Matrix4* jgl::Vector3d::getScalingMatrix(){
+jgl::Matrix4* jgl::Vector3f::getScalingMatrix(){
     return (new jgl::Matrix4)->setToScale(this, false);
 }
-jgl::Matrix4* jgl::Vector3d::getTranslationMatrix(){
+jgl::Matrix4* jgl::Vector3f::getTranslationMatrix(){
     return (new jgl::Matrix4)->setToTranslation(this, false);
 }

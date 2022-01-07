@@ -8,7 +8,7 @@ jgl::Quaternion::Quaternion(float x, float y, float z, float w){
 }
 jgl::Quaternion::Quaternion(Quaternion* q) : Quaternion(q->x, q->y, q->z, q->w){}
 jgl::Quaternion::Quaternion() : Quaternion(0, 0, 0, 0){}
-jgl::Quaternion::Quaternion(jgl::Vector3d* axis, float _rad) : jgl::Quaternion(
+jgl::Quaternion::Quaternion(jgl::Vector3f* axis, float _rad) : jgl::Quaternion(
         axis->getX() * sin(_rad/2), 
         axis->getY() * sin(_rad/2),
         axis->getZ() * sin(_rad/2),
@@ -30,7 +30,7 @@ jgl::Quaternion::Quaternion(float yaw, float pitch, float roll){
         cr * cp * cy + sr * sp * sy);
 }
 jgl::Quaternion::Quaternion(jgl::Matrix4* Matrix4) : jgl::Quaternion(Matrix4->getQuaternion()){}
-jgl::Quaternion::Quaternion(jgl::Vector3d* vec3d) : jgl::Quaternion(vec3d->getRotationMatrix()){}
+jgl::Quaternion::Quaternion(jgl::Vector3f* vec3d) : jgl::Quaternion(vec3d->getRotationMatrix()){}
 jgl::Quaternion::Quaternion(std::string* fromString){
     float firstIndex = fromString->find_first_of(',');
     float secondIndex = fromString->substr(firstIndex+1).find_first_of(',');
@@ -139,7 +139,7 @@ float jgl::Quaternion::getPitch(){
 
 
 
-jgl::Vector3d* jgl::Quaternion::getDirectionVector(){
+jgl::Vector3f* jgl::Quaternion::getDirectionVector(){
     return (new jgl::Matrix4(this))->getRotation();
 }
 

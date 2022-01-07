@@ -9,7 +9,7 @@
 namespace jgl{
 
     class Quaternion;
-    class Vector3d;
+    class Vector3f;
 
     class Matrix4{
 
@@ -54,11 +54,11 @@ namespace jgl{
             //Create a new rotation matrix from the given quaternion
             Matrix4(Quaternion* rotation);
             //Create a new matrix from the given rotation, translation and scale. Translation vector must be unit-vector
-            Matrix4(Vector3d* position, Quaternion* rotation, float scale);
+            Matrix4(Vector3f* position, Quaternion* rotation, jgl::Vector3f* scale);
             //Create a new matrix from the given rotation and translation vector. Scale will be calculated from vector
-            Matrix4(Vector3d* position, Quaternion* rotation);
-            //Create a new rotation matrix from the given direction vector. As Vector3d#getRotationMatrix(). It uses yAxis as Up 
-            Matrix4(Vector3d* direction);
+            Matrix4(Vector3f* position, Quaternion* rotation);
+            //Create a new rotation matrix from the given direction vector. As Vector3f#getRotationMatrix(). It uses yAxis as Up 
+            Matrix4(Vector3f* direction);
             //Create a new rotation matrix by the given eluer angles
             Matrix4(float yaw, float pitch, float roll);
             //Create a new matrix by the given string as row separated by ';' and col by ','
@@ -193,7 +193,7 @@ namespace jgl{
              * @param idt if the matrix must be identified before being rotated
              * @return this matrix
              */ 
-            Matrix4* setToRotation(Vector3d* direction, Vector3d* up, bool idt);
+            Matrix4* setToRotation(Vector3f* direction, Vector3f* up, bool idt);
             /**
              * Postmultiplies this matrix by the quaternion given
              * @param rotation
@@ -203,7 +203,7 @@ namespace jgl{
              * Postmultiplies this matrix by direction vector given
              * @param rotation
              */
-            Matrix4* rotate(Vector3d* rotation); 
+            Matrix4* rotate(Vector3f* rotation); 
             /**
              * Postmultiplies this matrix by the euler angles given
              * @param yaw
@@ -214,7 +214,7 @@ namespace jgl{
             /**
              * @return the direction vector which this rotation matrix represents
              */
-            Vector3d* getRotation(); 
+            Vector3f* getRotation(); 
 
 
             /**
@@ -230,7 +230,7 @@ namespace jgl{
              * @param scale
              * @return this matrix
              */ 
-            Matrix4* translate(Vector3d* position);
+            Matrix4* translate(Vector3f* position);
             /**
              * Set to translation this matrix with the given values
              * @param x
@@ -246,11 +246,11 @@ namespace jgl{
              * @param idt if the matrix must be identified before being rotated
              * @return this matrix
              */
-            Matrix4* setToTranslation(Vector3d* position, bool idt);
+            Matrix4* setToTranslation(Vector3f* position, bool idt);
             /**
              * @return the position vector which this matrix represents 
              */ 
-            Vector3d* getTranslation(); 
+            Vector3f* getTranslation(); 
 
 
             /**
@@ -266,7 +266,7 @@ namespace jgl{
              * @param scale
              * @return this matrix
              */ 
-            Matrix4* scale(Vector3d* scale);
+            Matrix4* scale(Vector3f* scale);
             /**
              * Set this matrix as a scaling one by the given scale vector
              * @param x
@@ -282,11 +282,11 @@ namespace jgl{
              * @param idt if the matrix must be identified before being rotated
              * @return this matrix
              */ 
-            Matrix4* setToScale(Vector3d* scale, bool idt);
+            Matrix4* setToScale(Vector3f* scale, bool idt);
             /**
              * @return the scale vector this matrix represent
              */ 
-            Vector3d* getScale();
+            Vector3f* getScale();
 
 
             /**

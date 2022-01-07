@@ -63,6 +63,39 @@ namespace jpl{
             TextShader();
 
             /**
+             * Render the given string with the given mix of colors
+             * @param text
+             * @param x
+             * @param y
+             * @param red
+             * @param green
+             * @param blue
+             * @param alpha
+             */ 
+            void render(std::string* text, int x, int y, float red, float green, float blue, float alpha);
+            
+            
+            /**
+             * Render the given string
+             * @param text
+             * @param x
+             * @param y
+             * @param colors
+             */ 
+            void render(std::string* text, int x, int y, float colors);
+
+
+            /**
+             * Render the given string
+             * @param text
+             * @param x
+             * @param y
+             * @param colors
+             */ 
+            void render(std::string* text, int x, int y, float* colors);
+
+
+            /**
              * Render the given string
              * @param text
              * @param x

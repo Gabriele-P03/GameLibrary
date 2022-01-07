@@ -14,12 +14,13 @@ jgl::Matrix4::Matrix4(jgl::Matrix4* mat4d) : jgl::Matrix4(
         mat4d->matrix[3][0], mat4d->matrix[3][1], mat4d->matrix[3][2], mat4d->matrix[3][3] 
     ){
 }
-jgl::Matrix4::Matrix4(jgl::Vector3d* position, jgl::Quaternion* rotation, float scale){
-    this->setToTranslation(position, true);
-    this->scale(scale, scale, scale);
+jgl::Matrix4::Matrix4(jgl::Vector3f* position, jgl::Quaternion* rotation, jgl::Vector3f* scale){
+    this->idt();
     this->rotate(rotation);
+    this->scale(scale);
+    this->translate(position);
 }
-jgl::Matrix4::Matrix4(Vector3d* position, Quaternion* rotation) : jgl::Matrix4(position->cpy()->vrs(), rotation, position->lenght()){}
+jgl::Matrix4::Matrix4(Vector3f* position, Quaternion* rotation) : jgl::Matrix4(position->cpy()->vrs(), rotation, new jgl::Vector3f(position->lenght(), position->lenght(), position->lenght())){}
 jgl::Matrix4::Matrix4(jgl::Quaternion* q){
     this->set(new float[16]{
         1-2*(float)pow(q->y, 2)-2*(float)pow(q->z, 2), 2*q->x*q->y - 2*q->z*q->w, 2*q->x*q->z + 2*q->y*q->w, 0,
@@ -28,8 +29,8 @@ jgl::Matrix4::Matrix4(jgl::Quaternion* q){
         0, 0, 0, 1
     });
 }
-jgl::Matrix4::Matrix4(jgl::Vector3d* direction){
-    this->setToRotation(direction, &jgl::Vector3d::yAxis, true);
+jgl::Matrix4::Matrix4(jgl::Vector3f* direction){
+    this->setToRotation(new jgl::Quaternion(direction->cpy()->vrs(), direction->angleRad(&jgl::Vector3f::xAxis)), true);
 }       
 jgl::Matrix4::Matrix4(float yaw, float pitch, float roll){
     float sy = sin(yaw), cy = cos(yaw), sp = sin(pitch), cp = cos(pitch), sr = sin(roll), cr = cos(roll);
@@ -199,7 +200,7 @@ float jgl::Matrix4::det(){
 jgl::Matrix4* jgl::Matrix4::rotate(jgl::Quaternion* rotation){
     return this->mul(new jgl::Matrix4(rotation));
 }
-jgl::Matrix4* jgl::Matrix4::rotate(jgl::Vector3d* rotation){
+jgl::Matrix4* jgl::Matrix4::rotate(jgl::Vector3f* rotation){
     return this->mul(new jgl::Matrix4(rotation));
 }
 jgl::Matrix4* jgl::Matrix4::rotate(float yaw, float pitch, float roll){
@@ -223,14 +224,14 @@ jgl::Matrix4* jgl::Matrix4::setToRotation(jgl::Quaternion* rotation, bool idt){
     ->set(2, 1, (2*rotation->y*rotation->z + 2*rotation->w*rotation->x))
     ->set(2, 2, (1-2*rotation->x*rotation->x - 2*rotation->y*rotation->y));
 }
-jgl::Matrix4* jgl::Matrix4::setToRotation(jgl::Vector3d* direction, jgl::Vector3d* up, bool idt){
+jgl::Matrix4* jgl::Matrix4::setToRotation(jgl::Vector3f* direction, jgl::Vector3f* up, bool idt){
 
     if(idt)
         this->idt();
 
-    jgl::Vector3d* right = direction->crs(up);
+    jgl::Vector3f* right = direction->crs(up);
     right->vrs();
-    jgl::Vector3d* newUp = right->crs(direction);
+    jgl::Vector3f* newUp = right->crs(direction);
     newUp->vrs();
 
     this->matrix[0][0] = right->getX(); 
@@ -255,48 +256,48 @@ jgl::Matrix4* jgl::Matrix4::setToRotation(jgl::Vector3d* direction, jgl::Vector3
 
     return this;
  }
-jgl::Vector3d* jgl::Matrix4::getRotation(){
-    return new jgl::Vector3d(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
+jgl::Vector3f* jgl::Matrix4::getRotation(){
+    return new jgl::Vector3f(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
 }
 
 jgl::Matrix4* jgl::Matrix4::translate(float x, float y, float z){
-    return this->translate(new jgl::Vector3d(x, y, z));
+    return this->translate(new jgl::Vector3f(x, y, z));
 }
-jgl::Matrix4* jgl::Matrix4::translate(jgl::Vector3d* position){
+jgl::Matrix4* jgl::Matrix4::translate(jgl::Vector3f* position){
     return this->mul( (new jgl::Matrix4())->setToTranslation(position, true) );
 }
 jgl::Matrix4* jgl::Matrix4::setToTranslation(float x, float y, float z, bool idt){    
-    return this->setToTranslation(new jgl::Vector3d(x, y, z), idt);
+    return this->setToTranslation(new jgl::Vector3f(x, y, z), idt);
 }
-jgl::Matrix4* jgl::Matrix4::setToTranslation(jgl::Vector3d* position, bool idt){
+jgl::Matrix4* jgl::Matrix4::setToTranslation(jgl::Vector3f* position, bool idt){
     if(idt)
         this->idt();
         
     return this->set(3, 0, position->getX())->set(3, 1, position->getY())->set(3, 2, position->getZ());
 }
-jgl::Vector3d* jgl::Matrix4::getTranslation(){
-    return new jgl::Vector3d(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
+jgl::Vector3f* jgl::Matrix4::getTranslation(){
+    return new jgl::Vector3f(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
 }
 
 
 jgl::Matrix4* jgl::Matrix4::scale(float x, float y, float z){
-    return this->scale(new jgl::Vector3d(x, y, z));
+    return this->scale(new jgl::Vector3f(x, y, z));
 }
-jgl::Matrix4* jgl::Matrix4::scale(jgl::Vector3d* scale){
+jgl::Matrix4* jgl::Matrix4::scale(jgl::Vector3f* scale){
     return this->mul( (new jgl::Matrix4())->setToScale(scale, true) );
 }
 jgl::Matrix4* jgl::Matrix4::setToScale(float x, float y, float z, bool idt){
-    return this->setToScale(new jgl::Vector3d(x, y, z), idt);
+    return this->setToScale(new jgl::Vector3f(x, y, z), idt);
 }
-jgl::Matrix4* jgl::Matrix4::setToScale(jgl::Vector3d* scale, bool idt){
+jgl::Matrix4* jgl::Matrix4::setToScale(jgl::Vector3f* scale, bool idt){
 
     if(idt)
         this->idt();
 
     return this->set(0, 0, scale->getX())->set(1, 1, scale->getY())->set(2, 2, scale->getZ());
 }
-jgl::Vector3d* jgl::Matrix4::getScale(){
-    return new jgl::Vector3d(this->matrix[0][0], this->matrix[1][1], this->matrix[2][2]);
+jgl::Vector3f* jgl::Matrix4::getScale(){
+    return new jgl::Vector3f(this->matrix[0][0], this->matrix[1][1], this->matrix[2][2]);
 }
 
 

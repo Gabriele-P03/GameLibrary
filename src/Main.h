@@ -21,6 +21,7 @@
 #include "engine/graphics/texture/Texture.hpp"
 #include "engine/graphics/shader/textShader/TextShader.hpp"
 #include "engine/utils/WindowInfo.hpp"
+#include "engine/camera/BaseCamera.hpp"
 
 //This will be the main window of the game
 GLFWwindow* window;

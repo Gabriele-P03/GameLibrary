@@ -49,7 +49,19 @@ void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
 }
 
 void jpl::TextShader::render(std::string* text, int x, int y){
+    this->render(text, x, y, 1.0f, 1.0f, 1.0f, 1.0f);
+}
 
+void jpl::TextShader::render(std::string* text, int x, int y, float red, float green, float blue, float alpha){
+    this->render(text, x, y, new float[4]{red, green, blue, alpha});
+}
+
+void jpl::TextShader::render(std::string* text, int x, int y, float* colors){
+
+    this->useProgram();
+
+    glUniform4f(glGetUniformLocation(*this->getShaderProgram(), "cols"), colors[0], colors[1], colors[2], colors[3]);
+    
     for(int i = 0; i < text->length(); i++){
 
         char buffer = text->at(i);

@@ -6,7 +6,7 @@ layout (location = 1) in vec2 tex;
 out vec2 outTex;
 uniform mat4 transform;
 
-in vec4 cols;   //Cols text will be rendered
+uniform vec4 cols;   //Cols text will be rendered
 out vec4 outCols;
 
 void main(){

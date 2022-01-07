@@ -1,9 +1,10 @@
 /**
  * DA FARE:
- * TEXTURE
- * TEXT RENDER
- *  SHAPE RENDER
+ * TEXTURE ----------FATTO
+ * TEXT RENDER-------W.I.P. Finire il font
+ * CAMERA
  * 
+ * SHAPE RENDER
  * MODEL
  * 3D RENDER
  * FISICA
@@ -16,7 +17,10 @@ using namespace jgl;
 
 int main(int argc, const char* argv[]){  
 
+    jpl::BaseCamera* camera = new jpl::BaseCamera(new Vector3f(1.0f, 0.0f, 0.0f), new jgl::Vector3f(1.0f, 0.0f, 0.0f), 10.0f, 15.0f);
+    camera->rotateAround(new jgl::Vector3f(2.0f, 0.0f, 0.0f), new jgl::Matrix4(M_PI, 0.0f, 0.0f));
 
+    /*
     initializeGameLibrary();
 
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
@@ -58,7 +62,7 @@ int main(int argc, const char* argv[]){
     }
 
     terminateGameLibrary();
-    
+    */
     return 0;
 }
 

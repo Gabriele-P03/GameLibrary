@@ -7,7 +7,7 @@
 
 namespace jgl{
 
-    class Vector3d;
+    class Vector3f;
     class Matrix4;
 
     class Quaternion{
@@ -22,13 +22,13 @@ namespace jgl{
             //Create a new quaternion as the given one
             Quaternion(Quaternion* quaternion);
             //Create a new quaternion by the given axis unit-vector and angle in radians
-            Quaternion(jgl::Vector3d* axis, float _rad);
+            Quaternion(jgl::Vector3f* axis, float _rad);
             //Create a new quaternion by the given euler angles
             Quaternion(float yaw, float pitch, float roll);
             //Create a new quaternion by the given rotation matrix
             Quaternion(Matrix4* Matrix4);
             //Create a new quaternion by the given direction vector, passing before from matrix constructor with a vector
-            Quaternion(Vector3d* vec3d);
+            Quaternion(Vector3f* vec3d);
             //Create a new quaternion by the given string as x,y,z,w
             Quaternion(std::string* fromString);
 
@@ -69,7 +69,7 @@ namespace jgl{
             /**
              * @return the direction vector represented by this quaternion
              */ 
-            Vector3d* getDirectionVector();
+            Vector3f* getDirectionVector();
     };
 }
 
