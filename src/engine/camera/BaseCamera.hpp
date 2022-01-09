@@ -85,7 +85,7 @@ namespace jpl{
              * Translate this camera by the given vector
              * @param translatingVector
              */ 
-            void translate(jgl::Vector3f* translatingMatrix);
+            void translate(jgl::Vector3f* translatingVector);
 
             /**
              * Inverse of BaseCamera#project(jgl::Vector3i*)

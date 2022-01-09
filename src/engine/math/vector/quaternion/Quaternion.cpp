@@ -140,7 +140,14 @@ float jgl::Quaternion::getPitch(){
 
 
 jgl::Vector3f* jgl::Quaternion::getDirectionVector(){
-    return (new jgl::Matrix4(this))->getRotation();
+    
+    float s = sqrt(1 - pow(this->w, 2));
+
+    if(s < 0.001f){ //Avoid division by 0
+        return new jgl::Vector3f(this->x, this->y, this->z);
+    }else{
+        return new jgl::Vector3f(this->x/s, this->y/s, this->z/s);
+    }
 }
 
 

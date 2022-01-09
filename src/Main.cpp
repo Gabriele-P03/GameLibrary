@@ -17,9 +17,12 @@ using namespace jgl;
 
 int main(int argc, const char* argv[]){  
 
-    jpl::BaseCamera* camera = new jpl::BaseCamera(new Vector3f(1.0f, 0.0f, 0.0f), new jgl::Vector3f(1.0f, 0.0f, 0.0f), 10.0f, 15.0f);
-    camera->rotateAround(new jgl::Vector3f(2.0f, 0.0f, 0.0f), new jgl::Matrix4(M_PI, 0.0f, 0.0f));
+    jpl::BaseCamera* camera = new jpl::BaseCamera(new Vector3f(0.0f, 0.0f, 0.0f), new jgl::Vector3f(1.0f, 0.0f, 0.0f), 10.0f, 15.0f);
+    jgl::Matrix4* tra = (new jgl::Matrix4())->idt();
+    tra->rotate(M_PI_2, 0.0f, 0.0f);
+    tra->translate(1.0f, 0.0f, 0.0f);
 
+    camera->transform(tra);
     /*
     initializeGameLibrary();
 

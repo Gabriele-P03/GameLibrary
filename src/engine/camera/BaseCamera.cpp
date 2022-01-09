@@ -41,11 +41,20 @@ void jpl::BaseCamera::rotateAround(jgl::Vector3f* point, jgl::Matrix4* rotationM
 
     jgl::Vector3f* difPos = this->position->cpy()->addAll(-point->getX(), -point->getY(), -point->getZ());
 
-    jgl::Matrix4* transform = new jgl::Matrix4(this->direction);
-    transform->translate(this->position);
+    jgl::Matrix4* transform = new jgl::Matrix4();
+    transform->setToTranslation(difPos, true);
     transform->mul(rotationMatrix);
-    this->direction = transform->getRotation();
+    transform->translate(point);
 
     this->position = transform->getTranslation();
-    this->position->add(point);
+}
+
+void jpl::BaseCamera::transform(jgl::Matrix4* transformMatrix){
+
+    transformMatrix->rotate(this->direction);
+    transformMatrix->translate(this->position);
+
+    this->direction = transformMatrix->getRotation();
+    this->position = transformMatrix->getTranslation();
+    this->normalizeUp();
 }

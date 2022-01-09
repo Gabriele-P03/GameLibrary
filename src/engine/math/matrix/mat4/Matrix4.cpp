@@ -257,7 +257,7 @@ jgl::Matrix4* jgl::Matrix4::setToRotation(jgl::Vector3f* direction, jgl::Vector3
     return this;
  }
 jgl::Vector3f* jgl::Matrix4::getRotation(){
-    return new jgl::Vector3f(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
+    return this->getQuaternion()->getDirectionVector();
 }
 
 jgl::Matrix4* jgl::Matrix4::translate(float x, float y, float z){
@@ -276,7 +276,7 @@ jgl::Matrix4* jgl::Matrix4::setToTranslation(jgl::Vector3f* position, bool idt){
     return this->set(3, 0, position->getX())->set(3, 1, position->getY())->set(3, 2, position->getZ());
 }
 jgl::Vector3f* jgl::Matrix4::getTranslation(){
-    return new jgl::Vector3f(this->matrix[0][2], this->matrix[1][2], this->matrix[2][2]);
+    return new jgl::Vector3f(this->matrix[3][0], this->matrix[3][1], this->matrix[3][2]);
 }
 
 
@@ -304,13 +304,15 @@ jgl::Vector3f* jgl::Matrix4::getScale(){
 
 jgl::Quaternion* jgl::Matrix4::getQuaternion(){
     jgl::Quaternion q;
-    float trace = this->matrix[0][0] + this->matrix[1][1] + this->matrix[2][2]; // I removed + 1.0f; see discussion with Ethan
+
+    float trace = this->matrix[0][0] + this->matrix[1][1] + this->matrix[2][2]; 
+
     if( trace > 0 ) {
-            float s = 0.5f / sqrtf(trace+ 1.0f);
-            q.w = 0.25f / s;
-            q.x = ( this->matrix[2][1] - this->matrix[1][2] ) * s;
-            q.y = ( this->matrix[0][2] - this->matrix[2][0] ) * s;
-            q.z = ( this->matrix[1][0] - this->matrix[0][1] ) * s;
+        float s = 0.5f / sqrtf(trace+ 1.0f);
+        q.w = 0.25f / s;
+        q.x = ( this->matrix[2][1] - this->matrix[1][2] ) * s;
+        q.y = ( this->matrix[0][2] - this->matrix[2][0] ) * s;
+        q.z = ( this->matrix[1][0] - this->matrix[0][1] ) * s;
     } else {
         if ( this->matrix[0][0] > this->matrix[1][1] && this->matrix[0][0] > this->matrix[2][2] ) {
             float s = 2.0f * sqrtf( 1.0f + this->matrix[0][0] - this->matrix[1][1] - this->matrix[2][2]);
@@ -318,13 +320,13 @@ jgl::Quaternion* jgl::Matrix4::getQuaternion(){
             q.x = 0.25f * s;
             q.y = (this->matrix[0][1] + this->matrix[1][0] ) / s;
             q.z = (this->matrix[0][2] + this->matrix[2][0] ) / s;
-        } else if (this->matrix[1][1] > this->matrix[2][2]) {
-        float s = 2.0f * sqrtf( 1.0f + this->matrix[1][1] - this->matrix[0][0] - this->matrix[2][2]);
+        }else if (this->matrix[1][1] > this->matrix[2][2]) {
+            float s = 2.0f * sqrtf( 1.0f + this->matrix[1][1] - this->matrix[0][0] - this->matrix[2][2]);
             q.w = (this->matrix[0][2] - this->matrix[2][0] ) / s;
             q.x = (this->matrix[0][1] + this->matrix[1][0] ) / s;
             q.y = 0.25f * s;
             q.z = (this->matrix[1][2] + this->matrix[2][1] ) / s;
-        } else {
+        }else {
             float s = 2.0f * sqrtf( 1.0f + this->matrix[2][2] - this->matrix[0][0] - this->matrix[1][1] );
             q.w = (this->matrix[1][0] - this->matrix[0][1] ) / s;
             q.x = (this->matrix[0][2] + this->matrix[2][0] ) / s;
