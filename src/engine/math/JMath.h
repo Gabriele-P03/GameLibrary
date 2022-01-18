@@ -4,6 +4,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+#include <GLFW/glfw3.h>
+
 //Return if the number is negative
 bool isNegative(double x);
 
@@ -21,6 +23,11 @@ double toDegree(double _rad);
 
 //Return the given degrees angle in radiants
 double toRad(double _deg);
+
+/**
+ * @return given coordinates into range [-1; +1]
+ */ 
+float* jplOpenGlCoords(int x, int y);
 
 
 #endif

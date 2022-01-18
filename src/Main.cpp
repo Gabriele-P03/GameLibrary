@@ -14,6 +14,7 @@ int main(int argc, const char* argv[]){
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
     ShapeShader* shapeShader = new ShapeShader();
+    shapeShader->begin(jpl::ShapeShader::SHAPE_TRIANGLE);
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -25,7 +26,7 @@ int main(int argc, const char* argv[]){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-
+        shapeShader->drawTriangle(100, 100, 100, new float[4]{1.0f, 1.0f, 0.0f, 1.0f});
         
         glfwSwapBuffers(window);
         glfwPollEvents();

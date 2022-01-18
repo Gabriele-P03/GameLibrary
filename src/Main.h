@@ -11,7 +11,7 @@
 #include "engine/graphics/shader/Shader.h"
 #include "files/Files.h"
 #include "engine/graphics/shader/Shader.h"
-#include "engine/graphics/shader/planeShader/TextureShader.hpp"
+#include "engine/graphics/shader/textureShader/TextureShader.hpp"
 #include "engine/math/vector/v2/Vector2f.h"
 #include "engine/math/matrix/mat4/Matrix4.h"
 #include "engine/math/matrix/mat3/Matrix3.h"

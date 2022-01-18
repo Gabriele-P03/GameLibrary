@@ -44,7 +44,13 @@ namespace jpl{
             /**
              * Check if ShapeShader#begin() has been called before any draw calling
              */ 
-            void checkBeginCall();
+            void checkBeginCall(SHAPE_TYPE shape_type);
+
+            /**
+             * Bind shader buffers and draw stuff
+             * It is not called by ShapeShader#drawLine() 'cause it needs to be rendered via glDrawArray()
+             */ 
+            inline void bindAndDraw(float* colors);
             
         public:
 
@@ -82,7 +88,24 @@ namespace jpl{
              * @param y
              * @param length
              */ 
-            void drawLine(int x, int y, float length);
+            void drawLine(int x, int y, float length, float* colors);
+
+            /**
+             * Draw a quad begin the bottom-left corner at x,y
+             * @param x
+             * @param y
+             * @param length of each side
+             * @param colors 4 float array which stores colors values as RGBA
+             */ 
+            void drawQuad(int x, int y, float length, float* colors);
+            /**
+             * Draw an equilater triangle begin the bottom-left corner at x,y
+             * @param x
+             * @param y
+             * @param length of each side
+             * @param colors 4 float array which stores colors values as RGBA
+             */ 
+            void drawTriangle(int x, int y, float length, float* colors);
     };
 }
 

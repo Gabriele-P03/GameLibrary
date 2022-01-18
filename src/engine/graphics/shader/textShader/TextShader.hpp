@@ -25,7 +25,7 @@
 
 #include <string>
 #include "../../../../files/Files.h"
-#include "../planeShader/TextureShader.hpp"
+#include "../textureShader/TextureShader.hpp"
 
 namespace jpl{
 

@@ -23,3 +23,12 @@ double toDegree(double _rad){
 double toRad(double _deg){
     return _deg * (M_PI / 180);
 }
+
+float* jplOpenGlCoords(int x, int y){
+    int w, h;
+    glfwGetWindowSize(glfwGetCurrentContext(), &w, &h);
+    return new float[2]{
+        ((float)x - (w/2)) / (w/2),
+        ((float)y - (h/2)) / (h/2)
+    };
+}
