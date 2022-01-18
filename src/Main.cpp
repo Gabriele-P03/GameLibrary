@@ -1,29 +1,11 @@
-/**
- * DA FARE:
- * TEXTURE ----------FATTO
- * TEXT RENDER-------W.I.P. Finire il font
- * CAMERA
- * 
- * SHAPE RENDER
- * MODEL
- * 3D RENDER
- * FISICA
- * SOCKET
- */ 
-
 #include "Main.h"
 
 using namespace jgl;
+using namespace jpl;
 
 int main(int argc, const char* argv[]){  
 
-    jpl::BaseCamera* camera = new jpl::BaseCamera(new Vector3f(0.0f, 0.0f, 0.0f), new jgl::Vector3f(1.0f, 0.0f, 0.0f), 10.0f, 15.0f);
-    jgl::Matrix4* tra = (new jgl::Matrix4())->idt();
-    tra->rotate(M_PI_2, 0.0f, 0.0f);
-    tra->translate(1.0f, 0.0f, 0.0f);
-
-    camera->transform(tra);
-    /*
+    
     initializeGameLibrary();
 
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
@@ -31,19 +13,7 @@ int main(int argc, const char* argv[]){
 
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    jpl::Audio* audio = new jpl::Audio(new jpl::AudioFile(new std::string("a.wav")));
-    audio->play();
-
-    jpl::TextureShader* shader = new jpl::TextureShader();
-    jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
-
-    jpl::TextShader* shader1 = new jpl::TextShader();
-    std::string* buf = new std::string("!");
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    ShapeShader* shapeShader = new ShapeShader(ShapeShader::SHAPE_LINE);
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -55,17 +25,14 @@ int main(int argc, const char* argv[]){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        //shader->rotation->rotate(M_PI_2/18, 0, 0);
-        //shader->draw(texture, 100, 100, false);
-        
-        shader1->render(buf, 300, 300);
+        shapeShader->draw(15.0f, 15.0f, 50.0f, 15.0f);
         
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     terminateGameLibrary();
-    */
+    
     return 0;
 }
 

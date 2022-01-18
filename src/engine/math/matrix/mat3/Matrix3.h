@@ -8,7 +8,7 @@
 
 namespace jgl{
     
-    class Vector2d;
+    class Vector2f;
 
     class Matrix3{
 
@@ -70,14 +70,14 @@ namespace jgl{
              * @param position
              * @param scale
              */
-            Matrix3(float yaw, Vector2d* position, float scale);
+            Matrix3(float yaw, Vector2f* position, float scale);
             /**
              * Create a new transformation matrix which represents the given position and rotation around z-axis.
              * Scale will be calculated by the given position, then you should not pass a unit-vector
              * @param yaw
              * @param position
              */
-            Matrix3(float yaw, Vector2d* position);  
+            Matrix3(float yaw, Vector2f* position);  
             /**
              * Create a new matrix from the given string.
              * Each box of a row is separated by comma.
@@ -232,7 +232,7 @@ namespace jgl{
              * Postmultiplies this matrix with the scale matrix
              * @return this
              */ 
-            Matrix3* scale(Vector2d* vec2d);
+            Matrix3* scale(Vector2f* vec2f);
             /**
              * Sets this matrix to a scaling one
              * @return this
@@ -242,7 +242,7 @@ namespace jgl{
              * Sets this matrix to a scaling one
              * @return this
              */ 
-            Matrix3* setToScaling(Vector2d* vec2d);
+            Matrix3* setToScaling(Vector2f* vec2f);
             /**
              * @return scale of the vector which matrix represents
              */ 
@@ -259,7 +259,7 @@ namespace jgl{
              * Postmultiplies this matrix with the translation matrix
              * @return this
              */ 
-            Matrix3* translate(Vector2d* vec2d);
+            Matrix3* translate(Vector2f* vec2f);
             /**
              * Sets this matrix to a translation one
              * @return this
@@ -269,11 +269,11 @@ namespace jgl{
              * Sets this matrix to a translation one
              * @return this
              */ 
-            Matrix3* setToTranslation(Vector2d* vec2d);
+            Matrix3* setToTranslation(Vector2f* vec2f);
             /**
              * @return vector containing translate of this matrix
              */ 
-            Vector2d* getTranslation();
+            Vector2f* getTranslation();
 
 
 

@@ -101,8 +101,8 @@ namespace jgl{
             //Rotate vector taking as pivot (0, 0, 0), counter-clockwise
             Vector3f* rotate(float _rad, jgl::Vector3f* axis);
 
-            //Rotate vector around pofloat by vec3d
-            Vector3f* rotateAround(jgl::Vector3f* vec3d, float _rad, jgl::Vector3f* axis);
+            //Rotate vector around pivot 
+            Vector3f* rotateAround(jgl::Vector3f* pivot, float _rad, jgl::Vector3f* axis);
 
             //Return the vector as string (x, y, z)
             std::string* toString();

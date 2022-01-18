@@ -18,16 +18,13 @@ namespace jpl{
 
     class BaseCamera{
 
-        private:
+        protected:
 
             float near, far;
             float viewportW, viewportH;
             jgl::Matrix4* combined, *projection, *view;
             jgl::Vector3f* direction, *position, *up; 
 
-        public:
-
-            BaseCamera(jgl::Vector3f* position, jgl::Vector3f* direction, float near, float far);
 
             /**
              * Set direction vector to look at x,y,z
@@ -35,69 +32,108 @@ namespace jpl{
              * @param y
              * @param z
              */ 
-            void lookAt(float x, float y, float z);
+            virtual void lookAt(float x, float y, float z);
+
 
             /**
              * Set direction vector to look at given position vector
              * @param target
              */ 
-            void lookAt(jgl::Vector3f* target);
+            virtual void lookAt(jgl::Vector3f* target);
+
+
+            BaseCamera(jgl::Vector3f* position, jgl::Vector3f* direction, float near, float far);
+
 
             /**
              * Normalizes the up vector.
              * Calculates the right vector via a crs(direction, up)
              * Then recalculating the up vector via a crs(right, direction).
              */ 
-            void normalizeUp();
+            virtual void normalizeUp();
 
             /**
-             * Projects the given Vector4 in world space to screen coordinates
-             * @param worldCoords
+             * Set direction vector of this camera
+             * @param quaternion
              */ 
-            jgl::Vector3f* project(jgl::Vector3f* worldCoords);
-
+            virtual void setToRotation(jgl::Quaternion* quaternion);
             /**
              * Rotate this camera by the given rotation matrix
              * @param rotationMatrix
              */ 
-            void rotate(jgl::Matrix4* rotationMatrix);
-
+            virtual void rotate(jgl::Matrix4* rotationMatrix);
             /**
              * Rotate this camera by the given rotation matrix
              * @param quaternion
              */ 
-            void rotate(jgl::Quaternion* quaternion);
-
+            virtual void rotate(jgl::Quaternion* quaternion);
             /**
              * Rotate this camera around the given point
              * @param point
              * @param rotationMatrix
              */ 
-            void rotateAround(jgl::Vector3f* point, jgl::Matrix4* rotationMatrix);
+            virtual void rotateAround(jgl::Vector3f* point, jgl::Matrix4* rotationMatrix);
+
 
             /**
              * Transform the position, direction and up vector by the given transformation matrix
              * @param transformationMatrix
              */ 
-            void transform(jgl::Matrix4* transformationMatrix);
+            virtual void transform(jgl::Matrix4* transformationMatrix);
+
 
             /**
              * Translate this camera by the given vector
              * @param translatingVector
              */ 
-            void translate(jgl::Vector3f* translatingVector);
+            virtual void translate(jgl::Vector3f* translatingVector);
+            /**
+             * Set to translation this camera by the given vector
+             * @param translatingVector
+             */ 
+            virtual void setToTranslation(jgl::Vector3f* translatingVector);
+
+
+        public:
 
             /**
+             * Projects the given Vector4 in world space to screen coordinates
+             * This method return a nullptr when called by BaseCamera
+             * @param worldCoords
+             */ 
+            virtual jgl::Vector3f* project(jgl::Vector3f* worldCoords);
+            /**
              * Inverse of BaseCamera#project(jgl::Vector3i*)
+             * This method return a nullptr when called by BaseCamera
              * @param screenCords
              * @return world space coords from the given screen one
              */ 
-            jgl::Vector3f* unproject(jgl::Vector3f* screenCords);
+            virtual jgl::Vector3f* unproject(jgl::Vector3f* screenCords);
+            
+            /**
+             * Alterate near and far value of this camera
+             * @param near
+             * @param far
+             */ 
+            virtual void setFrustum(float near, float far);
 
             /**
              * Recalculate projection and view matrix
              */ 
-            void update();
+            virtual void update();
+
+
+            jgl::Matrix4* getViewMatrix();
+            jgl::Matrix4* getProjectionMatrix();
+            jgl::Matrix4* getCombinedMatrix();
+            jgl::Vector3f* getDirection();
+            jgl::Vector3f* getPosition();
+            jgl::Vector3f* getUp();
+            float getFar();
+            float getNear();
+            float getViewportH();
+            float getViewportW();
+
     };
 
 }

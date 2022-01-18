@@ -12,5 +12,4 @@ void jpl::window_size_callback(GLFWwindow* window, int width, int height){
 
 void jpl::framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
-    
 }

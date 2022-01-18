@@ -47,12 +47,12 @@ jgl::Matrix3::Matrix3(float* values) : jgl::Matrix3::Matrix3(
         values[6], values[7], values[8] 
     ){
 }
-jgl::Matrix3::Matrix3(float yaw, jgl::Vector2d* position, float scale){
+jgl::Matrix3::Matrix3(float yaw, jgl::Vector2f* position, float scale){
     this->setToTranslation(position);
     this->rotate(yaw);
     this->scale(scale, scale);
 }
-jgl::Matrix3::Matrix3(float yaw, jgl::Vector2d* position) : jgl::Matrix3(yaw, position->cpy()->vrs(), position->lenght()){
+jgl::Matrix3::Matrix3(float yaw, jgl::Vector2f* position) : jgl::Matrix3(yaw, position->cpy()->vrs(), position->lenght()){
 
 }
 
@@ -285,8 +285,8 @@ float jgl::Matrix3::getRotation(){
 jgl::Matrix3* jgl::Matrix3::scale(float x, float y){
     return this->mul(new jgl::Matrix3(x, 0, 0, 0, y, 0, 0, 0, 1));
 }
-jgl::Matrix3* jgl::Matrix3::scale(jgl::Vector2d* vec2d){
-    return this->scale(vec2d->getX(), vec2d->getY());
+jgl::Matrix3* jgl::Matrix3::scale(jgl::Vector2f* vec2f){
+    return this->scale(vec2f->getX(), vec2f->getY());
 }
 float jgl::Matrix3::getScale(){
     return sqrt(pow(this->matrix[0][0],2) + pow(this->matrix[0][1],2));
@@ -294,8 +294,8 @@ float jgl::Matrix3::getScale(){
 jgl::Matrix3* jgl::Matrix3::setToScaling(float x, float y){
     return this->set(new jgl::Matrix3(x, 0, 0, 0, y, 0, 0, 0, 1));
 }
-jgl::Matrix3* jgl::Matrix3::setToScaling(jgl::Vector2d* vec2d){
-    return this->setToScaling(vec2d->getX(), vec2d->getY());
+jgl::Matrix3* jgl::Matrix3::setToScaling(jgl::Vector2f* vec2f){
+    return this->setToScaling(vec2f->getX(), vec2f->getY());
 }
 
 
@@ -303,17 +303,17 @@ jgl::Matrix3* jgl::Matrix3::setToScaling(jgl::Vector2d* vec2d){
 jgl::Matrix3* jgl::Matrix3::translate(float x, float y){
     return this->mul(new jgl::Matrix3(1, 0, x, 0, 1, y, 0, 0, 1));
 }
-jgl::Matrix3* jgl::Matrix3::translate(jgl::Vector2d* vec2d){
-    return this->translate(vec2d->getX(), vec2d->getY());
+jgl::Matrix3* jgl::Matrix3::translate(jgl::Vector2f* vec2f){
+    return this->translate(vec2f->getX(), vec2f->getY());
 }
-jgl::Vector2d* jgl::Matrix3::getTranslation(){
-    return new jgl::Vector2d(this->matrix[0][2], this->matrix[1][2]);
+jgl::Vector2f* jgl::Matrix3::getTranslation(){
+    return new jgl::Vector2f(this->matrix[0][2], this->matrix[1][2]);
 }
 jgl::Matrix3* jgl::Matrix3::setToTranslation(float x, float y){
     return this->set(new jgl::Matrix3(1, 0, x, 0, 1, y, 0, 0, 1));
 }
-jgl::Matrix3* jgl::Matrix3::setToTranslation(jgl::Vector2d* vec2d){
-    return this->setToTranslation(vec2d->getX(), vec2d->getY());
+jgl::Matrix3* jgl::Matrix3::setToTranslation(jgl::Vector2f* vec2f){
+    return this->setToTranslation(vec2f->getX(), vec2f->getY());
 }
 
 

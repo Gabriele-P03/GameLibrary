@@ -20,8 +20,9 @@
 #include "engine/audio/Audio.h"
 #include "engine/graphics/texture/Texture.hpp"
 #include "engine/graphics/shader/textShader/TextShader.hpp"
+#include "engine/graphics/shader/shapeShader/ShapeShader.hpp"
 #include "engine/utils/WindowInfo.hpp"
-#include "engine/camera/BaseCamera.hpp"
+#include "engine/camera/OrthoCamera.hpp"
 
 //This will be the main window of the game
 GLFWwindow* window;

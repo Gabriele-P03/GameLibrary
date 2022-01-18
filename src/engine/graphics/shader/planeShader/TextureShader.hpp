@@ -30,7 +30,7 @@
 
 namespace jpl{
 
-    class TextureShader : protected Shader{
+    class TextureShader : public Shader{
 
 
         protected:

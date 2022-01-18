@@ -1,0 +1,28 @@
+DA FARE:
+
+CLIENT-SIDE :
+
+    TEXTURE FATTO
+
+    TEXT RENDER: FATTO - Finire il font
+
+    CAMERA: 
+        Base FATTA
+        Ortho Rivedere Rotate, Project e Unproject
+        Perspective
+        Isometric
+        
+    SHAPE RENDER
+
+    MODEL
+
+    3D RENDER:
+        Block Render
+        Model Render
+
+    SOCKET
+
+SERVER-SIDE :
+
+    FISICA
+    SOCKET

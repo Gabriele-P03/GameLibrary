@@ -1,0 +1,74 @@
+/**
+ * A Shape Shader instance provide rendering methods for draw on screen shapes as:
+ * circle, line, rectangular, quad and triangle
+ * 
+ * These shape's vertices are already declaread and taken once you have passed your SHAPE_TYPE needed.
+ * Anyway you can set your own vertices if you wanna draw an another type of shape
+ * 
+ * You can also draw the shape with the color you wanna
+ * 
+ * As you can see, the vertex code and fragment code which ShapeShader needs 
+ * is very similar to TextShader's one, in fact it uses that.
+ * But it neither inheritance it nor TextureShader - as it doesn't render any texture -.
+ * 
+ * @author Gabriele-P03
+ */ 
+
+#ifndef SHAPESHADER_JPL_HPP
+#define SHAPESHADER_JPL_HPP
+
+#include "../Shader.h"
+#include "../../../math/matrix/mat4/Matrix4.h"
+
+namespace jpl{
+
+    class ShapeShader : public Shader{
+        
+        typedef unsigned short SHAPE_TYPE;
+
+        private:
+
+            bool working;
+
+            SHAPE_TYPE shape_type;
+            
+            jgl::Matrix4* transform;
+
+            /**
+             * @param shape_type
+             * @param size of the array which will be returned
+             * @return float array which stores vertices of shape
+             */ 
+            float* getShapeVertices(SHAPE_TYPE shape_type, int &size);
+
+        public:
+
+            static const SHAPE_TYPE SHAPE_LINE = 0;
+            static const SHAPE_TYPE SHAPE_TRIANGLE = 1;
+            static const SHAPE_TYPE SHAPE_QUAD = 2;
+            static const SHAPE_TYPE SHAPE_RECT = 3;
+            static const SHAPE_TYPE SHAPE_CIRCLE = 4;
+
+            ShapeShader(SHAPE_TYPE shape_type);
+
+            
+
+            /**
+             * Make available shader program of ShapeRender
+             * It uses SHAPE_QUAD as default
+             */ 
+            void begin();
+            /**
+             * Make available shader program of ShapeRender
+             * @param shape_type 
+             */
+            void begin(SHAPE_TYPE shape_type); 
+
+            /**
+             * Disable shader program
+             */ 
+            void end();
+    };
+}
+
+#endif
