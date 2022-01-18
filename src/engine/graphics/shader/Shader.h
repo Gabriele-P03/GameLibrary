@@ -136,6 +136,9 @@ namespace jpl{
             static std::vector<unsigned int*>* getVertexShaders();
             static std::vector<unsigned int*>* getFragmentShaders();
             static std::vector<unsigned int*>* getShaderPrograms();
+
+            //Free memory and close shader program
+            //void free();
     };
     
 }

@@ -1,10 +1,8 @@
 #include "ShapeShader.hpp"
 
-jpl::ShapeShader::ShapeShader(jpl::ShapeShader::SHAPE_TYPE shape_type) : jpl::Shader(
+jpl::ShapeShader::ShapeShader() : jpl::Shader(
         new std::string("shaders/text/vertex.vs"),
         new std::string("shaders/text/fragment.fs")){
-
-    this->shape_type = shape_type;
 
     this->transform = (new jgl::Matrix4())->idt();
 }
@@ -15,38 +13,70 @@ void jpl::ShapeShader::begin(){
 }
 void jpl::ShapeShader::begin(SHAPE_TYPE shape_type){
 
+    if(this->working){
+        delete this->vertices;
+        delete this->indices;
+    }else{
+        this->working = true;
+    }
+
+    this->getShapeVertices(shape_type, this->vertices, this->_sizeVertices, this->indices, this->_sizeIndices);
 }
 
-float* jpl::ShapeShader::getShapeVertices(SHAPE_TYPE shape_type, int &size){
+
+void jpl::ShapeShader::end(){
+    this->working = false;
+}
+
+
+void jpl::ShapeShader::getShapeVertices(SHAPE_TYPE shape_type, float* &vertices, unsigned int &_sizeVertices, unsigned int* &indices, unsigned int &_sizeIndices){
 
     switch (shape_type)
     {
         case 0:
-            size = 4;
-            return new float[4]{-0.5f, 0.0f, 0.5f, 0.0f};
+            _sizeVertices = 6;
+            vertices = new float[_sizeVertices]{-0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 0.0f};
         break;
 
         case 1:
-            size = 6;
-            return new float[6]{-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
+            _sizeVertices = 12;
+            vertices = new float[_sizeVertices]{-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f};
+            _sizeIndices = 3;
+            indices = new unsigned int[_sizeIndices]{0, 1, 2};
         break;
 
         case 2:
-            size = 8;
-            return new float[8]{-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f};
+            _sizeVertices = 15;
+            vertices = new float[_sizeVertices]{-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.0f};
+            _sizeIndices = 6;
+            indices = new unsigned int[_sizeIndices]{0, 1, 2, 0, 1, 3};
         break;
         
         case 3:
-            size = 8;
-            return new float[8]{-0.5f, -0.25f, 0.5f, -0.25f, 0.5f, 0.25f, -0.5f, 0.25f};
-        break;
-
-        case 4:
-            size = 8;
-            return new float[8]{-0.5f, -0.25f, 0.5f, -0.25f, 0.5f, 0.25f, -0.5f, 0.25f};
+            //Let's looking for a way to render a circle with GLSL
         break;
     
         default:
         break;
     }
 }
+
+
+void jpl::ShapeShader::drawLine(int x, int y, float length, float red, float green, float blue, float alpha){
+
+    this->checkBeginCall();
+    this->bind();
+    glBindVertexArray(*this->VAO);
+    glDrawElements(GL_LINE, this->_sizeIndices, GL_UNSIGNED_INT, (void*)0);
+}
+
+
+void jpl::ShapeShader::checkBeginCall(){
+
+    if(!this->working){
+        std::cout<<"Error ShapeShader: you're trying to render without have called ShapeShader#begin() before..."<<std::endl;
+        exit(-1);
+    }
+}
+
+jpl::ShapeShader::SHAPE_TYPE jpl::ShapeShader::getShapeType(){ return this->shape_type; }

@@ -39,19 +39,26 @@ namespace jpl{
              * @param size of the array which will be returned
              * @return float array which stores vertices of shape
              */ 
-            float* getShapeVertices(SHAPE_TYPE shape_type, int &size);
+            void getShapeVertices(SHAPE_TYPE shape_type, float* &vertices, unsigned int &_sizeVertices, unsigned int* &indices, unsigned int &_sizeIndices);
 
+            /**
+             * Check if ShapeShader#begin() has been called before any draw calling
+             */ 
+            void checkBeginCall();
+            
         public:
 
             static const SHAPE_TYPE SHAPE_LINE = 0;
             static const SHAPE_TYPE SHAPE_TRIANGLE = 1;
             static const SHAPE_TYPE SHAPE_QUAD = 2;
-            static const SHAPE_TYPE SHAPE_RECT = 3;
-            static const SHAPE_TYPE SHAPE_CIRCLE = 4;
+            static const SHAPE_TYPE SHAPE_CIRCLE = 3;
 
-            ShapeShader(SHAPE_TYPE shape_type);
+            ShapeShader();
 
-            
+            /**
+             * @return shape currently using
+             */
+            SHAPE_TYPE getShapeType();
 
             /**
              * Make available shader program of ShapeRender
@@ -68,6 +75,14 @@ namespace jpl{
              * Disable shader program
              */ 
             void end();
+
+            /**
+             * Draw a line horizzontally on the window
+             * @param x 
+             * @param y
+             * @param length
+             */ 
+            void drawLine(int x, int y, float length);
     };
 }
 

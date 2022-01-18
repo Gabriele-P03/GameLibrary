@@ -13,7 +13,7 @@ int main(int argc, const char* argv[]){
 
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    ShapeShader* shapeShader = new ShapeShader(ShapeShader::SHAPE_LINE);
+    ShapeShader* shapeShader = new ShapeShader();
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        shapeShader->draw(15.0f, 15.0f, 50.0f, 15.0f);
+
         
         glfwSwapBuffers(window);
         glfwPollEvents();
