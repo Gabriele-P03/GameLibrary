@@ -1,8 +1,8 @@
 #include "Vector3f.h"
 
- jgl::Vector3f jgl::Vector3f::xAxis = jgl::Vector3f(1, 0, 0);
- jgl::Vector3f jgl::Vector3f::yAxis = jgl::Vector3f(0, 1, 0);
- jgl::Vector3f jgl::Vector3f::zAxis = jgl::Vector3f(0, 0, 1);
+ jgl::Vector3f jgl::Vector3f::xAxis = jgl::Vector3f(1.0f, 0, 0);
+ jgl::Vector3f jgl::Vector3f::yAxis = jgl::Vector3f(0, 1.0f, 0);
+ jgl::Vector3f jgl::Vector3f::zAxis = jgl::Vector3f(0, 0, 1.0f);
 
 jgl::Vector3f::Vector3f(float x, float y, float z){
     this->x = x;
@@ -69,7 +69,7 @@ jgl::Vector3f* jgl::Vector3f::mulAll(float x, float y, float z){this->mulX(x); t
 
 
 
-jgl::Vector3f* jgl::Vector3f::cpy(){return new jgl::Vector3f(this->x, this->y, this->z); return this;}
+jgl::Vector3f* jgl::Vector3f::cpy(){return new jgl::Vector3f(this->x, this->y, this->z);}
 
 
 

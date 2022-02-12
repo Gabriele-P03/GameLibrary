@@ -1,10 +1,10 @@
 #include "Main.h"
 
-using namespace jgl;
 using namespace jpl;
 
 int main(int argc, const char* argv[]){  
 
+    
     
     initializeGameLibrary();
 
@@ -13,20 +13,52 @@ int main(int argc, const char* argv[]){
 
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    ShapeShader* shapeShader = new ShapeShader();
-    shapeShader->begin(jpl::ShapeShader::SHAPE_TRIANGLE);
+    jpl::CubeShader* cube = new jpl::CubeShader();
+    jpl::PerspCamera* camera = new jpl::PerspCamera(new jgl::Vector3f(0.0f, 0.0f, -1.0f), new jgl::Vector3f(0.0f, 0.0f, 1.0f), -3.0f, 100.0f);
+    camera->setFOV(M_PI_2);
+    jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
 
     std::cout<<"Beginning render loop...\n\n";
+
+
     while(!glfwWindowShouldClose(window)){
 
         if(isKeyPressed(GLFW_KEY_ESCAPE)){
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
 
+        glDisable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_ALWAYS);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        shapeShader->drawTriangle(100, 100, 100, new float[4]{1.0f, 1.0f, 0.0f, 1.0f});
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        cube->draw(camera->getCombinedMatrix(), 0.0f, 0.0f, 0.0f);
+        texture->draw();
+
+        glDepthFunc(GL_LESS);
+        glEnable(GL_CULL_FACE);
+
+
+        if(isKeyPressed(GLFW_KEY_W))
+            camera->translate(new jgl::Vector3f(0.0f, 0.0f, 0.05f));
+        if(isKeyPressed(GLFW_KEY_S))
+            camera->translate(new jgl::Vector3f(0.0f, 0.0f, -0.05f));
+        if(isKeyPressed(GLFW_KEY_A))
+            camera->translate(new jgl::Vector3f(-0.05f, 0.0f, 0.0f));
+        if(isKeyPressed(GLFW_KEY_D))
+            camera->translate(new jgl::Vector3f(0.05f, 0.0f, 0.0f));
+        if(isKeyPressed(GLFW_KEY_R))
+            camera->translate(new jgl::Vector3f(0.0f, 0.05f, 0.0f));
+        if(isKeyPressed(GLFW_KEY_F))
+            camera->translate(new jgl::Vector3f(0.0f, -0.05f, 0.0f));
+
+        if(isKeyPressed(GLFW_KEY_Z))
+            cube->rotation->rotate(M_PI_2/90, 0.0f, 0.0f);    
+        if(isKeyPressed(GLFW_KEY_Q))
+            cube->rotation->rotate(0.0f, M_PI_2/90, 0.0f);
+
+        camera->update();
+
         
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -59,7 +91,9 @@ void initializeGameLibrary(){
 
     std::cout<<"Done\n";
 
-    initAudio();
+    #ifdef AUDIO_JPL_H
+        initAudio();
+    #endif
 
     std::cout<<"Everything initialized!\n\n";
 }
@@ -118,6 +152,9 @@ void createWindow(int w, int h, const char* title, GLFWmonitor* monitor, GLFWwin
 
     std::cout<<"Done\n\n";
 
+    jpl::WindowSize::INSTANCE.w = w;
+    jpl::WindowSize::INSTANCE.h = h;
+
     if(show){
         std::cout<<"Showing window...";
         glfwShowWindow(window);
@@ -131,7 +168,9 @@ void terminateGameLibrary(){
 
     std::cout<<"Terminating library...\n\n";
 
-    termAudio();
+    #ifdef AUDIO_JPL_H
+        termAudio();
+    #endif
     termShaders();
 
     std::cout<<"Closing GLFW...";

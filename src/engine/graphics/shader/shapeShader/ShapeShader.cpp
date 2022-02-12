@@ -1,10 +1,11 @@
 #include "ShapeShader.hpp"
 
 jpl::ShapeShader::ShapeShader() : jpl::Shader(
-        new std::string("shaders/text/vertex.vs"),
-        new std::string("shaders/text/fragment.fs")){
+        new std::string("shaders/shape/vertex.vs"),
+        new std::string("shaders/shape/fragment.fs")){
 
     this->transform = (new jgl::Matrix4())->idt();
+    this->rotation = (new jgl::Matrix4())->idt();
 }
 
 
@@ -57,10 +58,10 @@ void jpl::ShapeShader::getShapeVertices(SHAPE_TYPE shape_type, float* &vertices,
 
         case 2:
             _sizeVertices = 16;
-            vertices = new float[_sizeVertices]{-0.5f, -0.5f, 0.0f, 
-                                                0.5f, -0.5f, 0.0f, 
-                                                0.5f, 0.5f, 0.0f,
-                                                -0.5f, 0.5f, 0.0f};
+            vertices = new float[_sizeVertices]{-1.0f, -1.0f, 0.0f, 
+                                                1.0f, -1.0f, 0.0f, 
+                                                1.0f, 1.0f, 0.0f,
+                                                -1.0f, 1.0f, 0.0f};
             _sizeIndices = 6;
             indices = new unsigned int[_sizeIndices]{0, 1, 2, 0, 2, 3};
         break;
@@ -82,14 +83,31 @@ void jpl::ShapeShader::drawLine(int x, int y, float length, float* colors){
 
     this->checkBeginCall(SHAPE_LINE);
     this->transform->setToScale(length/(float)w, 1.0f, 1.0f, true);
-    float* coords = jplOpenGlCoords(x, y);
+    float* coords = jplOpenGlCoords(x, y, length, 0);
     this->transform->translate(coords[0], coords[1], 0.0f);
     this->useProgram();
     glUniform4f(glGetUniformLocation(*this->getShaderProgram(), "cols"), colors[0], colors[1], colors[2], colors[3]);
-    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->transform->matrix[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->rotation->cpy()->mul(transform)->matrix[0][0]);
     this->bind();
     glBindVertexArray(*this->VAO);
     glDrawArrays(GL_LINES, 0, this->_sizeVertices);
+}
+void jpl::ShapeShader::drawCircle(int x, int y, float radius, float* colors){
+
+    int w, h;
+    glfwGetWindowSize(glfwGetCurrentContext(), &w, &h);
+
+    this->checkBeginCall(SHAPE_CIRCLE);
+    this->transform->setToScale(radius/(float)w, radius/(float)h, 1.0f, true);
+    float* coords = jplOpenGlCoords(x, y, 0, 0);
+    this->transform->translate(coords[0], coords[1], 0.0f);
+    this->useProgram();
+    glUniform1f(glGetUniformLocation(*this->getShaderProgram(), "circle"), 1.0f);
+    glUniform4f(glGetUniformLocation(*this->getShaderProgram(), "cols"), colors[0], colors[1], colors[2], colors[3]);
+    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->rotation->cpy()->mul(transform)->matrix[0][0]);
+    this->bind();
+    glBindVertexArray(*this->VAO);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, this->_sizeVertices);
 }
 
 
@@ -99,10 +117,10 @@ void jpl::ShapeShader::drawQuad(int x, int y, float length, float* colors){
     int w, h;
     glfwGetWindowSize(glfwGetCurrentContext(), &w, &h);
     this->transform->setToScale(length/(float)w, length/(float)h, 1.0f, true);
-    float* coords = jplOpenGlCoords(x, y);
+    float* coords = jplOpenGlCoords(x, y, length, length);
     this->transform->translate(coords[0], coords[1], 0.0f);
     this->useProgram();
-    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->transform->matrix[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->rotation->cpy()->mul(transform)->matrix[0][0]);
     this->bindAndDraw(colors);
 }
 void jpl::ShapeShader::drawTriangle(int x, int y, float length, float* colors){
@@ -111,10 +129,10 @@ void jpl::ShapeShader::drawTriangle(int x, int y, float length, float* colors){
     int w, h;
     glfwGetWindowSize(glfwGetCurrentContext(), &w, &h);
     this->transform->setToScale(length/(float)w, length/(float)h, 1.0f, true);
-    float* coords = jplOpenGlCoords(x, y);
+    float* coords = jplOpenGlCoords(x, y, length, length);
     this->transform->translate(coords[0], coords[1], 0.0f);
     this->useProgram();
-    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->transform->matrix[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, &this->rotation->cpy()->mul(transform)->matrix[0][0]);
     this->bindAndDraw(colors);
 }
 

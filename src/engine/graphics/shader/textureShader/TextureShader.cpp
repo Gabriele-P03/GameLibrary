@@ -85,8 +85,7 @@ void jpl::TextureShader::draw(jpl::Texture* texuture, int w, int h){
 
 
 void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT){
-    int widthWindow, heightWindow;
-    glfwGetWindowSize(glfwGetCurrentContext(), &widthWindow, &heightWindow);
+    int widthWindow = jpl::WindowSize::INSTANCE.w, heightWindow = jpl::WindowSize::INSTANCE.h;
 
     //UVs are store in an array different by the one of shader's coordinates
     this->vertices[18] = (float)offsetX/(float)wT;

@@ -3,6 +3,7 @@
 jpl::OrthoCamera::OrthoCamera(jgl::Vector3f* position, float near, float far, float viewportW, float viewportH) : 
     jpl::BaseCamera::BaseCamera(position, new jgl::Vector3f(0.0f, 0.0f, 1.0f), near, far){
 
+        this->FOV = M_PI_2;
         this->setToOrtho(viewportW, viewportH);
         this->update();
 }

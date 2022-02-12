@@ -7,22 +7,11 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include "engine/input/key/KeyInput.h"
-#include "engine/graphics/shader/Shader.h"
-#include "files/Files.h"
-#include "engine/graphics/shader/Shader.h"
-#include "engine/graphics/shader/textureShader/TextureShader.hpp"
-#include "engine/math/vector/v2/Vector2f.h"
-#include "engine/math/matrix/mat4/Matrix4.h"
-#include "engine/math/matrix/mat3/Matrix3.h"
-#include "engine/parser/json/JsonReader.h"
-#include "engine/parser/json/JsonWriter.h"
-#include "engine/audio/Audio.h"
 #include "engine/graphics/texture/Texture.hpp"
-#include "engine/graphics/shader/textShader/TextShader.hpp"
-#include "engine/graphics/shader/shapeShader/ShapeShader.hpp"
+#include "engine/input/key/KeyInput.h"
+#include "engine/graphics/shader/shader3d/cubeShader/CubeShader.hpp"
+#include "engine/camera/PerspCamera.hpp"
 #include "engine/utils/WindowInfo.hpp"
-#include "engine/camera/OrthoCamera.hpp"
 
 //This will be the main window of the game
 GLFWwindow* window;
@@ -78,5 +67,9 @@ void createWindow(int w, int h, const char* title, GLFWmonitor* monitor, GLFWwin
  * Called on game closing
  */ 
 void terminateGameLibrary();
+
+/**
+ * 
+ */ 
 
 #endif

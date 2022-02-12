@@ -25,9 +25,13 @@ double toDegree(double _rad);
 double toRad(double _deg);
 
 /**
+ * @param x
+ * @param y
+ * @param lengthX converted into range[-1; +1], it will be added to x coord
+ * @param lengthY converted into range[-1; +1], it will be added to y coord
  * @return given coordinates into range [-1; +1]
  */ 
-float* jplOpenGlCoords(int x, int y);
+float* jplOpenGlCoords(int x, int y, float lengthX, float lengthY);
 
 
 #endif

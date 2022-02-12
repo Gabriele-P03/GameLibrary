@@ -54,6 +54,8 @@ namespace jpl{
             
         public:
 
+            jgl::Matrix4* rotation;
+
             static const SHAPE_TYPE SHAPE_LINE = 0;
             static const SHAPE_TYPE SHAPE_TRIANGLE = 1;
             static const SHAPE_TYPE SHAPE_QUAD = 2;
@@ -106,6 +108,15 @@ namespace jpl{
              * @param colors 4 float array which stores colors values as RGBA
              */ 
             void drawTriangle(int x, int y, float length, float* colors);
+            /**
+             * Draw an equilater triangle begin the bottom-left corner at x,y.
+             * It doesn't work
+             * @param x
+             * @param y
+             * @param radius
+             * @param colors 4 float array which stores colors values as RGBA
+             */ 
+            void drawCircle(int x, int y, float radius, float* colors);
     };
 }
 

@@ -13,8 +13,8 @@
  * @author Gabriele-P03
  */ 
 
-#ifndef AUDIO_H
-#define AUDIO_H
+#ifndef AUDIO_JPL_H
+#define AUDIO_JPL_H
 
 #include <AL/al.h>
 #include <AL/alc.h>

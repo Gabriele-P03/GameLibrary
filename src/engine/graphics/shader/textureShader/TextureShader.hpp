@@ -25,6 +25,7 @@
 #include <iostream>
 #include "../../../input/key/KeyInput.h"
 #include "../../../input/mouse/MouseInput.h"
+#include "../../../utils/WindowInfo.hpp"
 #include <string>
 
 

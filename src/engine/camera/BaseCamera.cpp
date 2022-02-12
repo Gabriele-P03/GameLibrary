@@ -5,28 +5,29 @@ jpl::BaseCamera::BaseCamera(jgl::Vector3f* position, jgl::Vector3f* direction, f
 
     this->position = position;
     this->direction = direction;
-    this->up = (this->direction->crs(&jgl::Vector3f::yAxis))->crs(this->direction);
+    this->up = new jgl::Vector3f(0.0f, 1.0f, 0.0f);
+    this->normalizeUp();
     this->near = near;
     this->far = far;
 
+
+    this->projection = (new jgl::Matrix4())->idt();
+    this->updateFrustum();
 }
 
 
 void jpl::BaseCamera::lookAt(float x, float y, float z){
-    //this->lookAt(new jgl::Vector3f(x, y, z));
-    //This code will be written in PerspectiveCamera
+    this->lookAt(new jgl::Vector3f(x, y, z));
 }
 void jpl::BaseCamera::lookAt(jgl::Vector3f* target){
-    /*
     this->direction->set(
         target->cpy()->addAll(
             -this->position->getX(),
             -this->position->getY(),
             -this->position->getZ()
         )->vrs());
-    
-        This code will be written in PerspectiveCamera
-    */
+
+        this->normalizeUp();
 }
 
 
@@ -86,22 +87,25 @@ void jpl::BaseCamera::setToTranslation(jgl::Vector3f* translatingVector){
 
 void jpl::BaseCamera::update(){
     this->view = (new jgl::Matrix4(this->direction))->setToTranslation(this->position, true);
-/*
-    this->projection = new jgl::Matrix4(    
-                    1.0f, 0.0f, 0.0f, 0.0f,
-                    0.0f, 1.0f, 0.0f, 0.0f,
-                    0.0f, 0.0f, -1.0f, 0.0f,
-                    0.0f, 0.0f, 0.0f, 1.0f
-    );
-    //For cenetering camera about window's origin(0;0)
-    this->projection->setToScale(2.0f/(float)this->viewportW, 2.0f/(float)this->viewportH, 2.0f/(float)(far-near), true);
-    this->projection->translate(new jgl::Vector3f(this->viewportW/2, this->viewportH/2, (-this->near -this->far)/2));
-
-    this->combined = this->view->cpy()->mul(this->projection);
-*/
+    this->updateFrustum();
+    this->combined = this->projection->cpy()->mul(this->view);
 }
 
-void jpl::BaseCamera::setFrustum(float near, float far){
+void jpl::BaseCamera::updateFrustum(){
+
+    int w = jpl::WindowSize::INSTANCE.w, h = jpl::WindowSize::INSTANCE.h;
+
+    float aspect = (float)w/(float)h;
+    float depth = this->far-this->near;
+    float e = tan(this->FOV/2);
+
+    this->projection->setToScale(near/e, near/e, (far+near)/depth, true);
+    this->projection->set(2, 3, (-2.0f*far*near)/depth);
+    this->projection->set(3, 2, -1.0f);
+    this->projection->set(3, 3, 0.0f);
+}
+
+void jpl::BaseCamera::setPlane(float near, float far){
     this->near = near;
     this->far = far;
 }

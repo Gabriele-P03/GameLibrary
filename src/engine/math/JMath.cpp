@@ -24,11 +24,11 @@ double toRad(double _deg){
     return _deg * (M_PI / 180);
 }
 
-float* jplOpenGlCoords(int x, int y){
+float* jplOpenGlCoords(int x, int y, float lengthX, float lengthY){
     int w, h;
     glfwGetWindowSize(glfwGetCurrentContext(), &w, &h);
     return new float[2]{
-        ((float)x - (w/2)) / (w/2),
-        ((float)y - (h/2)) / (h/2)
+        ((float)x - (w/2)) / (w/2) + lengthX/(float)w,
+        ((float)y - (h/2)) / (h/2) + lengthY/(float)h
     };
 }

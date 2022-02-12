@@ -13,6 +13,7 @@
 #include "../math/matrix/mat4/Matrix4.h"
 #include "../math/vector/quaternion/Quaternion.h"
 #include "../math/vector/v3/Vector3f.h"
+#include "../utils/WindowInfo.hpp"
 
 namespace jpl{
 
@@ -20,26 +21,10 @@ namespace jpl{
 
         protected:
 
-            float near, far;
+            float near, far, FOV;
             float viewportW, viewportH;
             jgl::Matrix4* combined, *projection, *view;
             jgl::Vector3f* direction, *position, *up; 
-
-
-            /**
-             * Set direction vector to look at x,y,z
-             * @param x
-             * @param y
-             * @param z
-             */ 
-            virtual void lookAt(float x, float y, float z);
-
-
-            /**
-             * Set direction vector to look at given position vector
-             * @param target
-             */ 
-            virtual void lookAt(jgl::Vector3f* target);
 
 
             BaseCamera(jgl::Vector3f* position, jgl::Vector3f* direction, float near, float far);
@@ -97,6 +82,22 @@ namespace jpl{
         public:
 
             /**
+             * Set direction vector to look at x,y,z
+             * @param x
+             * @param y
+             * @param z
+             */ 
+            virtual void lookAt(float x, float y, float z);
+
+
+            /**
+             * Set direction vector to look at given position vector
+             * @param target
+             */ 
+            virtual void lookAt(jgl::Vector3f* target);
+
+
+            /**
              * Projects the given Vector4 in world space to screen coordinates
              * This method return a nullptr when called by BaseCamera
              * @param worldCoords
@@ -115,12 +116,14 @@ namespace jpl{
              * @param near
              * @param far
              */ 
-            virtual void setFrustum(float near, float far);
+            virtual void setPlane(float near, float far);
 
             /**
              * Recalculate projection and view matrix
              */ 
             virtual void update();
+
+            virtual void updateFrustum();
 
 
             jgl::Matrix4* getViewMatrix();
