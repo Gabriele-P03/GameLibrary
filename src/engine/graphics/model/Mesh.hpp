@@ -24,7 +24,6 @@ namespace jpl{
             unsigned int* indices;
             unsigned int _sizeIndices;
 
-
         public:
 
             Mesh(float* vertices, unsigned int _sizeVertices, unsigned int* indices, unsigned int _sizeIndices);
@@ -33,7 +32,6 @@ namespace jpl{
             unsigned int getSizeVertices() const;
             unsigned int* getIndices() const;
             unsigned int getSizeIndices() const;
-            float* getTextures() const;
 
             static const Mesh* CUBE;
     };

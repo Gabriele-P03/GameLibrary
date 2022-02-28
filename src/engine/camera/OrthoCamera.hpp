@@ -1,7 +1,13 @@
 /**
- * The orthographic camera is a camera which is parallel to Z-plane, thus it must be used in 2D game.
+ * The orthographic camera is a camera which is parallel to Z-plane, 
+ * therefore it must be used in 2D game.
  * 
- * Orthographic camera rotates only around Z-axis (Yaw)
+ * Orthographic camera rotates only around Z-axis (Yaw).
+ * 
+ * If you're gonna using constructor without viewport parameters, be aware of calling
+ * setToOrtho(), then updateProjection() and then update() in order to set viewports and update projection matrix.
+ * 
+ * Even if you can pass z value when translating, remember that proejction matrix is calculated for 2D space
  * 
  * @author Gabriele-P03
  */ 
@@ -78,31 +84,39 @@ namespace jpl{
              * Translate this camera by the given vector
              * @param translatingVector
              */ 
-            void translate(jgl::Vector2f* translatingVector);
+            void translate(jgl::Vector3f* translatingVector);
             /**
              * Translate this camera by the given vector
              * @param x
              * @param y
              */ 
-            void translate(float x, float y);
+            void translate(float x, float y, float z);
             /**
              * Set to translation this camera by the given vector
              * @param translationVector
              */
-            void setToTranslation(jgl::Vector2f* translationVector); 
+            void setToTranslation(jgl::Vector3f* translationVector); 
             /**
              * Set to translation this camera by the given values
              * @param x
              * @param y
              */
-            void setToTranslation(float x, float y); 
+            void setToTranslation(float x, float y, float z); 
 
+            void updateFrustum() override;
 
             /**
-             * Update view and projection matrix
-             * Update combined matrix
+             * Projects the given screen coordinates to world coordinates
+             * @param screenCords
              */ 
-            void update() override;
+            jgl::Vector2f* project(jgl::Vector2f* mouseCoords);
+
+            /**
+             * Unprojects the given screen coordinates to world coordinates
+             * @param screenCords
+             */ 
+            jgl::Vector2f* unproject(jgl::Vector2f* worldCoords);
+
     };
 }
 

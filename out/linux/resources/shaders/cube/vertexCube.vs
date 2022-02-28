@@ -11,9 +11,9 @@ out vec4 cols; //This will be deleted once texture will have been developed
 
 void main(){
 
-    gl_Position = combined * transform * vec4(pos, 1.0f);
+    gl_Position =  combined * transform * vec4(pos, 1.0f);
 
     outTex = tex;
-    cols = vec4(0.7f, 0.3f, 0.0f, 1.0f);
+    //cols = vec4(0.7f, 0.3f, 0.0f, 1.0f);
 
 }

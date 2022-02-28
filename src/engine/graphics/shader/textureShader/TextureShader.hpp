@@ -13,6 +13,12 @@
  * 
  * A single transformation matrix is passed to shader program. It is obtained postmultipling scale to rotation matrix, then translation one
  * 
+ * TextureShader's vertex shader core requires a combined matrix in order to render stuff, this due to
+ * 2D game's map rendering, but if you're gonna rendering GUI like player's inventory, 
+ * then it must not be suboordinated to a camera, you must pass an identity matrix to shader program via:
+ * 
+ * glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &(new jgl::Matrix4())->idt()->matrix[0][0];
+ * 
  * @author Gabriele-P03
  */ 
 

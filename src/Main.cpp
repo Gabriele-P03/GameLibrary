@@ -3,23 +3,21 @@
 using namespace jpl;
 
 int main(int argc, const char* argv[]){  
-
-    
     
     initializeGameLibrary();
-
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
     int values[] = {GLFW_TRUE, GLFW_FALSE};
-
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
-
-    jpl::CubeShader* cube = new jpl::CubeShader();
-    jpl::PerspCamera* camera = new jpl::PerspCamera(new jgl::Vector3f(0.0f, 0.0f, -1.0f), new jgl::Vector3f(0.0f, 0.0f, 1.0f), -3.0f, 100.0f);
-    camera->setFOV(M_PI_2);
-    jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
 
     std::cout<<"Beginning render loop...\n\n";
 
+    jpl::OrthoCamera* camera = new jpl::OrthoCamera();
+    camera->setToOrtho(jpl::WindowSize::INSTANCE.w, jpl::WindowSize::INSTANCE.h);
+    camera->updateFrustum();
+    camera->update();
+
+    jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
+    jpl::TextureShader* shader = new jpl::TextureShader();
 
     while(!glfwWindowShouldClose(window)){
 
@@ -27,39 +25,41 @@ int main(int argc, const char* argv[]){
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
 
-        glDisable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_ALWAYS);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        cube->draw(camera->getCombinedMatrix(), 0.0f, 0.0f, 0.0f);
-        texture->draw();
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        glDepthFunc(GL_LESS);
-        glEnable(GL_CULL_FACE);
+        if(isKeyPressed(GLFW_KEY_W)){
+            camera->translate(0.0f, 0.05f, 0.0f);
+            camera->update();
+            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
+        }
+        if(isKeyPressed(GLFW_KEY_S)){
+            camera->translate(0.0f, -0.05f, 0.0f);
+            camera->update();
+            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
+        }
+        if(isKeyPressed(GLFW_KEY_A)){
+            camera->translate(-0.05f, 0.0f, 0.0f);
+            camera->update();
+            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
+        }        
+        if(isKeyPressed(GLFW_KEY_D)){
+            camera->translate(0.05f, 0.0f, 0.0f);
+            camera->update();
+            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
+        } 
+        if(isKeyPressed(GLFW_KEY_Z)){
+            double x, y;
+            glfwGetCursorPos(window, &x, &y);
 
+            jgl::Vector2f* pos = camera->project(new jgl::Vector2f(x, y));
+            cout<<x<<" - "<<y<<std::endl<<pos->getX()<<" - "<<pos->getY()<<std::endl;
+            pos = camera->unproject(pos);
+            cout<<pos->getX()<<" - "<<pos->getY()<<std::endl<<std::endl;
+        }
 
-        if(isKeyPressed(GLFW_KEY_W))
-            camera->translate(new jgl::Vector3f(0.0f, 0.0f, 0.05f));
-        if(isKeyPressed(GLFW_KEY_S))
-            camera->translate(new jgl::Vector3f(0.0f, 0.0f, -0.05f));
-        if(isKeyPressed(GLFW_KEY_A))
-            camera->translate(new jgl::Vector3f(-0.05f, 0.0f, 0.0f));
-        if(isKeyPressed(GLFW_KEY_D))
-            camera->translate(new jgl::Vector3f(0.05f, 0.0f, 0.0f));
-        if(isKeyPressed(GLFW_KEY_R))
-            camera->translate(new jgl::Vector3f(0.0f, 0.05f, 0.0f));
-        if(isKeyPressed(GLFW_KEY_F))
-            camera->translate(new jgl::Vector3f(0.0f, -0.05f, 0.0f));
+        shader->draw(texture);
 
-        if(isKeyPressed(GLFW_KEY_Z))
-            cube->rotation->rotate(M_PI_2/90, 0.0f, 0.0f);    
-        if(isKeyPressed(GLFW_KEY_Q))
-            cube->rotation->rotate(0.0f, M_PI_2/90, 0.0f);
-
-        camera->update();
-
-        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

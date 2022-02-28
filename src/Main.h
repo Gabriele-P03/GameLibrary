@@ -10,7 +10,8 @@
 #include "engine/graphics/texture/Texture.hpp"
 #include "engine/input/key/KeyInput.h"
 #include "engine/graphics/shader/shader3d/cubeShader/CubeShader.hpp"
-#include "engine/camera/PerspCamera.hpp"
+#include "engine/graphics/shader/textureShader/TextureShader.hpp"
+#include "engine/camera/OrthoCamera.hpp"
 #include "engine/utils/WindowInfo.hpp"
 
 //This will be the main window of the game

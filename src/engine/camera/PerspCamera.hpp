@@ -22,14 +22,46 @@ namespace jpl{
 
             PerspCamera(jgl::Vector3f* position, jgl::Vector3f* direction, float near, float far);
 
-            void translate(float x, float y, float z);
-            void translate(jgl::Vector3f* translatingVector);
+            /**
+             * Translate this camera by the given vector
+             * @param translatingVector
+             */ 
+            virtual void translate(jgl::Vector3f* translatingVector);
+            /**
+             * Set to translation this camera by the given vector
+             * @param translatingVector
+             */ 
+            virtual void setToTranslation(jgl::Vector3f* translatingVector);
 
-            void rotate(float yaw, float pitch, float roll);
-            void rotate(jgl::Quaternion* q);
-            void rotate(jgl::Matrix4* mat);
 
-            void setFOV(float FOV);
+            /**
+             * Set direction vector of this camera
+             * @param quaternion
+             */ 
+            virtual void setToRotation(jgl::Quaternion* quaternion);
+            /**
+             * Rotate this camera by the given rotation matrix
+             * @param rotationMatrix
+             */ 
+            virtual void rotate(jgl::Matrix4* rotationMatrix);
+            /**
+             * Rotate this camera by the given rotation matrix
+             * @param quaternion
+             */ 
+            virtual void rotate(jgl::Quaternion* quaternion);
+            /**
+             * Rotate this camera around the given point
+             * @param point
+             * @param rotationMatrix
+             */ 
+            virtual void rotateAround(jgl::Vector3f* point, jgl::Matrix4* rotationMatrix);
+
+
+            /**
+             * Transform the position, direction and up vector by the given transformation matrix
+             * @param transformationMatrix
+             */ 
+            virtual void transform(jgl::Matrix4* transformationMatrix);
     };
 }
 

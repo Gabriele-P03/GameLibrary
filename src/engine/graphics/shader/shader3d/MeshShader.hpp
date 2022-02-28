@@ -17,6 +17,8 @@ namespace jpl{
 
         protected:
 
+            unsigned int* UBO;
+
             MeshShader(std::string* pathToVertex, std::string* pathToFragment);
 
             virtual void draw() override;
