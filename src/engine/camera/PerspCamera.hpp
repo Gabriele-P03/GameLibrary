@@ -62,6 +62,18 @@ namespace jpl{
              * @param transformationMatrix
              */ 
             virtual void transform(jgl::Matrix4* transformationMatrix);
+
+            /**
+             * Project the given screen coordinates to 3D world game
+             * @return world coords
+             */ 
+            jgl::Vector3f* project(jgl::Vector3f* screenCoords);
+
+                        /**
+             * Project the given screen coordinates to 3D world game
+             * @return world coords
+             */ 
+            jgl::Vector3f* unproject(jgl::Vector3f* worldCoords);
     };
 }
 

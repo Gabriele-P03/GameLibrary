@@ -25,14 +25,21 @@ bool isButtonReleased(int button);
 int getButtonState(int button);
 
 /**
-* Return current x position of the mouse
-*/ 
-int getXPos();
+ * Stores, inside parameters, position of the mouse pointer
+ * @param x
+ * @param y
+ */ 
+void getMousePosition(double *x, double *y);
 
 /**
-* Return current y position of the mouse
+* @return x position of the mouse
 */ 
-int getYPos();
+double getXPos();
+
+/**
+* @return current y position of the mouse
+*/ 
+double getYPos();
 
 /**
  * GLFW doesn't provide static method about retrieving position or state of buttons, then
@@ -44,8 +51,8 @@ int getYPos();
  * Once call one of them, relative variable will be set as 0
  */ 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-double getXOff();
-double getYOff();
+double getXScrollOff();
+double getYScrollOff();
 
 
 #endif

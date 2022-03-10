@@ -15,50 +15,26 @@ int main(int argc, const char* argv[]){
     camera->setToOrtho(jpl::WindowSize::INSTANCE.w, jpl::WindowSize::INSTANCE.h);
     camera->updateFrustum();
     camera->update();
+    jpl::Button* button = new jpl::Button(0, 0, 100, 100);
+
+
+    button->setOnClickListener([] (jpl::View* v) {
+        std::cout<<"tasto premuto...";
+    });
 
     jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
     jpl::TextureShader* shader = new jpl::TextureShader();
 
     while(!glfwWindowShouldClose(window)){
-
+        
         if(isKeyPressed(GLFW_KEY_ESCAPE)){
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        if(isKeyPressed(GLFW_KEY_W)){
-            camera->translate(0.0f, 0.05f, 0.0f);
-            camera->update();
-            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
-        }
-        if(isKeyPressed(GLFW_KEY_S)){
-            camera->translate(0.0f, -0.05f, 0.0f);
-            camera->update();
-            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
-        }
-        if(isKeyPressed(GLFW_KEY_A)){
-            camera->translate(-0.05f, 0.0f, 0.0f);
-            camera->update();
-            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
-        }        
-        if(isKeyPressed(GLFW_KEY_D)){
-            camera->translate(0.05f, 0.0f, 0.0f);
-            camera->update();
-            glUniformMatrix4fv(glGetUniformLocation(*shader->getShaderProgram(), "combined"), 1, GL_FALSE, &camera->getCombinedMatrix()->matrix[0][0]);
-        } 
-        if(isKeyPressed(GLFW_KEY_Z)){
-            double x, y;
-            glfwGetCursorPos(window, &x, &y);
-
-            jgl::Vector2f* pos = camera->project(new jgl::Vector2f(x, y));
-            cout<<x<<" - "<<y<<std::endl<<pos->getX()<<" - "<<pos->getY()<<std::endl;
-            pos = camera->unproject(pos);
-            cout<<pos->getX()<<" - "<<pos->getY()<<std::endl<<std::endl;
-        }
-
-        shader->draw(texture);
+     
+        button->render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
