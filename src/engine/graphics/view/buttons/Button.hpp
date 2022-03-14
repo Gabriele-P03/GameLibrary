@@ -15,16 +15,31 @@ namespace jpl{
 
             std::string* text;
 
+            /**
+             * If you wish to render text with another font or another shader program,
+             * just override this method in a Button's child, using you own shader.
+             * It is called by Button::render()
+             */ 
+            virtual void renderText();
+
+            /**
+             * This is the texture which will be rendered when cursor is above the button
+             * If you don't wanna any rendering overlay, just do not call its setter
+             */ 
+            Texture* overlay;
+
         public:
             Button(int x, int y, int width, int height);
             Button(int x, int y);
             Button();
 
-            void tick() override;
-            void render() override;
+            virtual void tick() override;
+            virtual void render() override;
 
-            virtual void setText(std::string* text);
+            virtual void setText(std::string text);
             std::string* getText();
+
+            virtual void setOverlay(Texture* overlay);
     };
 }
 

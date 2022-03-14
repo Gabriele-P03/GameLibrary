@@ -1,20 +1,22 @@
 /**
- * A view is a simple abstraction of stuff which can be renderd on window in a 2D context
+ * A view is a simple abstraction of stuff which can be renderd on window in a 2D context which aren't
+ * in gameplay environment. It means that they're buttons, text-input field and so on...
+ * 
  * All shaders for rendering views' stuff are in common for every of them as protected static fields
  * 
- * Some views may not need TextShader therefore it won't be initialized via View's constructor.
- * Then, if you're gonna makin' your own view and you need it, remember to initialize it.
- * It will be initialized via Button's one ecc...
+ * If you're gonna using some views already available, which render text, they had been meant to use
+ * default text shader available as public static field @see TextShader
+ * Also the texture shader which is used, is the default one
  * 
- * @author
+ * @author Gabriele-P03
  */
 
 #ifndef VIEW_JPL_HPP
 #define VIEW_JPL_HPP
 
+#include "../shader/textShader/TextShader.hpp"
 #include "../../input/mouse/MouseInput.h"
 #include <functional>
-#include "../shader/textShader/TextShader.hpp"
 
 namespace jpl{
 
@@ -32,8 +34,8 @@ namespace jpl{
 
             std::function <void (View*)> clickListener;
 
-            static TextShader* textShader;  //Used for rendering button's text
-            static TextureShader* textureShader;    //Used for rendering button's background texture 
+            //It is the background texture
+            Texture* background;
 
         public:
 
@@ -65,6 +67,11 @@ namespace jpl{
              * press the view
              */ 
             void setOnClickListener( std::function <void (View*)> clickListener);
+
+            /**
+             * Set the background texture which will be rendered behind the view
+             */ 
+            void setBackground(Texture* background);
     };
     
 } 

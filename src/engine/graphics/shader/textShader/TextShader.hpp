@@ -113,11 +113,13 @@ namespace jpl{
             void loadFont(int rows, int cols, int size, int offset);
 
 
+            /**
+             * @return the size of font's chars
+             */
+            int getFontSize();
+
             static TextShader* TEXT_SHADER_DEFAULT;
     };
 }
-
-
-
 
 #endif

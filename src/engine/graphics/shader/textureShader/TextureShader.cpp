@@ -10,10 +10,10 @@ jpl::TextureShader::TextureShader(std::string* vertexFilePath, std::string* frag
 
     this->_sizeVertices = 20;
     this->vertices = new float[this->_sizeVertices]{
-        -0.5f, -0.5f, 0.0f,    0.0f, 1.0f,
-        0.5f, -0.5f, 0.0f,    1.0f, 1.0f,           
-        0.5f, 0.5f, 0.0f,     1.0f, 0.0f,    
-        -0.5f, 0.5f, 0.0f,    0.0f, 0.0f
+        -1.0f, -1.0f, 0.0f,    0.0f, 1.0f,
+        1.0f, -1.0f, 0.0f,    1.0f, 1.0f,           
+        1.0f, 1.0f, 0.0f,     1.0f, 0.0f,    
+        -1.0f, 1.0f, 0.0f,    0.0f, 0.0f
     };
 
     this->_sizeIndices = 6;
@@ -101,10 +101,10 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
     this->vertices[14] = (float)offsetY/(float)hT;
 
 
-    double startX = -1.0f + (double)x/(double)widthWindow;
-    double startY = -1.0f + (double)y/(double)heightWindow;
-    double midX = startX + ((double)widthX/2)/(double)widthWindow;
-    double midY = startY + ((double)heightY/2)/(double)heightWindow;
+    double startX = -1.0f + 2.0f * (double)x / (double)widthWindow;
+    double startY = -1.0f + 2.0f * (double)y / (double)heightWindow;
+    double midX = startX + (double)widthX/(double)widthWindow;
+    double midY = startY + (double)heightY/(double)heightWindow;
 
     /*
         As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not
@@ -120,3 +120,14 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
 
     this->translation->setToTranslation(midX, midY, 0.0f, false);
 }
+
+
+/**
+ * Static fields are initialized before everything.
+ * Shader generates new OpenGl's buffers, whose library needs to be initialized before.
+ * Initialize a library before reltive static fields is not possible...
+ * Then we need to define as nullptr the pointer, which will be redefined in the main function
+ * 
+ * Same thing for the TextShader static field
+ */ 
+jpl::TextureShader* jpl::TextureShader::TEXTURE_SHADER_DEFAULT = nullptr;

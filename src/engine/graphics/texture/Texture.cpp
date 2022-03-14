@@ -1,10 +1,10 @@
 #include "Texture.hpp"
 
-jpl::Texture::Texture(std::string* path){
+jpl::Texture::Texture(std::string path){
 
     this->img = new jpl::Texture::image;
 
-    unsigned error_t = lodepng::decode(this->img->data, this->img->w, this->img->h, getInternalPath(path)->c_str());
+    unsigned error_t = lodepng::decode(this->img->data, this->img->w, this->img->h, getInternalPath(&path)->c_str());
 
     if(error_t){
         std::cout<<"Texture loading error "<<error_t<<": "<<lodepng_error_text(error_t)<<std::endl;

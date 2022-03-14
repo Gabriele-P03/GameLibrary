@@ -17,6 +17,9 @@
 #include <iostream>
 #include "../../../files/Files.h"
 #include "lodepng.h"
+
+#define GLEW_STATIC
+#include <GL/glew.h>
 #include <GL/gl.h>
 
 namespace jpl{
@@ -43,7 +46,7 @@ namespace jpl{
         public:
 
             //Load the image at the given path
-            Texture(std::string* path);
+            Texture(std::string path);
 
             unsigned int getHeight();
             std::vector<unsigned char>* getData();

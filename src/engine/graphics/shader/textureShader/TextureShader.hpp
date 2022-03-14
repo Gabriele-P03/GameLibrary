@@ -130,9 +130,10 @@ namespace jpl{
              */ 
             void draw(Texture* texuture, int w, int h);
 
+            static TextureShader* TEXTURE_SHADER_DEFAULT;
 
-            
-    };
+    };  
 }
+
 
 #endif

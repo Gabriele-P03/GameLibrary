@@ -25,6 +25,7 @@ void jpl::View::tick(){
     if(isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)){
         double x, y;
         getMousePosition(&x, &y);
+        y = jpl::WindowSize::INSTANCE.h - y;
 
         if(x >= this->x && x <= this->w && y >= this->y && y <= this->h){
 
@@ -37,9 +38,12 @@ void jpl::View::tick(){
 }
 
 void jpl::View::render(){
-    this->tick();
+    
+    if(this->background != nullptr){
+        jpl::TextureShader::TEXTURE_SHADER_DEFAULT->draw(this->background, this->x, this->y, this->w, this->h);
+    }
 }
 
-void jpl::View::setOnClickListener( std::function <void (jpl::View*)> clickListener){
-    this->clickListener = clickListener;
-}
+void jpl::View::setOnClickListener( std::function <void (jpl::View*)> clickListener){this->clickListener = clickListener;}
+
+void jpl::View::setBackground(jpl::Texture* background){this->background = background;}

@@ -9,13 +9,13 @@ uniform mat4 transform;
 
 /*
     Combined matrix of the camera.
-    If this shader is not used during gameplay, i.e. in Main Menu, 'cause there's any camera, you should pass an identity matrix;
-    as you already well-know... 
+    If this shader is not used during gameplay, i.e. in Main Menu, 'cause there's any camera, 
+    you should pass an identity matrix.
 */
 uniform mat4 combined;
 
 void main(){
 
-    gl_Position = combined * transform * vec4(pos.xyz, 1.0f);
+    gl_Position = transform * vec4(pos.xyz, 1.0f);
     outTex = tex;
 }

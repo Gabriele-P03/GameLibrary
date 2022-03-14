@@ -22,7 +22,7 @@ jpl::TextShader::TextShader(std::string* pathToVertex, std::string* pathToFragme
 jpl::TextShader::TextShader(std::string* pathToFont, std::string* pathToVertex, std::string* pathToFragment) :
     jpl::TextureShader(pathToVertex, pathToFragment) {
 
-    this->font = new jpl::Texture(pathToFont);
+    this->font = new jpl::Texture(*pathToFont);
     glBlendFunci(0, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnablei(GL_BLEND, 0);
 }      
@@ -73,5 +73,14 @@ void jpl::TextShader::render(std::string* text, int x, int y, float* colors){
     }
 }
 
+int jpl::TextShader::getFontSize(){return this->size;}
 
-//jpl::TextShader* jpl::TextShader::TEXT_SHADER_DEFAULT = new jpl::TextShader();
+/**
+ * Static fields are initialized before everything.
+ * Shader generates new OpenGl's buffers, whose library needs to be initialized before.
+ * Initialize a library before reltive static fields is not possible...
+ * Then we need to define as nullptr the pointer, which will be redefined in the main function
+ * 
+ * Same thing for the TextureShader static field
+ */ 
+jpl::TextShader* jpl::TextShader::TEXT_SHADER_DEFAULT = nullptr;

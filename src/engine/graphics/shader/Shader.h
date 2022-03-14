@@ -23,8 +23,8 @@
  * @author Gabriele-P03
  */ 
 
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef SHADER_JPL_H
+#define SHADER_JPL_H
 
 #include <iostream>
 #include <string>

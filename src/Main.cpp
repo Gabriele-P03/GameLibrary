@@ -9,22 +9,19 @@ int main(int argc, const char* argv[]){
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    std::cout<<"Beginning render loop...\n\n";
-
-    jpl::OrthoCamera* camera = new jpl::OrthoCamera();
-    camera->setToOrtho(jpl::WindowSize::INSTANCE.w, jpl::WindowSize::INSTANCE.h);
-    camera->updateFrustum();
-    camera->update();
+    jpl::TextShader::TEXT_SHADER_DEFAULT = new jpl::TextShader();
+    jpl::TextureShader::TEXTURE_SHADER_DEFAULT = new jpl::TextureShader();
+    
     jpl::Button* button = new jpl::Button(0, 0, 100, 100);
-
-
+    button->setText("!011");
+    jpl::Texture* texture = new jpl::Texture("ciao2.png");
+    button->setBackground(texture);
+    button->setOverlay(new jpl::Texture("ciao1.png"));
     button->setOnClickListener([] (jpl::View* v) {
-        std::cout<<"tasto premuto...";
+        glfwSetWindowShouldClose(glfwGetCurrentContext(), GLFW_TRUE);
     });
 
-    jpl::Texture* texture = new jpl::Texture(new std::string("ciao.png"));
-    jpl::TextureShader* shader = new jpl::TextureShader();
-
+    std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
         
         if(isKeyPressed(GLFW_KEY_ESCAPE)){
@@ -147,7 +144,10 @@ void terminateGameLibrary(){
     #ifdef AUDIO_JPL_H
         termAudio();
     #endif
-    termShaders();
+
+    #ifdef SHADER_JPL_H
+        termShaders();
+    #endif
 
     std::cout<<"Closing GLFW...";
     glfwTerminate();
