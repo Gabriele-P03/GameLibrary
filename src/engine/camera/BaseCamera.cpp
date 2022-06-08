@@ -15,6 +15,29 @@ jpl::BaseCamera::BaseCamera(jgl::Vector3f* position, jgl::Vector3f* direction, f
 }
 
 
+void jpl::BaseCamera::tick(float speed){
+
+    float x = 0.0f, y = 0.0f;
+
+    if(isKeyPressed(GLFW_KEY_W)){
+        y += speed;
+    }
+    if(isKeyPressed(GLFW_KEY_S)){
+        y -= speed;
+    }
+    if(isKeyPressed(GLFW_KEY_A)){
+        x -= speed;
+    }
+    if(isKeyPressed(GLFW_KEY_D)){
+        x += speed;
+    }
+
+    if(x != 0.0f || y != 0.0f){
+        this->position->addAll(x, y, 0.0f);
+    }
+}
+
+
 void jpl::BaseCamera::lookAt(float x, float y, float z){
     this->lookAt(new jgl::Vector3f(x, y, z));
 }
@@ -50,16 +73,6 @@ void jpl::BaseCamera::update(){
 
 void jpl::BaseCamera::updateFrustum(){
 
-    int w = jpl::WindowSize::INSTANCE.w, h = jpl::WindowSize::INSTANCE.h;
-
-    float aspect = (float)w/(float)h;
-    float depth = this->far-this->near;
-    float e = tan(this->FOV/2);
-
-    this->projection->setToScale(1.0f/e, 1.0f/e, 1, true);
-    this->projection->set(2, 3, (-2.0f*far*near)/depth);
-    this->projection->set(3, 2, 1.0f);
-    this->projection->set(3, 3, 0.0f);
 }
 
 void jpl::BaseCamera::setPlane(float near, float far){
@@ -69,6 +82,11 @@ void jpl::BaseCamera::setPlane(float near, float far){
 
 void jpl::BaseCamera::setFOV(float FOV){
     this->FOV = FOV;
+}
+
+void jpl::BaseCamera::setViewport(float viewportW, float viewportH){
+    this->viewportW = viewportW;
+    this->viewportH = viewportH;
 }
 
 jgl::Matrix4* jpl::BaseCamera::getViewMatrix(){return this->view;}

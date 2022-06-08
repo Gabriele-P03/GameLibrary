@@ -72,14 +72,6 @@ namespace jpl{
              */ 
             void rotateAround(jgl::Vector2f* point, float angle);
 
-
-            /**
-             * Update viewports value with the new given ones.
-             * This method will not update view matrix, you must call also update()
-            */
-            void setToOrtho(float newViewportW, float newViewportH);
-
-
             /**
              * Translate this camera by the given vector
              * @param translatingVector
@@ -103,7 +95,9 @@ namespace jpl{
              */
             void setToTranslation(float x, float y, float z); 
 
+
             void updateFrustum() override;
+
 
             /**
              * Projects the given screen coordinates to world coordinates

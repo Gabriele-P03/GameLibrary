@@ -36,7 +36,7 @@ namespace jpl{
             virtual void tick() override;
             virtual void render() override;
 
-            virtual void setText(std::string text);
+            void setText(std::string text);
             std::string* getText();
 
             virtual void setOverlay(Texture* overlay);

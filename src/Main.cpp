@@ -4,22 +4,29 @@ using namespace jpl;
 
 int main(int argc, const char* argv[]){  
     
+    
+
     initializeGameLibrary();
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    jpl::TextShader::TEXT_SHADER_DEFAULT = new jpl::TextShader();
-    jpl::TextureShader::TEXTURE_SHADER_DEFAULT = new jpl::TextureShader();
+    jpl::Texture* texture = new jpl::Texture(std::string("ciao.png"));
+
+    jpl::Mesh* mesh = loadModel(new std::string("model/block.obj"), 3);
+    jpl::MeshShader* shader = new jpl::MeshShader(
+        new std::string("shaders/cube/vertexCube.vs"),
+        new std::string("shaders/cube/fragmentCube.fs")
+        );
+
+    jpl::PerspCamera* camera = new jpl::PerspCamera(
+        new jgl::Vector3f(0.0f, 0.0f, -1.0f), 
+        new jgl::Vector3f(0.0f, 0.0f, 1.0f),
+        0.1f, 1000.0f);
     
-    jpl::Button* button = new jpl::Button(0, 0, 100, 100);
-    button->setText("!011");
-    jpl::Texture* texture = new jpl::Texture("ciao2.png");
-    button->setBackground(texture);
-    button->setOverlay(new jpl::Texture("ciao1.png"));
-    button->setOnClickListener([] (jpl::View* v) {
-        glfwSetWindowShouldClose(glfwGetCurrentContext(), GLFW_TRUE);
-    });
+    camera->setFOV(M_PI_2);
+    camera->updateFrustum();
+    camera->update();
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -29,10 +36,17 @@ int main(int argc, const char* argv[]){
         }
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      
-        button->render();
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
 
+        camera->tick(0.05f, 0.005f, false);
+        camera->update();
+        texture->draw();
+        shader->draw(jpl::Mesh::CUBE, camera->getCombinedMatrix(), 0.0f, 0.0f, 0.0f);
+
+        glDisable(GL_DEPTH_TEST);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -127,6 +141,10 @@ void createWindow(int w, int h, const char* title, GLFWmonitor* monitor, GLFWwin
 
     jpl::WindowSize::INSTANCE.w = w;
     jpl::WindowSize::INSTANCE.h = h;
+
+    std::cout<<"Setting Keyboard Callback...";
+    glfwSetKeyCallback(glfwGetCurrentContext(), keyboard_callback);
+    std::cout<<"Done\n";
 
     if(show){
         std::cout<<"Showing window...";

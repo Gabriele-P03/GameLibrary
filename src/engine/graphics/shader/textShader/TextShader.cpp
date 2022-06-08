@@ -62,13 +62,17 @@ void jpl::TextShader::render(std::string* text, int x, int y, float* colors){
 
     glUniform4f(glGetUniformLocation(*this->getShaderProgram(), "cols"), colors[0], colors[1], colors[2], colors[3]);
     
-    for(int i = 0; i < text->length(); i++){
+    if(text != nullptr){
+        if(text->length() > 0){
+            for(int i = 0; i < text->length(); i++){
 
-        char buffer = text->at(i);
-        int dec = (int)buffer;
+                char buffer = text->at(i);
+                int dec = (int)buffer;
 
-        if(dec >= 33 || dec <= 126){
-            this->draw(this->font, x+size*i, y, size, size, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
+                if(dec >= 33 || dec <= 126){
+                    this->draw(this->font, x+size*i, y, size, size, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
+                }
+            }
         }
     }
 }

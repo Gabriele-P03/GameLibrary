@@ -15,3 +15,12 @@ bool isKeyReleased(int key){
 int getKeyScancode(int key){
     return glfwGetKeyScancode(key);
 }
+
+int key_buffer, scancode_buffer, action_buffer, mods_buffer;
+
+void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+    key_buffer = key;
+    scancode_buffer = scancode;
+    action_buffer = action;
+    mods_buffer = mods;
+}

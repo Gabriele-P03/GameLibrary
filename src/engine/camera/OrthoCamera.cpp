@@ -52,12 +52,6 @@ void jpl::OrthoCamera::updateFrustum(){
             true);
 }
 
-
-void jpl::OrthoCamera::setToOrtho(float newViewportW, float newViewportH){
-    jpl::BaseCamera::viewportW = newViewportW;
-    jpl::BaseCamera::viewportH = newViewportH;
-}
-
 jgl::Vector2f* jpl::OrthoCamera::project(jgl::Vector2f* mouseCoords){
 
     //y is calculated from +1 'cause y mouse coord begins from top side of the window

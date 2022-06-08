@@ -10,6 +10,7 @@
 #define PERSPCAMERA_JPL_HPP
 
 #include "BaseCamera.hpp"
+#include "../input/mouse/MouseInput.h"
 
 namespace jpl{
 
@@ -17,10 +18,13 @@ namespace jpl{
 
         private:
 
+            float lastXMousePos, lastYMousePos;
 
         public:
 
             PerspCamera(jgl::Vector3f* position, jgl::Vector3f* direction, float near, float far);
+
+            virtual void updateFrustum() override;
 
             /**
              * Translate this camera by the given vector
@@ -74,6 +78,20 @@ namespace jpl{
              * @return world coords
              */ 
             jgl::Vector3f* unproject(jgl::Vector3f* worldCoords);
+
+
+            /**
+             * Called in order to move camera as WASD movements
+             * 
+             * As this is a perspective camera it will also provides rotating system 
+             *
+             * @param speedMove speed which camera is moved at
+             * @param speedRot speed which camera is rotated at
+             * @param yawLock if yaw cannot do a full circula movement
+             * @warning this method does NOT call update()
+             * @warning in video-game zAxis and yAxis are inverted 
+             */
+            virtual void tick(float speedMove, float speedRot, bool yawLock);
     };
 }
 

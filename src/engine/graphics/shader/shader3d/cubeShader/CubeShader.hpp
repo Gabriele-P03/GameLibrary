@@ -14,15 +14,9 @@
 
 namespace jpl{
 
-    class CubeShader : public MeshShader{
-
-        private:
-
-            virtual void draw() override;
+    class CubeShader : protected MeshShader{
 
         public:
-
-            jgl::Matrix4* scale, *translating, *rotation;
 
             CubeShader();
 

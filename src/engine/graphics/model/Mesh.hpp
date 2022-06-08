@@ -13,6 +13,8 @@
 #ifndef MESH_JPL_HPP
 #define MESH_JPL_HPP
 
+#include <vector>
+
 namespace jpl{
 
     class Mesh{
@@ -24,16 +26,22 @@ namespace jpl{
             unsigned int* indices;
             unsigned int _sizeIndices;
 
+            unsigned int verticesPerFace;
+
         public:
 
             Mesh(float* vertices, unsigned int _sizeVertices, unsigned int* indices, unsigned int _sizeIndices);
-            
+            Mesh(std::vector<float*> vertices);
+
             float* getVertices() const;
             unsigned int getSizeVertices() const;
             unsigned int* getIndices() const;
             unsigned int getSizeIndices() const;
 
-            static const Mesh* CUBE;
+            unsigned int getVerticesPerFace();
+            Mesh* setVerticesPerFace(unsigned int verticesPerFace);
+
+            static Mesh* CUBE;
     };
 }
 

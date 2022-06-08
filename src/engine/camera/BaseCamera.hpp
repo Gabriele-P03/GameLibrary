@@ -14,6 +14,7 @@
 #include "../math/vector/quaternion/Quaternion.h"
 #include "../math/vector/v3/Vector3f.h"
 #include "../utils/WindowInfo.hpp"
+#include "../input/key/KeyInput.h"
 
 namespace jpl{
 
@@ -73,10 +74,20 @@ namespace jpl{
             virtual void update();
 
             /**
+             * Called in order to move camera as WASD movements
+             * 
+             * @param speed speed which camera is moved at
+             * @warning this method does NOT call update()
+             */
+            virtual void tick(float speed); 
+
+            /**
              * Update projection matrix.
              * This should be called after have either resized window, viewports, changed FOV or z-depth
              */ 
             virtual void updateFrustum();
+
+            void setViewport(float viewportW, float viewportH);
 
 
             jgl::Matrix4* getViewMatrix();

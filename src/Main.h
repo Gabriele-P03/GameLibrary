@@ -8,7 +8,11 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
-#include "engine/graphics/view/buttons/Button.hpp"
+#include "engine/graphics/model/ModelLoader.hpp"
+#include "engine/camera/PerspCamera.hpp"
+#include "engine/graphics/shader/shader3d/MeshShader.hpp"
+#include "engine/graphics/texture/Texture.hpp"
+
 #include "engine/input/key/KeyInput.h"
 #include "engine/utils/WindowInfo.hpp"
 
@@ -30,6 +34,7 @@ void initializeGameLibrary();
  * Just print error code @param error and @param desc
  */ 
 void error_callback(int error, const char* desc);
+
 
 /**
  * Create window with the given parameters.
