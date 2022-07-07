@@ -2,11 +2,10 @@
 
 
 jpl::TextureShader::TextureShader() : 
-    jpl::TextureShader(new std::string("shaders/texture2d/vertex.vs"), new std::string("shaders/texture2d/fragment.fs")){
+    jpl::TextureShader("shaders/vertex.vs", "shaders/fragment.fs"){
 }
 
-jpl::TextureShader::TextureShader(std::string* vertexFilePath, std::string* fragmentFilePath) : jpl::Shader(vertexFilePath, fragmentFilePath){
-
+jpl::TextureShader::TextureShader(std::string vertexFilePath, std::string fragmentFilePath) : jpl::Shader(vertexFilePath, fragmentFilePath){
 
     this->_sizeVertices = 20;
     this->vertices = new float[this->_sizeVertices]{
@@ -21,10 +20,6 @@ jpl::TextureShader::TextureShader(std::string* vertexFilePath, std::string* frag
         0, 1, 2,    //Front face
         0, 2, 3,
     };
-
-    this->rotation = (new jgl::Matrix4())->idt();
-    this->scale = (new jgl::Matrix4())->idt();
-    this->translation = (new jgl::Matrix4())->idt();
 }
 
 
@@ -42,29 +37,14 @@ void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int widthX, i
         //Before binding buffer(s), it's gonna binding array
         glBindVertexArray(*this->VAO);
 
-        //Binding VBO and send vertices
-        glBindBuffer(GL_ARRAY_BUFFER, *this->getVBO());
-        glBufferData(GL_ARRAY_BUFFER, this->_sizeVertices * sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        //Enabling coords on screen
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        //Enabling texture coords
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-
+        this->bindVBO();
+        this->vertexAttrib();
         //Binding EBO and send elements (indices)
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *this->EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->_sizeIndices * sizeof(indices), indices, GL_STATIC_DRAW);
+        this->bindEBO();
     }
-
+    this->pushMatrixTransformation();
     texture->draw();
-    jgl::Matrix4* buffer = this->rotation->cpy()->mul(this->scale)->mul(this->translation);
-    glUniformMatrix4fv(glGetUniformLocation(*this->shaderProgram, "transform"), 1, GL_FALSE, &buffer->matrix[0][0]);
-
-    
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+    glDrawElements(GL_TRIANGLES, this->_sizeIndices, GL_UNSIGNED_INT, (void*)0);
 }
 
 void jpl::TextureShader::draw(jpl::Texture* texture){
@@ -83,6 +63,15 @@ void jpl::TextureShader::draw(jpl::Texture* texuture, int w, int h){
     this->draw(texuture, 0, 0, w, h, 0, 0, w, h);
 }
 
+void jpl::TextureShader::vertexAttrib(){
+    //Enabling coords on screen
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    //Enabling texture coords
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+}
 
 void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT){
     int widthWindow = jpl::WindowSize::INSTANCE.w, heightWindow = jpl::WindowSize::INSTANCE.h;
@@ -100,27 +89,25 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
     this->vertices[13] = this->vertices[18] + (float)w/(float)wT;
     this->vertices[14] = (float)offsetY/(float)hT;
 
+    float widthRatio = (float)widthX/(float)widthWindow;
+    float heightRatio = (float)heightY/(float)heightWindow;
 
-    double startX = -1.0f + 2.0f * (double)x / (double)widthWindow;
-    double startY = -1.0f + 2.0f * (double)y / (double)heightWindow;
-    double midX = startX + (double)widthX/(double)widthWindow;
-    double midY = startY + (double)heightY/(double)heightWindow;
+    float newX = -1.0f + ( (float)(x+w/2.0f)/(float)widthWindow ),
+        newY = -1.0f + ( (float)(y+h/2.0f)/(float)heightWindow );
 
     /*
         As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not
         a quad, we need to scale down x and y as the texture supplies.
         Do not care if your texture width is greater than window's. It will do it...
     */
-    float widthRatio = (float)widthX/(float)widthWindow;
-    float heightRatio = (float)heightY/(float)heightWindow;
-    this->scale->setToScale( 
+    /*this->scale = glm::scale(glm::mat4(1.0f), glm::vec3(
                 (wT < widthWindow ?  widthRatio : 1/widthRatio), 
                 (hT < heightWindow ? heightRatio : 1/heightRatio),
-                 1.0f, false);
-
-    this->translation->setToTranslation(midX, midY, 0.0f, false);
+                 1.0f));
+*/
+    //float tmpX = -1.0f + ((float)widthX/2.0f)/(float)widthWindow;
+    this->translation = glm::translate(glm::mat4(1.0f), glm::vec3(newX, newY, 0.0f));
 }
-
 
 /**
  * Static fields are initialized before everything.

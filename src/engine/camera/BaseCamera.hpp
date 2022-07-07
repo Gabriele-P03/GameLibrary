@@ -1,108 +1,90 @@
-/**
- * This is an abstraction of a camera for 2D/3D game.
- * 
- * Its position, direction and other information will be stored as it was in a 3D game,
- * even if you're developing a 2D one
- * 
- * @author Gabriele-P03
- */ 
+#ifndef JPL_BASECAMERA_HPP
+#define JPL_BASECAMERA_HPP
 
-#ifndef BASECAMERA_JPL_HPP
-#define BASECAMERA_JPL_HPP
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include "../math/matrix/mat4/Matrix4.h"
-#include "../math/vector/quaternion/Quaternion.h"
-#include "../math/vector/v3/Vector3f.h"
-#include "../utils/WindowInfo.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+#include "../utils/WindowSize.hpp"
 #include "../input/key/KeyInput.h"
 
+#include <iostream>
 namespace jpl{
 
     class BaseCamera{
 
         protected:
 
-            float near, far, FOV;
-            float viewportW, viewportH;
-            jgl::Matrix4* combined, *projection, *view;
-            jgl::Vector3f* direction, *position, *up, *right; 
-
-
-            BaseCamera(jgl::Vector3f* position, jgl::Vector3f* direction, float near, float far);
+            BaseCamera(glm::vec3 pos, glm::vec3 target);
+            BaseCamera(glm::vec3 pos, glm::vec3 target, float near, float far);
+            BaseCamera(glm::vec3 pos, glm::vec3 target, float near, float far, float viewportW, float viewportH);
 
         public:
-
-            /**
-             * Normalizes the up vector.
-             * Calculates the right vector via a crs(direction, up)
-             * Then recalculating the up vector via a crs(right, direction).
-             */ 
-            virtual void normalizeUpAndRight();
-
-            /**
-             * Set direction vector to look at x,y,z
-             * @param x
-             * @param y
-             * @param z
-             */ 
-            virtual void lookAt(float x, float y, float z);
-
-
-            /**
-             * Set direction vector to look at given position vector
-             * @param target
-             */ 
-            virtual void lookAt(jgl::Vector3f* target);
+            glm::vec3 position, direction, up, right, target;
+            float near, far, viewportW, viewportH;
+            glm::mat4 view, projection, combined;
 
             
-            /**
-             * Alterate near and far value of this camera
-             * @param near
-             * @param far
-             */ 
-            virtual void setPlane(float near, float far);
 
             /**
-             * Set a new FieldOfView
-             * @param FOV
-             */ 
-            void setFOV(float FOV); 
-
-            /**
-             * Recalculate view and combined matrix
-             */ 
-            virtual void update();
-
-            /**
-             * Called in order to move camera as WASD movements
+             * Update the projection matrix. Not called automatically.
+             * Do it once changed eithrt viewport or near or far.
              * 
-             * @param speed speed which camera is moved at
-             * @warning this method does NOT call update()
-             */
-            virtual void tick(float speed); 
-
-            /**
-             * Update projection matrix.
-             * This should be called after have either resized window, viewports, changed FOV or z-depth
+             * @warning the function in BaseCamera ha an empty body. It will be defined in sub-classes 
              */ 
             virtual void updateFrustum();
 
+            /**
+             * update combined matrix. It calls also updateView().
+             * Not called automatically. Do it when camera moves or rotates.
+             * It also pushes the new combined matrix to the OpenGL pipeline
+             * of the current shader program
+             * 
+             * Pass 0 as shaderProgram if you do not wanna call pushCombinedMatrix()
+             * 
+             * @param shaderProgram id of the current shader program. 
+             */ 
+            virtual void update(unsigned int shaderProgram);
+
+            /**
+             * This is the main camera's function. It listen for WASD keys
+             * in order to move camera
+             * 
+             * @param speedMov movement speed
+             * @param speedRot rotation speed
+             * @param shaderProgram id of the current shader program
+             */ 
+            virtual void tick(float speedMov, float speedRot, unsigned int shaderProgram);
+
+            /**
+             * @param viewportW 
+             * @param viewportH
+             */ 
             void setViewport(float viewportW, float viewportH);
 
+            /**
+             * Called by update(), it updates view matrix
+             */ 
+            virtual void updateView();
 
-            jgl::Matrix4* getViewMatrix();
-            jgl::Matrix4* getProjectionMatrix();
-            jgl::Matrix4* getCombinedMatrix();
-            jgl::Vector3f* getDirection();
-            jgl::Vector3f* getPosition();
-            jgl::Vector3f* getUp();
-            float getFar();
-            float getNear();
-            float getViewportH();
-            float getViewportW();
+            /**
+             * Called by constructor and when camera rotates, it updates up and right vectors
+             */ 
+            virtual void updateUpAndRight();
+
+            /**
+             * Push the new combined matrix to the current shader program pipeline
+             * You do not need to call it. It's already done by update().
+             * 
+             * @param shaderProgram id of the current shader program
+             */ 
+            virtual void pushCombinedMatrix(unsigned int shaderProgram);
 
     };
-
 }
 
 #endif

@@ -1,82 +1,45 @@
 #include "OrthoCamera.hpp"
 
-jpl::OrthoCamera::OrthoCamera(jgl::Vector3f* position, float near, float far, float viewportW, float viewportH) : 
-    jpl::BaseCamera::BaseCamera(position, new jgl::Vector3f(0.0f, 0.0f, 1.0f), near, far){
+jpl::OrthoCamera::OrthoCamera(glm::vec3 pos, glm::vec3 target, float near, float far, float viewportW, float viewportH) 
+    : jpl::BaseCamera::BaseCamera(pos, target, near, far, viewportW, viewportH) {
+        
+    this->updateFrustum();
+    this->update(0);
 }
-jpl::OrthoCamera::OrthoCamera(jgl::Vector3f* position, float viewportW, float viewportH) :
-    jpl::OrthoCamera::OrthoCamera(position, 0.0f, 10.0f, viewportW, viewportH){
-}
-jpl::OrthoCamera::OrthoCamera() : 
-    jpl::OrthoCamera::OrthoCamera(1.0f, -10.0f){
-
-}
-jpl::OrthoCamera::OrthoCamera(float near, float far) :
-    jpl::BaseCamera::BaseCamera(new jgl::Vector3f(0.0f, 0.0f, 0.0f), new jgl::Vector3f(0.0f, 0.0f, -1.0f), near, far){
-        //Neither call setToOrtho nor update
-}
-jpl::OrthoCamera::OrthoCamera(float near, float far, float viewportW, float viewportH) : 
-    jpl::OrthoCamera::OrthoCamera(new jgl::Vector3f(0.0f, 0.0f, 0.0f), near, far, viewportW, viewportH){
-
-}
-
-void jpl::OrthoCamera::setToRotation(float angle){
-    this->direction = (new jgl::Quaternion(new jgl::Vector3f(0.0f, 0.0f, 1.0f), angle))->getDirectionVector();
-}
-void jpl::OrthoCamera::rotate(float angle){
-    this->direction->rotate(angle, &jgl::Vector3f::zAxis);
-}
-void jpl::OrthoCamera::rotateAround(jgl::Vector2f* point, float angle){
-    this->position->rotateAround(new jgl::Vector3f(point->getX(), point->getY(), 0.0f), angle, &jgl::Vector3f::xAxis);
-}
-
-
-void jpl::OrthoCamera::translate(jgl::Vector3f* translatingVector){
-    this->position->addAll(translatingVector->getX(), translatingVector->getY(), 0.0f);
-}
-void jpl::OrthoCamera::translate(float x, float y, float z){
-    this->position->addAll(x, y, z);
-}
-void jpl::OrthoCamera::setToTranslation(jgl::Vector3f* translationVector){
-    this->position = new jgl::Vector3f(translationVector->getX(), translationVector->getY(), translationVector->getZ());
-}
-void jpl::OrthoCamera::setToTranslation(float x, float y, float z){
-    this->position = new jgl::Vector3f(x, y, z);
-}
+jpl::OrthoCamera::OrthoCamera(glm::vec3 pos, glm::vec3 target, float near, float far) : jpl::OrthoCamera::OrthoCamera(pos, target, near, far, 0.0f, 0.0f){}
+jpl::OrthoCamera::OrthoCamera(glm::vec3 pos, glm::vec3 target) : jpl::OrthoCamera::OrthoCamera(pos, target, 0.1f, 100.0f){}
 
 
 void jpl::OrthoCamera::updateFrustum(){
-    this->projection = (new jgl::Matrix4())->setToScale(
-            (float)jpl::WindowSize::INSTANCE.w/this->viewportW, 
-            (float)jpl::WindowSize::INSTANCE.h/this->viewportH,
-            1.0f, 
-            true);
+    float vW_2 = this->viewportW/2.0f, vH_2 = this->viewportH / 2.0f;
+    this->projection = glm::ortho(0.0f, vW_2, 0.0f, vH_2, this->near, this->far);
 }
 
-jgl::Vector2f* jpl::OrthoCamera::project(jgl::Vector2f* mouseCoords){
+void jpl::OrthoCamera::tick(float speedMov, float speedRot, unsigned int shaderProgram){
 
-    //y is calculated from +1 'cause y mouse coord begins from top side of the window
-    float x = mouseCoords->getX()/jpl::WindowSize::INSTANCE.w;
-    float y = (jpl::WindowSize::INSTANCE.h - mouseCoords->getY())/jpl::WindowSize::INSTANCE.h;
-    x *= this->viewportW;
-    y *= this->viewportH;
+    float x = 0.0f, y = 0.0f, z = 0.0f;
 
-    return new jgl::Vector2f(
-        x + this->position->getX(),
-        y + this->position->getY()
-    );
-}
+    if(jpl::isKeyPressed(GLFW_KEY_W)){
+        y = speedMov;
+    }
+    if(jpl::isKeyPressed(GLFW_KEY_S)){
+        y = -speedMov;
+    }
+    if(jpl::isKeyPressed(GLFW_KEY_A)){
+        x = speedMov;
+    }
+    if(jpl::isKeyPressed(GLFW_KEY_D)){
+        x = -speedMov;
+    }
+    if(jpl::isKeyPressed(GLFW_KEY_Y)){
+        z = speedMov;
+    }
+    if(jpl::isKeyPressed(GLFW_KEY_H)){
+        z = -speedMov;
+    }
 
-jgl::Vector2f* jpl::OrthoCamera::unproject(jgl::Vector2f* worldCoords){
-
-    float x = worldCoords->getX() - this->position->getX();
-    float y = worldCoords->getY() - this->position->getY();
-
-    x /= this->viewportW;
-    y /= this->viewportH;
-
-    x *= jpl::WindowSize::INSTANCE.w;
-    y *= jpl::WindowSize::INSTANCE.h;
-    y += jpl::WindowSize::INSTANCE.h;
-
-    return new jgl::Vector2f(x, y);
+    if(x != 0.0f || y != 0.0f || z != 0.0f){
+        this->position += glm::vec3(x, y, z);
+        this->update(shaderProgram);
+    }
 }

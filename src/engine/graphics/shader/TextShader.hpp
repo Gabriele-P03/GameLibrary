@@ -1,5 +1,9 @@
 /**
  * Abstraction of text rendering shader.
+ * 
+ * Since you could need to render text in a 3D world (e.g. player name above the model), you can pass
+ * the combined matrix of the persp camera, otherwise just pass an idt matrix
+ * 
  * You could construct your own object of this class using your font. Anyway, there's alredy one
  * static instance with the default font of this library
  * 
@@ -24,8 +28,8 @@
 #define TEXTSHADER_HPP
 
 #include <string>
-#include "../../../../files/Files.h"
-#include "../textureShader/TextureShader.hpp"
+#include "../../../files/Files.h"
+#include "TextureShader.hpp"
 
 namespace jpl{
 
@@ -48,15 +52,15 @@ namespace jpl{
             /**
              * Construct a new text shader with given BitMap font, Vertex and Shader codes
              */ 
-            TextShader(std::string* pathToFont, std::string* pathToVertex, std::string* pathToFragment);
+            TextShader(std::string pathToFont, std::string pathToVertex, std::string pathToFragment);
             /**
              * Construct a new text shader with default BitMap font and new Vertex and Shader codes
              */ 
-            TextShader(std::string* pathToVertex, std::string* pathToFragment);
+            TextShader(std::string pathToVertex, std::string pathToFragment);
             /**
              * Construct a new text shader with given BitMap font and default Vertex and Shader codes
              */ 
-            TextShader(std::string* pathToFont);
+            TextShader(std::string pathToFont);
             /**
              * Construct a new text shader with default BitMap font, Vertex and Shader code
              */ 
@@ -72,7 +76,7 @@ namespace jpl{
              * @param blue
              * @param alpha
              */ 
-            void render(std::string* text, int x, int y, float red, float green, float blue, float alpha);
+            void render(std::string text, int x, int y, float red, float green, float blue, float alpha);
             
             
             /**
@@ -82,7 +86,7 @@ namespace jpl{
              * @param y
              * @param colors
              */ 
-            void render(std::string* text, int x, int y, float colors);
+            void render(std::string text, int x, int y, float colors);
 
 
             /**
@@ -92,7 +96,7 @@ namespace jpl{
              * @param y
              * @param colors
              */ 
-            void render(std::string* text, int x, int y, float* colors);
+            void render(std::string text, int x, int y, float* colors);
 
 
             /**
@@ -101,7 +105,7 @@ namespace jpl{
              * @param x
              * @param y
              */ 
-            void render(std::string* text, int x, int y);
+            void render(std::string text, int x, int y);
 
             /**
              * Called for loading font
@@ -111,6 +115,17 @@ namespace jpl{
              * @param offset padding between each box, which must be the same btween rows and cols
              */ 
             void loadFont(int rows, int cols, int size, int offset);
+
+
+            /**
+             * Since you could need to draw text either on 2D screen (text button on GameMenu)
+             * or in a 3D space (players' name at the top of the model), you will need to
+             * set a ceratin combined matrix:
+             *  Identity in the first case, otherwise combined matrix of the camera
+             * 
+             * @param combinedMatrix
+             */ 
+            virtual void setCombinedMatrix(glm::mat4 combinedMatrix);
 
 
             /**

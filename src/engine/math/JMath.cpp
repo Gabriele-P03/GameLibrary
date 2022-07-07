@@ -1,4 +1,4 @@
-#include "JMath.h"
+#include "JMath.hpp"
 
 bool isNegative(double x){
     return x < 0;

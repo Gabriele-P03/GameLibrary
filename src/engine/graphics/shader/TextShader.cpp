@@ -1,30 +1,24 @@
 #include "TextShader.hpp"
 
-jpl::TextShader::TextShader() : jpl::TextShader(
-    new std::string("font/font.png"),
-    new std::string("shaders/text/vertex.vs"),
-    new std::string("shaders/text/fragment.fs")){
-
+jpl::TextShader::TextShader() : jpl::TextShader("font/font.png", "shaders/vertex.vs", "shaders/fragment.fs"){
     this->loadFont(11, 11, 32, 1);
 }
-jpl::TextShader::TextShader(std::string* pathToFont) : jpl::TextShader(
-    pathToFont,
-    new std::string("shaders/text/vertex.vs"),
-    new std::string("shaders/text/fragment.fs")){
+jpl::TextShader::TextShader(std::string pathToFont) : jpl::TextShader(
+    pathToFont, "shaders/vertex.vs", "shaders/fragment.fs"){
 
 } 
-jpl::TextShader::TextShader(std::string* pathToVertex, std::string* pathToFragment) : jpl::TextShader(
-        getInternalPath(new std::string("font/font.png")),
-        pathToVertex, pathToFragment){
+jpl::TextShader::TextShader(std::string pathToVertex, std::string pathToFragment) : jpl::TextShader(
+        *getInternalPath("font/font.png"), pathToVertex, pathToFragment){
 
 } 
 
-jpl::TextShader::TextShader(std::string* pathToFont, std::string* pathToVertex, std::string* pathToFragment) :
+jpl::TextShader::TextShader(std::string pathToFont, std::string pathToVertex, std::string pathToFragment) :
     jpl::TextureShader(pathToVertex, pathToFragment) {
 
-    this->font = new jpl::Texture(*pathToFont);
+    this->font = new jpl::Texture(pathToFont);
     glBlendFunci(0, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnablei(GL_BLEND, 0);
+    this->setCombinedMatrix(glm::mat4(1.0f));
 }      
 
 void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
@@ -48,25 +42,25 @@ void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
     }
 }
 
-void jpl::TextShader::render(std::string* text, int x, int y){
+void jpl::TextShader::render(std::string text, int x, int y){
     this->render(text, x, y, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void jpl::TextShader::render(std::string* text, int x, int y, float red, float green, float blue, float alpha){
+void jpl::TextShader::render(std::string text, int x, int y, float red, float green, float blue, float alpha){
     this->render(text, x, y, new float[4]{red, green, blue, alpha});
 }
 
-void jpl::TextShader::render(std::string* text, int x, int y, float* colors){
+void jpl::TextShader::render(std::string text, int x, int y, float* colors){
 
     this->useProgram();
 
     glUniform4f(glGetUniformLocation(*this->getShaderProgram(), "cols"), colors[0], colors[1], colors[2], colors[3]);
     
-    if(text != nullptr){
-        if(text->length() > 0){
-            for(int i = 0; i < text->length(); i++){
+    if(!text.empty()){
+        if(text.length() > 0){
+            for(int i = 0; i < text.length(); i++){
 
-                char buffer = text->at(i);
+                char buffer = text.at(i);
                 int dec = (int)buffer;
 
                 if(dec >= 33 || dec <= 126){
@@ -75,6 +69,10 @@ void jpl::TextShader::render(std::string* text, int x, int y, float* colors){
             }
         }
     }
+}
+
+void jpl::TextShader::setCombinedMatrix(glm::mat4 combinedMatrix){
+    glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "combined"), 1, GL_FALSE, glm::value_ptr(combinedMatrix));
 }
 
 int jpl::TextShader::getFontSize(){return this->size;}

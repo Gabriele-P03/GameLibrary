@@ -54,7 +54,7 @@ namespace jpl{
             unsigned int* getTextureID();
 
             //Draw this texture
-            void draw();
+            virtual void draw();
     };
 }
 

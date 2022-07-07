@@ -1,8 +1,8 @@
 #include "Files.h"
 
-void getLocalFile(std::string* pathToFile, std::ios_base::openmode __modes, std::fstream** file){
+void getLocalFile(std::string pathToFile, std::ios_base::openmode __modes, std::fstream** file){
 
-    std::string path = std::string(*getRootPath() + "/" + *pathToFile);
+    std::string path = *getRootPath() + "/" + pathToFile;
 
     (**file).open(path, __modes);
 
@@ -14,8 +14,8 @@ void getLocalFile(std::string* pathToFile, std::ios_base::openmode __modes, std:
     }
 }
 
-void getInternalFile(std::string* pathToFile, std::ios_base::openmode _mode, std::fstream** file){
-    getLocalFile( new std::string("resources/" + *pathToFile), _mode, file);
+void getInternalFile(std::string pathToFile, std::ios_base::openmode _mode, std::fstream** file){
+    getLocalFile( "resources/" + pathToFile, _mode, file);
 }
 
 std::string* getRootPath(){
@@ -52,7 +52,7 @@ std::string* getRootPath(){
 
 }
 
-std::string* readFile(std::string* pathToFile){
+std::string* readFile(std::string pathToFile){
 
     std::fstream* file = new std::fstream;
     getInternalFile(pathToFile, std::ios_base::in, &file);
@@ -84,10 +84,10 @@ std::string* readFile(std::fstream* file){
     }
 }
 
-std::string* getInternalPath(std::string* path){
-    return new std::string(*getRootPath() + "/resources/" + *path);
+std::string* getInternalPath(std::string path){
+    return new std::string(*getRootPath() + "/resources/" + path);
 }
 
-std::string* getLocalFile(std::string* path){
-    return new std::string(*getRootPath() + "/" + *path);
+std::string* getLocalFile(std::string path){
+    return new std::string(*getRootPath() + "/" + path);
 }

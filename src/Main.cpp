@@ -3,30 +3,32 @@
 using namespace jpl;
 
 int main(int argc, const char* argv[]){  
-    
-    
 
     initializeGameLibrary();
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    jpl::Texture* texture = new jpl::Texture(std::string("ciao.png"));
-
-    jpl::Mesh* mesh = loadModel(new std::string("model/block.obj"), 3);
-    jpl::MeshShader* shader = new jpl::MeshShader(
-        new std::string("shaders/cube/vertexCube.vs"),
-        new std::string("shaders/cube/fragmentCube.fs")
-        );
-
-    jpl::PerspCamera* camera = new jpl::PerspCamera(
-        new jgl::Vector3f(0.0f, 0.0f, -1.0f), 
-        new jgl::Vector3f(0.0f, 0.0f, 1.0f),
-        0.1f, 1000.0f);
-    
-    camera->setFOV(M_PI_2);
-    camera->updateFrustum();
-    camera->update();
+    jpl::TextureShader* shader = new jpl::TextureShader();
+    shader->setVertices(
+        new float[20]{
+            -0.5f, -0.5f, 0.0f,     0.0f, 0.0f,
+            0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
+            0.5f, 0.5f, 0.0f,       1.0f, 1.0f,
+            -0.5f, 0.5f, 0.0f,      0.0f, 1.0f
+        }, 20
+    );
+    shader->setIndices(
+        new unsigned int[6]{
+            0,1,2,
+            0,2,3
+        }, 6
+    );
+    shader->pushMatrixTransformation();
+    jpl::Texture* texture = new jpl::Texture("ciao.png");
+    jpl::OrthoCamera* camera = new jpl::OrthoCamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, -1.0f), -1.0f, 100.0f, 
+            jpl::WindowSize::INSTANCE.w/200, jpl::WindowSize::INSTANCE.h/200);
+    camera->pushCombinedMatrix(*shader->getShaderProgram());
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -36,17 +38,11 @@ int main(int argc, const char* argv[]){
         }
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
+        glClear(GL_COLOR_BUFFER_BIT); 
+        
+        shader->draw(texture, 0, 0, false);
+        camera->tick(0.05f, 0.05f, *shader->getShaderProgram());
 
-        camera->tick(0.05f, 0.005f, false);
-        camera->update();
-        texture->draw();
-        shader->draw(jpl::Mesh::CUBE, camera->getCombinedMatrix(), 0.0f, 0.0f, 0.0f);
-
-        glDisable(GL_DEPTH_TEST);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -143,7 +139,7 @@ void createWindow(int w, int h, const char* title, GLFWmonitor* monitor, GLFWwin
     jpl::WindowSize::INSTANCE.h = h;
 
     std::cout<<"Setting Keyboard Callback...";
-    glfwSetKeyCallback(glfwGetCurrentContext(), keyboard_callback);
+    glfwSetKeyCallback(glfwGetCurrentContext(), jpl::keyboard_callback);
     std::cout<<"Done\n";
 
     if(show){

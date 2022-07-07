@@ -3,6 +3,12 @@
 
 #include <GLFW/glfw3.h>
 
+extern int key_buffer, scancode_buffer, action_buffer, mods_buffer;
+
+namespace jpl{
+
+
+
 extern int getStateKey(int key);
 
 extern bool isKeyPressed(int key);
@@ -20,7 +26,6 @@ extern int getKeyScancode(int key);
  * This callback is used to save every key pressed into a char buffer var.
  */ 
 extern void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
-extern int key_buffer, scancode_buffer, action_buffer, mods_buffer;
+}
 
 #endif

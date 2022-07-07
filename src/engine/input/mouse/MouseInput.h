@@ -7,6 +7,8 @@
 
 #include <GLFW/glfw3.h>
 
+namespace jpl{
+
 /**
 * Return if the given button is pressed
 */ 
@@ -54,5 +56,5 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 double getXScrollOff();
 double getYScrollOff();
 
-
+}
 #endif

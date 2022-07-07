@@ -37,6 +37,12 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include "../../math/JMath.hpp"
+
+
 typedef unsigned int JPLstartX;
 typedef unsigned int JPLstartY;
 typedef unsigned int JPLwidthX;
@@ -89,31 +95,68 @@ namespace jpl{
             void createShader(std::string vertexCode, std::string fragmentCode);
 
             /**
-             *  Bind buffer with the given parameters
+             *  Bind buffers calling bindVBO(), bindEBO() and vertexAttrib()
             */  
-            virtual void bind();
+            inline virtual void bind();
+
+            /**
+             * Bind VBO.
+             * You should never call this func, it is already done by bind().
+             * But you can override it, if you need it  
+             */ 
+            inline virtual void bindVBO();
+
+            /**
+             * Bind EBO
+             * You should never call this func, it is already done by bind().
+             * But you can override it, if you need it  
+             */ 
+            inline virtual void bindEBO();
+
+            /**
+             * Make the calls to glVertexAttribArray() and enable it
+             * You should never call this func, it is already done by bind().
+             * But you can override it, if you need it 
+             */ 
+            inline virtual void vertexAttrib();
+
 
             /*
                 Draw the triangles which compose this shader.
                 First call glUseProgram() in order to set this shader available for pipeline,
                 then call glBindVertexArray(VAO) and then draw elements via glDrawArrays()
             */
-            virtual void draw();
+            inline virtual void draw();
 
             /**
              * Set available this shader program via glUseProgram()
              * Before to call the function, it checks the current shader in order 
              * to not call glUseProgram() while it isn't needed
              */ 
-            virtual void useProgram();
+            inline virtual void useProgram();
+
+            /**
+             * Called by constrctor, it initializes matrices as identity
+             */ 
+            virtual void initializeMatrices();
 
         public:
 
+            glm::mat4 rotation, scale, translation; 
+
             //Constructor with path to file
-            Shader(std::string* pathToVertexFile, std::string* pathToFragmentFile);
+            Shader(std::string pathToVertexFile, std::string pathToFragmentFile);
 
             //Constructor with code already taken
             Shader(const char* vertexCode, const char* fragmentCode);
+
+            /**
+             * It creates a new transformation matrix and pushes it to OpenGL.
+             * Since this shader has been performed to work with uniform variable, this 
+             * function is not called automatically.
+             */ 
+            virtual void pushMatrixTransformation();
+
 
             unsigned int* getVBO();
             unsigned int* getVAO();
@@ -136,9 +179,6 @@ namespace jpl{
             static std::vector<unsigned int*>* getVertexShaders();
             static std::vector<unsigned int*>* getFragmentShaders();
             static std::vector<unsigned int*>* getShaderPrograms();
-
-            //Free memory and close shader program
-            //void free();
     };
     
 }

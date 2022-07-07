@@ -1,29 +1,29 @@
 #include "MouseInput.h"
 
-int getButtonState(int button){
+int jpl::getButtonState(int button){
     return glfwGetMouseButton(glfwGetCurrentContext(), button);
 }
  
-bool isButtonPressed(int button){
-    return getButtonState(button) == GLFW_PRESS;
+bool jpl::isButtonPressed(int button){
+    return jpl::getButtonState(button) == GLFW_PRESS;
 }
 
-bool isButtonReleased(int button){
-    return getButtonState(button) == GLFW_RELEASE;
+bool jpl::isButtonReleased(int button){
+    return jpl::getButtonState(button) == GLFW_RELEASE;
 }
 
-void getMousePosition(double *x, double *y){
+void jpl::getMousePosition(double *x, double *y){
     glfwGetCursorPos(glfwGetCurrentContext(), x, y);
 }
 
-double getXPos(){
+double jpl::getXPos(){
     double *x = new double;
-    getMousePosition(x, new double);
+    jpl::getMousePosition(x, new double);
     return *x;
 }
 
-double getYPos(){
+double jpl::getYPos(){
     double *y = new double;
-    getMousePosition(new double, y);
+    jpl::getMousePosition(new double, y);
     return *y;
 }
