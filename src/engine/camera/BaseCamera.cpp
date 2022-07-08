@@ -14,8 +14,8 @@ jpl::BaseCamera::BaseCamera(glm::vec3 pos, glm::vec3 target) : jpl::BaseCamera::
 
 void jpl::BaseCamera::updateUpAndRight(){
 
-    this->right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), this->direction));
-    this->up = glm::normalize(glm::cross(this->direction, this->right));
+    this->right = glm::normalize(glm::cross(this->direction, glm::vec3(0.0f, 1.0f, 0.0f)));
+    this->up = glm::normalize(glm::cross(this->right, this->direction));
 }
 
 void jpl::BaseCamera::updateView(){

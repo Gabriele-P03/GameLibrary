@@ -9,26 +9,10 @@ int main(int argc, const char* argv[]){
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    jpl::TextureShader* shader = new jpl::TextureShader();
-    shader->setVertices(
-        new float[20]{
-            -0.5f, -0.5f, 0.0f,     0.0f, 0.0f,
-            0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
-            0.5f, 0.5f, 0.0f,       1.0f, 1.0f,
-            -0.5f, 0.5f, 0.0f,      0.0f, 1.0f
-        }, 20
-    );
-    shader->setIndices(
-        new unsigned int[6]{
-            0,1,2,
-            0,2,3
-        }, 6
-    );
-    shader->pushMatrixTransformation();
+    jpl::PerspCamera* camera = new jpl::PerspCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), M_PI_2, 0.1f, 100.0f, jpl::WindowSize::INSTANCE.w/60, jpl::WindowSize::INSTANCE.h/60);
+    jpl::ModelShader* modelShader = new jpl::ModelShader();
+    camera->pushCombinedMatrix(*modelShader->getShaderProgram());
     jpl::Texture* texture = new jpl::Texture("ciao.png");
-    jpl::OrthoCamera* camera = new jpl::OrthoCamera(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, -1.0f), -1.0f, 100.0f, 
-            jpl::WindowSize::INSTANCE.w/200, jpl::WindowSize::INSTANCE.h/200);
-    camera->pushCombinedMatrix(*shader->getShaderProgram());
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -37,11 +21,14 @@ int main(int argc, const char* argv[]){
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
 
+        glEnable(GL_DEPTH_TEST);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT); 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
         
-        shader->draw(texture, 0, 0, false);
-        camera->tick(0.05f, 0.05f, *shader->getShaderProgram());
+        camera->tick(0.05f, 0.05f, *modelShader->getShaderProgram());
+        modelShader->pushMatrixTransformation();
+        texture->draw();
+        modelShader->render(jpl::Mesh::CUBE, 0.0f, 0.0f, 0.0f);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

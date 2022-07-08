@@ -18,7 +18,6 @@ jpl::TextShader::TextShader(std::string pathToFont, std::string pathToVertex, st
     this->font = new jpl::Texture(pathToFont);
     glBlendFunci(0, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnablei(GL_BLEND, 0);
-    this->setCombinedMatrix(glm::mat4(1.0f));
 }      
 
 void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
@@ -64,6 +63,7 @@ void jpl::TextShader::render(std::string text, int x, int y, float* colors){
                 int dec = (int)buffer;
 
                 if(dec >= 33 || dec <= 126){
+                    this->setCombinedMatrix(glm::mat4(1.0f));
                     this->draw(this->font, x+size*i, y, size, size, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
                 }
             }

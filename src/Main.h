@@ -8,7 +8,9 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
-#include "engine/camera/OrthoCamera.hpp"
+#include "engine/camera/PerspCamera.hpp"
+#include "engine/graphics/shader/ModelShader.hpp"
+#include "engine/graphics/model/ModelLoader.hpp"
 #include "engine/graphics/texture/Texture.hpp"
 #include "engine/graphics/shader/TextureShader.hpp"
 #include "engine/graphics/shader/TextShader.hpp"
