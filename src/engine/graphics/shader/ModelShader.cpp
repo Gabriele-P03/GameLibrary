@@ -45,6 +45,13 @@ void jpl::ModelShader::render(jpl::Mesh* mesh, float x, float y, float z){
     //As model which is not a cube, or kinda of, it hardly ever will use indices
     //We can check it via mesh->getIndices() != nullptr
     glBindVertexArray(*this->VAO);
+
+    this->translation.x = x;
+    this->translation.y = y;
+    this->translation.z = z;
+
+    this->pushMatrixTransformation();
+
     if(mesh->getIndices() != nullptr){  
         glDrawElements(GL_TRIANGLES, mesh->getSizeIndices(), GL_UNSIGNED_INT, (void*)0);
     }

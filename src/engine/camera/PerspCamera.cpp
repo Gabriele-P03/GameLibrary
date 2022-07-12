@@ -3,7 +3,14 @@
 jpl::PerspCamera::PerspCamera(glm::vec3 pos, glm::vec3 target, float FOV, float near, float far, float viewportW, float viewportH) 
     : jpl::BaseCamera::BaseCamera(pos, target, near, far, viewportW, viewportH) {
         
+    this->constraintPitch = true;
     this->FOV = FOV;
+
+    double x, y;
+    jpl::getMousePosition(&x, &y);
+    this->lastX = x;
+    this->lastY = y;
+
     this->updateFrustum();
     this->update(0);
 }
@@ -24,31 +31,66 @@ void jpl::PerspCamera::updateView(){
 
 void jpl::PerspCamera::tick(float speedMov, float speedRot, unsigned int shaderProgram){
 
-    float x = 0.0f, y = 0.0f, z = 0.0f;
+    bool update = false;
 
     if(jpl::isKeyPressed(GLFW_KEY_W)){
-        y = speedMov;
+        this->move(direction, speedMov);
+        update = true;
     }
     if(jpl::isKeyPressed(GLFW_KEY_S)){
-        y = -speedMov;
+        this->move(direction, -speedMov);
+        update = true;
     }
     if(jpl::isKeyPressed(GLFW_KEY_A)){
-        x = speedMov;
+        this->move(glm::cross(this->up, this->direction), speedMov);
+        update = true;
     }
     if(jpl::isKeyPressed(GLFW_KEY_D)){
-        x = -speedMov;
-    }
-    if(jpl::isKeyPressed(GLFW_KEY_Y)){
-        z = speedMov;
-    }
-    if(jpl::isKeyPressed(GLFW_KEY_H)){
-        z = -speedMov;
+        this->move(glm::cross(this->direction, this->up), speedMov);
+        update = true;
     }
 
-    if(x != 0.0f || y != 0.0f || z != 0.0f){
-        this->position += glm::vec3(x, y, z);
-        this->update(shaderProgram);
+    //Let's check if mouse has been moved
+    double currentX, currentY;
+    jpl::getMousePosition(&currentX, &currentY);
+    if(this->lastX != currentX || this->lastY != currentY){
+
+        float yaw = currentX - lastX;
+        float pitch = lastY - currentY;//Since screen is bottom to top
+
+        this->YAW += yaw;
+
+        if(!this->constraintPitch || 
+            (this->constraintPitch && this->PITCH+pitch <= 89.0f && this->PITCH+pitch >= -89.0f))
+            this->PITCH += pitch;
+
+
+        this->lastX = currentX;
+        this->lastY = currentY;
+
+        this->direction.x = cos(glm::radians(this->YAW)) * cos(glm::radians(this->PITCH));
+        this->direction.y = sin(glm::radians(this->PITCH));
+        this->direction.z = sin(glm::radians(this->YAW)) * cos(glm::radians(this->PITCH));
+
+        this->direction = glm::normalize(this->direction);
+
+        this->updateUpAndRight();
+        update = true;
     }
+
+    if(update)
+        this->update(shaderProgram);
+}
+
+inline void jpl::PerspCamera::move(glm::vec3 direction, float speed){
+    glm::vec3 right = glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    //In order to move ignoring y-axis
+    right.y = 0.0f;
+    right = glm::normalize(right);
+
+    direction = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), right));
+    this->position += direction * speed;
 }
 
 void jpl::PerspCamera::setFOV(float FOV){this->FOV = FOV;}

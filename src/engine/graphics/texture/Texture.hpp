@@ -43,6 +43,9 @@ namespace jpl{
             //Generate a new OpenGl's buffer for texture and save the ID inside the vector
             void genTexture();
 
+            //Called by constructor in order to flip vertically the matrix of data composed by w*h
+            void flipV();
+
         public:
 
             //Load the image at the given path

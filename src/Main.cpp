@@ -9,10 +9,11 @@ int main(int argc, const char* argv[]){
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
-    jpl::PerspCamera* camera = new jpl::PerspCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), M_PI_2, 0.1f, 100.0f, jpl::WindowSize::INSTANCE.w/60, jpl::WindowSize::INSTANCE.h/60);
+    jpl::PerspCamera* camera = new jpl::PerspCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), M_PI_2, 0.1f, 100.0f, jpl::WindowSize::INSTANCE.w/60, jpl::WindowSize::INSTANCE.h/60);
     jpl::ModelShader* modelShader = new jpl::ModelShader();
+    jpl::Mesh* mesh = jpl::loadModel("model/block.obj", 3);
     camera->pushCombinedMatrix(*modelShader->getShaderProgram());
-    jpl::Texture* texture = new jpl::Texture("ciao.png");
+    jpl::Texture* texture = new jpl::Texture("model/texture.png");
 
     std::cout<<"Beginning render loop...\n\n";
     while(!glfwWindowShouldClose(window)){
@@ -26,9 +27,15 @@ int main(int argc, const char* argv[]){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
         
         camera->tick(0.05f, 0.05f, *modelShader->getShaderProgram());
-        modelShader->pushMatrixTransformation();
         texture->draw();
         modelShader->render(jpl::Mesh::CUBE, 0.0f, 0.0f, 0.0f);
+        //modelShader->rotation = glm::rotate(modelShader->rotation, (float)M_PI_2/90, glm::vec3(1.0f, 0.0f, 0.0f));
+        //modelShader->render(mesh, 2.0f, 2.0f, 2.0f);
+
+        if(jpl::isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)){
+            std::cout<<"pos: "<<camera->position.x<<" - "<<camera->position.y<<" - "<<camera->position.z<<"\n";
+            std::cout<<"dir: "<<camera->direction.x<<" - "<<camera->direction.y<<" - "<<camera->direction.z<<"\n\n";
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -127,7 +134,11 @@ void createWindow(int w, int h, const char* title, GLFWmonitor* monitor, GLFWwin
 
     std::cout<<"Setting Keyboard Callback...";
     glfwSetKeyCallback(glfwGetCurrentContext(), jpl::keyboard_callback);
-    std::cout<<"Done\n";
+    std::cout<<"Done\nSetting Cursor Pos Callback...";
+    glfwSetCursorPosCallback(glfwGetCurrentContext(), jpl::cursor_pos_callback);
+    std::cout<<"Done\nSetting Scroll Callback...";
+    glfwSetScrollCallback(glfwGetCurrentContext(), jpl::scroll_callback);
+    std::cout<<"Done\n\n";
 
     if(show){
         std::cout<<"Showing window...";

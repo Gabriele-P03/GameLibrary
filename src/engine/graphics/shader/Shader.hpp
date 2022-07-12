@@ -37,6 +37,7 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
+#include <glm/gtx/euler_angles.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -136,13 +137,16 @@ namespace jpl{
             inline virtual void useProgram();
 
             /**
-             * Called by constrctor, it initializes matrices as identity
+             * Called by constrctor, it initializes vectors
              */ 
-            virtual void initializeMatrices();
+            virtual void initializeVectors();
+
+            glm::vec3 right, up;
 
         public:
-
-            glm::mat4 rotation, scale, translation; 
+            
+            glm::mat4 rotation;
+            glm::vec3 scale, translation; 
 
             //Constructor with path to file
             Shader(std::string pathToVertexFile, std::string pathToFragmentFile);
@@ -156,6 +160,12 @@ namespace jpl{
              * function is not called automatically.
              */ 
             virtual void pushMatrixTransformation();
+
+            /**
+             * After have changed the rotation vector, you should call this method in order to 
+             * update also up and right
+             */ 
+            virtual void updateUpAndRight();
 
 
             unsigned int* getVBO();

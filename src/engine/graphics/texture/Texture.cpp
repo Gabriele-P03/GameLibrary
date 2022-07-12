@@ -9,8 +9,28 @@ jpl::Texture::Texture(std::string path){
     if(error_t){
         std::cout<<"Texture loading error "<<error_t<<": "<<lodepng_error_text(error_t)<<std::endl;
     }else{
+        this->flipV();
         this->genTexture();
     }
+}
+
+void jpl::Texture::flipV(){
+
+    int w = this->img->w;
+    int h = this->img->h;
+
+    //RGBA means 4 values. For flipping vertically we can simplify the width by 2. Width must be also
+    //multiplied for 4(RGBA). Then w*4/2 = w*2
+
+    unsigned char buffer;
+
+    for(int x = 0; x < h/2; x++){
+        for(int y = 0; y < 4*w; y++){
+            buffer = this->img->data[ 4*w*x + y ];
+            this->img->data[ 4*w*x + y ] = this->img->data[4*w*(h-x-1) + y];
+            this->img->data[4*w*(h-x-1) + y] = buffer;
+        }
+    }  
 }
 
 

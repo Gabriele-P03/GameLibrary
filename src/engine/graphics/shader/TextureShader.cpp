@@ -98,15 +98,15 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
     /*
         As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not
         a quad, we need to scale down x and y as the texture supplies.
-        Do not care if your texture width is greater than window's. It will do it...
+        Do not care if your texture width is greater than window's; It will do it
     */
-    this->scale = glm::scale(glm::mat4(1.0f), glm::vec3(
+    this->scale = glm::vec3(
                 (wT < widthWindow ?  widthRatio : 1/widthRatio), 
                 (hT < heightWindow ? heightRatio : 1/heightRatio),
-                 1.0f));
+                 1.0f);
 
     //float tmpX = -1.0f + ((float)widthX/2.0f)/(float)widthWindow;
-    this->translation = glm::translate(glm::mat4(1.0f), glm::vec3(newX, newY, 0.0f));
+    this->translation = glm::vec3(newX, newY, 0.0f);
 }
 
 /**

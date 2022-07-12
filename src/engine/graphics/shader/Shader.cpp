@@ -12,13 +12,13 @@ jpl::Shader::Shader(std::string pathToVertexFile, std::string pathToFragmentFile
 
     this->genMainBuffers();
     this->createShader(*readFile(pathToVertexFile), *readFile(pathToFragmentFile));
-    this->initializeMatrices();
+    this->initializeVectors();
 }
 
 jpl::Shader::Shader(const char* vertexCode, const char* fragmentCode){
     this->genMainBuffers();
     this->createShader(std::string(vertexCode), std::string(fragmentCode));
-    this->initializeMatrices();
+    this->initializeVectors();
 }
 
 void jpl::Shader::genMainBuffers(){
@@ -102,10 +102,10 @@ void jpl::Shader::createShader(std::string vertexCode, std::string fragmentCode)
     std::cout<<"New shader created...\n";
 }
 
-void jpl::Shader::initializeMatrices(){
+void jpl::Shader::initializeVectors(){
     this->rotation = glm::mat4(1.0f);
-    this->scale = glm::mat4(1.0f);
-    this->translation = glm::mat4(1.0f);
+    this->scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    this->translation = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 inline void jpl::Shader::bind(){
@@ -159,8 +159,15 @@ inline void jpl::Shader::useProgram(){
 }
 
 void jpl::Shader::pushMatrixTransformation(){
-    glm::mat4 transform = this->translation * this->scale * this->rotation;
+    glm::mat4 transform = glm::scale(this->rotation, this->scale);
+    transform = glm::translate(transform, this->translation);
     glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, glm::value_ptr(transform));
+}
+
+void jpl::Shader::updateUpAndRight(){
+    glm::vec3 direction = glm::axis(glm::quat_cast(this->rotation));
+    this->right = glm::cross(direction, glm::vec3(0.0f, 1.0f, 0.0f));
+    this->up = glm::cross(direction, right);
 }
 
 void termShaders(){

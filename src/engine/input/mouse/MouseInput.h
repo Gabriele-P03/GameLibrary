@@ -7,7 +7,12 @@
 
 #include <GLFW/glfw3.h>
 
+
+
+
 namespace jpl{
+
+    extern double xScrollOffset, yScrollOffset, xMouseOffset, yMouseOffset;
 
 /**
 * Return if the given button is pressed
@@ -44,17 +49,25 @@ double getXPos();
 double getYPos();
 
 /**
- * GLFW doesn't provide static method about retrieving position or state of buttons, then
- * in order to get scroll of wheel you need to set a scroll callback (as you done with error callback).
+ * GLFW doesn't provide static method about retrieving mouse scrolling then
+ * in order to get it, you need to set a scroll callback (as you done with error callback).
  * 
  * Call glfwSetScrollCallback() giving this name function. Once you need scroll amount, 
  * get it via getYOff() or getXOff(). You should always get scroll via getYOff()
  * 
  * Once call one of them, relative variable will be set as 0
  */ 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-double getXScrollOff();
-double getYScrollOff();
+extern void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+/**
+ * GLFW doesn't provide static method about retrieving mouse position, then
+ * in order to get it, you need to set a mouse position callback (as you done with error callback).
+ * 
+ * Call glfwSetMouseCallback() giving this name function. Once you need scroll amount, 
+ * get it via getYOff() or getXOff(). You should always get scroll via getYOff()
+ * 
+ * Once call one of them, relative variable will be set as 0
+ */ 
+extern void cursor_pos_callback(GLFWwindow* window, double xoffset, double yoffset);
 }
 #endif

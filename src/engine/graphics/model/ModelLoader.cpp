@@ -16,6 +16,10 @@ jpl::Mesh* jpl::loadModel(std::string pathToObject, unsigned int verticesPerFace
     std::string buffer;
     unsigned int vpf;
 
+    //This boolean stores if the model loader has finished to load vertices and texture vertices.
+    //It is used to reverse the texture vertices vector
+    bool startedFace;
+
     while(getline(*file, buffer)){
 
         if(buffer.size() > 0){
@@ -32,6 +36,11 @@ jpl::Mesh* jpl::loadModel(std::string pathToObject, unsigned int verticesPerFace
                 textures.push_back(new float(atof(buffer.substr(0, buffer.find_first_of(' ')).c_str())));
                 textures.push_back(new float(atof(buffer.substr(buffer.find_last_of(' ')+1).c_str())));
             }else if(type == "f"){
+
+                    /*if(!startedFace){
+                        std::reverse(textures.begin(), textures.end());
+                        startedFace = true;
+                    }*/
                     vpf = computeFace(vertices, textures, buffer, verticesMesh, verticesPerFace);
             }
         }

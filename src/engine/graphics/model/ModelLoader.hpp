@@ -11,6 +11,7 @@
 
 #include "Mesh.hpp"
 #include "../../../files/Files.h"
+#include <algorithm>
 #include <vector>
 
 

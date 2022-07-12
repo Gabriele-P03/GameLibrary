@@ -26,23 +26,52 @@ unsigned int jpl::Mesh::getSizeIndices() const{return this->_sizeIndices;}
 unsigned int jpl::Mesh::getVerticesPerFace(){return this->verticesPerFace;}
 jpl::Mesh* jpl::Mesh::setVerticesPerFace(unsigned int verticesPerFace){this->verticesPerFace = verticesPerFace; return this;}
 
-jpl::Mesh* jpl::Mesh::CUBE = new jpl::Mesh( new float[40]{
-    -0.5f, -0.5f, 0.5f, 0.0f, 1.0f,   //Bottom-Left-Front
-    0.5f, -0.5f, 0.5f, 1.0f, 1.0f,     //Bottom-Right-Front
-    0.5f, 0.5f, 0.5f, 1.0f, 0.0f,     //Top-Right-Front
-    -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,     //Top-Left-Front
+jpl::Mesh* jpl::Mesh::CUBE = new jpl::Mesh( new float[120]{
 
-    -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,    //Bottom-Left-Back
-    0.5f, -0.5f, -0.5f, 1.0f, 1.0f,     //Bottom-Right-Back
-    0.5f, 0.5f, -0.5f, 1.0f, 0.0f,      //Top-Right-Back
-    -0.5f, 0.5f, -0.5f, 0.0f, 0.0f        //Top-Left-Back
+    //Back 
+    -0.5f, -0.5f, -0.5f, 0.1666f, 0.0f,   
+    0.5f, -0.5f, -0.5f, 0.0f, 0.0f,    
+    0.5f, 0.5f, -0.5f, 0.0f, 1.0f,     
+    -0.5f, 0.5f, -0.5f, 0.1666f, 1.0f, 
+
+    //Front 
+    -0.5f, -0.5f, 0.5f, 0.1666f, 0.0f,   
+    0.5f, -0.5f, 0.5f, 0.3332f, 0.0f,    
+    0.5f, 0.5f, 0.5f, 0.3332f, 1.0f,     
+    -0.5f, 0.5f, 0.5f, 0.1666f, 1.0f,     
+
+    //Right
+    0.5f, -0.5f, -0.5f, 0.3332f, 0.0f,    
+    0.5f, 0.5f, -0.5f, 0.3332f, 1.0f,    
+    0.5f, 0.5f, 0.5f, 0.4998f, 1.0f,      
+    0.5f, -0.5f, 0.5f, 0.4998f, 0.0f,
+
+    //Left
+    -0.5f, -0.5f, -0.5f, 0.6664f, 0.0f,    
+    -0.5f, 0.5f, -0.5f, 0.6664f, 1.0f,    
+    -0.5f, 0.5f, 0.5f, 0.4998f, 1.0f,      
+    -0.5f, -0.5f, 0.5f, 0.4998f, 0.0f,
+
+    //Up
+    -0.5f, 0.5f, -0.5f, 0.8330f, 0.0f,
+    0.5f, 0.5f, -0.5f, 0.6664f, 0.0f,
+    0.5f, 0.5f, 0.5f, 0.6664f, 1.0f,
+    -0.5f, 0.5f, 0.5f, 0.8330f, 1.0f 
+
+    //Bottom
+    -0.5f, -0.5f, -0.5f, 0.9996f, 1.0f,
+    0.5f, -0.5f, -0.5f, 0.8330f, 1.0f,
+    0.5f, -0.5f, 0.5f, 0.8330f, 0.0f,
+    -0.5f, -0.5f, 0.5f, 0.9996f, 0.0f     
+
 }, 40, new unsigned int[36]{
-    0, 1, 2, 0, 2, 3,   //Front
-    4, 5, 6, 4, 6, 7,   //Back
-        5, 6, 2, 5, 2, 1,   //Right
-    4, 7, 3, 4, 3, 0,   //Left
-    2, 6, 7, 2, 7, 3,   //Top
-    1, 5, 4, 1, 4, 0    //Bottom
+    0, 1, 2, 0, 2, 3,       //Front
+    4, 5, 6, 4, 6, 7,       //Back
+    8, 9, 10, 8, 10, 11,    //Left
+    12, 13, 14, 12, 14, 15, //Right
+    16, 17, 18, 16, 18, 19, //Up
+    20, 21, 22, 20, 22, 23
+
 }, 36);
 
 

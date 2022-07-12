@@ -27,3 +27,15 @@ double jpl::getYPos(){
     jpl::getMousePosition(new double, y);
     return *y;
 }
+
+double jpl::xMouseOffset, jpl::yMouseOffset, jpl::xScrollOffset, jpl::yScrollOffset;
+
+void jpl::cursor_pos_callback(GLFWwindow* window, double xoffset, double yoffset){
+    jpl::xMouseOffset = xoffset;
+    jpl::yMouseOffset = yoffset;
+}
+
+void jpl::scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+    jpl::xScrollOffset = xoffset;
+    jpl::yScrollOffset = yoffset;
+}

@@ -1,3 +1,19 @@
+/**
+ * A BaseCamera is the first abstraction of a camera, it cannot be directly instanced
+ * (protected constructors).
+ * 
+ * If you're developing a 2D game, then use OrthoCamera, otherwise, for 3D, PerspCamera
+ * 
+ * The combined matrix is already pushed to the current shader program via 
+ * pushMatrixCombined(unsigned int shaderProgram) - called by update() which is called by 
+ * tick() once camera moves.
+ * 
+ * Shader's id is passed to tick(), which accept also the speed of movement and rotation one.
+ * tick() is the only method you need to call in order to move and rotater camera.
+ * 
+ * @author Gabriele-P03
+ */ 
+
 #ifndef JPL_BASECAMERA_HPP
 #define JPL_BASECAMERA_HPP
 

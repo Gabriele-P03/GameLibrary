@@ -16,11 +16,11 @@ int jpl::getKeyScancode(int key){
     return glfwGetKeyScancode(key);
 }
 
-int key_buffer, scancode_buffer, action_buffer, mods_buffer;
+int jpl::key_buffer, jpl::scancode_buffer, jpl::action_buffer, jpl::mods_buffer;
 
 void jpl::keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-    key_buffer = key;
-    scancode_buffer = scancode;
-    action_buffer = action;
-    mods_buffer = mods;
+    jpl::key_buffer = key;
+    jpl::scancode_buffer = scancode;
+    jpl::action_buffer = action;
+    jpl::mods_buffer = mods;
 }

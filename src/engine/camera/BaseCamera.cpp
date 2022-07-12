@@ -34,7 +34,7 @@ void jpl::BaseCamera::updateFrustum(){
 void jpl::BaseCamera::update(unsigned int shaderProgram){
     this->updateView();
     this->combined =  this->projection * this->view;
-    std::cout<<"pos: "<<this->combined[3][0]<<" - "<<this->combined[3][1]<<" - "<<this->combined[3][2]<<std::endl;
+    //std::cout<<"pos: "<<this->combined[3][0]<<" - "<<this->combined[3][1]<<" - "<<this->combined[3][2]<<std::endl;
     if(shaderProgram > 0)
         this->pushCombinedMatrix(shaderProgram);
 }
