@@ -51,6 +51,8 @@ namespace jpl{
             //Load the image at the given path
             Texture(std::string path);
 
+            Texture(std::string path, bool flipV);
+
             unsigned int getHeight();
             std::vector<unsigned char>* getData();
             unsigned int getWidth();

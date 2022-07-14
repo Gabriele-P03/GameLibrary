@@ -1,6 +1,10 @@
 #include "Texture.hpp"
 
-jpl::Texture::Texture(std::string path){
+jpl::Texture::Texture(std::string path) : jpl::Texture(path, true){
+
+}
+
+jpl::Texture::Texture(std::string path, bool flipV){
 
     this->img = new jpl::Texture::image;
 
@@ -9,7 +13,10 @@ jpl::Texture::Texture(std::string path){
     if(error_t){
         std::cout<<"Texture loading error "<<error_t<<": "<<lodepng_error_text(error_t)<<std::endl;
     }else{
-        this->flipV();
+
+        if(flipV)
+            this->flipV();
+            
         this->genTexture();
     }
 }
@@ -47,6 +54,8 @@ void jpl::Texture::draw(){
 //    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *this->getTextureID());
     
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 

@@ -9,6 +9,7 @@ int main(int argc, const char* argv[]){
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
 
+    jpl::Audio* audio = new jpl::Audio(new jpl::AudioFile("a.wav"));
     jpl::PerspCamera* camera = new jpl::PerspCamera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), M_PI_2, 0.1f, 100.0f, jpl::WindowSize::INSTANCE.w/60, jpl::WindowSize::INSTANCE.h/60);
     jpl::ModelShader* modelShader = new jpl::ModelShader();
     jpl::Mesh* mesh = jpl::loadModel("model/block.obj", 3);
@@ -16,6 +17,9 @@ int main(int argc, const char* argv[]){
     jpl::Texture* texture = new jpl::Texture("model/texture.png");
 
     std::cout<<"Beginning render loop...\n\n";
+    
+    audio->play();
+
     while(!glfwWindowShouldClose(window)){
         
         if(isKeyPressed(GLFW_KEY_ESCAPE)){
@@ -26,16 +30,9 @@ int main(int argc, const char* argv[]){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
         
-        camera->tick(0.05f, 0.05f, *modelShader->getShaderProgram());
         texture->draw();
-        modelShader->render(jpl::Mesh::CUBE, 0.0f, 0.0f, 0.0f);
-        //modelShader->rotation = glm::rotate(modelShader->rotation, (float)M_PI_2/90, glm::vec3(1.0f, 0.0f, 0.0f));
-        //modelShader->render(mesh, 2.0f, 2.0f, 2.0f);
-
-        if(jpl::isButtonPressed(GLFW_MOUSE_BUTTON_LEFT)){
-            std::cout<<"pos: "<<camera->position.x<<" - "<<camera->position.y<<" - "<<camera->position.z<<"\n";
-            std::cout<<"dir: "<<camera->direction.x<<" - "<<camera->direction.y<<" - "<<camera->direction.z<<"\n\n";
-        }
+        modelShader->render(mesh, 2.0f, 2.0f, 2.0f);
+        camera->tick(0.05f, 0.05f, *modelShader->getShaderProgram());
 
         glfwSwapBuffers(window);
         glfwPollEvents();

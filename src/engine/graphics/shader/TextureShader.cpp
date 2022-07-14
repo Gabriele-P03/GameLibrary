@@ -24,15 +24,15 @@ jpl::TextureShader::TextureShader(std::string vertexFilePath, std::string fragme
 
 
 
-void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h){
+void jpl::TextureShader::draw(jpl::Texture* texture, float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h){
 
-    this->calculateTextureCoords(x, y, widthX, heightY, offsetX, offsetY, w, h, texture->getWidth(), texture->getHeight());
+    this->calculateTextureCoords(x, y, z, widthX, heightY, offsetX, offsetY, w, h, texture->getWidth(), texture->getHeight());
+
+    this->useProgram();
 
     int currentVAO;
     glGetProgramiv(*this->shaderProgram, GL_ARRAY_BUFFER_BINDING, &currentVAO);
     if(currentVAO != *this->VAO){
-
-        this->useProgram();
 
         //Before binding buffer(s), it's gonna binding array
         glBindVertexArray(*this->VAO);
@@ -48,19 +48,19 @@ void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int widthX, i
 }
 
 void jpl::TextureShader::draw(jpl::Texture* texture){
-    this->draw(texture, 0, 0, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
+    this->draw(texture, 0, 0, 0, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
 }
-void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, int lastX, int lastY, bool flag){
-    this->draw(texture, x, y, lastX, lastY, 0, 0, texture->getWidth(), texture->getHeight());
+void jpl::TextureShader::draw(jpl::Texture* texture, float x, float y, float z, int lastX, int lastY, bool flag){
+    this->draw(texture, x, y, z, lastX, lastY, 0, 0, texture->getWidth(), texture->getHeight());
 }
-void jpl::TextureShader::draw(jpl::Texture* texture, int x, int y, bool flag){
-    this->draw(texture, x, y, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
+void jpl::TextureShader::draw(jpl::Texture* texture, float x, float y, float z, bool flag){
+    this->draw(texture, x, y, z, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
 }
 void jpl::TextureShader::draw(jpl::Texture* texuture, int offsetX, int offsetY, int w, int h){
-    this->draw(texuture, 0, 0, w, h, offsetX, offsetY, w, h);
+    this->draw(texuture, 0, 0, 0, w, h, offsetX, offsetY, w, h);
 }
 void jpl::TextureShader::draw(jpl::Texture* texuture, int w, int h){
-    this->draw(texuture, 0, 0, w, h, 0, 0, w, h);
+    this->draw(texuture, 0, 0, 0, w, h, 0, 0, w, h);
 }
 
 void jpl::TextureShader::vertexAttrib(){
@@ -73,7 +73,7 @@ void jpl::TextureShader::vertexAttrib(){
     glEnableVertexAttribArray(1);
 }
 
-void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT){
+void jpl::TextureShader::calculateTextureCoords(float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT){
     int widthWindow = jpl::WindowSize::INSTANCE.w, heightWindow = jpl::WindowSize::INSTANCE.h;
 
     //UVs are store in an array different by the one of shader's coordinates
@@ -106,7 +106,7 @@ void jpl::TextureShader::calculateTextureCoords(int x, int y, int widthX, int he
                  1.0f);
 
     //float tmpX = -1.0f + ((float)widthX/2.0f)/(float)widthWindow;
-    this->translation = glm::vec3(newX, newY, 0.0f);
+    this->translation = glm::vec3(newX, newY, z);
 }
 
 /**

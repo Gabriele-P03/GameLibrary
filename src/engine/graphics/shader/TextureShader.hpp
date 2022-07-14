@@ -50,6 +50,7 @@ namespace jpl{
              * for rotating you should invoke other methods
              * @param x x coord of screen
              * @param y y coord of screen
+             * @param z z coord of screen
              * @param widthX width of quad 
              * @param heightY height of quad
              * @param offsetX
@@ -60,7 +61,7 @@ namespace jpl{
              * @param hT total height of texture
              * @return array of float containing the 4 points of quad of the texture
              */ 
-            virtual void calculateTextureCoords(int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT);
+            virtual void calculateTextureCoords(float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT);
 
 
         public:
@@ -78,6 +79,7 @@ namespace jpl{
              * @param texture
              * @param x x coord of window to draw begin from
              * @param y y coord of window to draw begin from
+             * @param z z coord of window to draw begin from
              * @param widthX width of quad 
              * @param heightY height of quad
              * @param offsetX offset x of texture
@@ -85,7 +87,7 @@ namespace jpl{
              * @param w width of texture to draw
              * @param h height of texture to draw
              */ 
-            void draw(Texture* texuture, int x, int y, int widthX, int heightY, int offsetX, int offsetY, int w, int h);
+            void draw(Texture* texuture, float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h);
 
 
             /**
@@ -93,9 +95,10 @@ namespace jpl{
              * @param texture
              * @param x x coord of window to draw begin from
              * @param y y coord of window to draw begin from
+             * @param z z coord of window to draw begin from
              * @param flag not used. Just for getting around the definition of two method with same parameters
              */ 
-            void draw(Texture* texuture, int x, int y, bool flag);
+            void draw(Texture* texuture, float x, float y, float z, bool flag);
             /**
              * Draw the whole texture beginning from x,y and zooming it 'till lastX;lastY 
              * 
@@ -103,11 +106,12 @@ namespace jpl{
              * @param texture
              * @param x x coord of window to draw begin from
              * @param y y coord of window to draw begin from
+             * @param z z coord of window to draw begin from
              * @param widthX width of quad 
              * @param heightY height of quad
              * @param flag not used. Just for getting around the definition of two method with same parameters
              */ 
-            void draw(Texture* texuture, int x, int y, int widthX, int heightY, bool flag);
+            void draw(Texture* texuture, float x, float y, float z, int widthX, int heightY, bool flag);
 
 
             /**

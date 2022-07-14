@@ -26,7 +26,7 @@ void jpl::ModelShader::render(jpl::Mesh* mesh, float x, float y, float z){
         glBufferData(GL_ARRAY_BUFFER, mesh->getSizeVertices() * sizeof(mesh->getVertices()), mesh->getVertices(), GL_STATIC_DRAW);
 
         //Enabling coords on screen
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
         glEnableVertexAttribArray(0);
 
         //Enabling texture coords
@@ -56,7 +56,7 @@ void jpl::ModelShader::render(jpl::Mesh* mesh, float x, float y, float z){
         glDrawElements(GL_TRIANGLES, mesh->getSizeIndices(), GL_UNSIGNED_INT, (void*)0);
     }
     else{
-        glDrawArrays(GL_TRIANGLES, 0, mesh->getSizeVertices());
+        glDrawArrays(GL_TRIANGLES, 0, mesh->getSizeVertices()/5);
     }
     
 }

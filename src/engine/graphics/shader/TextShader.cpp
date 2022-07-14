@@ -15,7 +15,7 @@ jpl::TextShader::TextShader(std::string pathToVertex, std::string pathToFragment
 jpl::TextShader::TextShader(std::string pathToFont, std::string pathToVertex, std::string pathToFragment) :
     jpl::TextureShader(pathToVertex, pathToFragment) {
 
-    this->font = new jpl::Texture(pathToFont);
+    this->font = new jpl::Texture(pathToFont, false);
     glBlendFunci(0, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnablei(GL_BLEND, 0);
 }      
@@ -41,15 +41,15 @@ void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
     }
 }
 
-void jpl::TextShader::render(std::string text, int x, int y){
-    this->render(text, x, y, 1.0f, 1.0f, 1.0f, 1.0f);
+void jpl::TextShader::render(std::string text, float x, float y, float z){
+    this->render(text, x, y, z, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void jpl::TextShader::render(std::string text, int x, int y, float red, float green, float blue, float alpha){
-    this->render(text, x, y, new float[4]{red, green, blue, alpha});
+void jpl::TextShader::render(std::string text, float x, float y, float z, float red, float green, float blue, float alpha){
+    this->render(text, x, y, z, new float[4]{red, green, blue, alpha});
 }
 
-void jpl::TextShader::render(std::string text, int x, int y, float* colors){
+void jpl::TextShader::render(std::string text, float x, float y, float z, float* colors){
 
     this->useProgram();
 
@@ -63,8 +63,7 @@ void jpl::TextShader::render(std::string text, int x, int y, float* colors){
                 int dec = (int)buffer;
 
                 if(dec >= 33 || dec <= 126){
-                    this->setCombinedMatrix(glm::mat4(1.0f));
-                    this->draw(this->font, x+size*i, y, size, size, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
+                    this->draw(this->font, x+size*i, y, z, size, size, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
                 }
             }
         }
@@ -76,6 +75,7 @@ void jpl::TextShader::setCombinedMatrix(glm::mat4 combinedMatrix){
 }
 
 int jpl::TextShader::getFontSize(){return this->size;}
+
 
 /**
  * Static fields are initialized before everything.

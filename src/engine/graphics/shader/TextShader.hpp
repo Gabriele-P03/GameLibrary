@@ -19,7 +19,9 @@
  * On render() call, the given string parameter (text to be rendered) will be checked char by char.
  * The single char will be pointed to the struct and then it takes coords of font.
  * 
- * Blending function in enabled for each text shader you gonna contruct, if you don't need it, just disable it  
+ * This shader can be used for rendering text either in 2D game or 3D one.
+ * Before call render() method, send the comboned matrix of the camera to the shader
+ * via TextShader#setCombinedMatrix() or pass an identity matrix if you wanna render as 2D
  * 
  * @author Gabriele-P03
  */ 
@@ -33,7 +35,7 @@
 
 namespace jpl{
 
-    class TextShader : protected TextureShader{
+    class TextShader : public TextureShader{
 
         private:
         
@@ -76,17 +78,8 @@ namespace jpl{
              * @param blue
              * @param alpha
              */ 
-            void render(std::string text, int x, int y, float red, float green, float blue, float alpha);
+            void render(std::string text, float x, float y, float z, float red, float green, float blue, float alpha);
             
-            
-            /**
-             * Render the given string
-             * @param text
-             * @param x
-             * @param y
-             * @param colors
-             */ 
-            void render(std::string text, int x, int y, float colors);
 
 
             /**
@@ -96,7 +89,7 @@ namespace jpl{
              * @param y
              * @param colors
              */ 
-            void render(std::string text, int x, int y, float* colors);
+            void render(std::string text, float x, float y, float z, float* colors);
 
 
             /**
@@ -105,7 +98,7 @@ namespace jpl{
              * @param x
              * @param y
              */ 
-            void render(std::string text, int x, int y);
+            void render(std::string text, float x, float y, float z);
 
             /**
              * Called for loading font

@@ -49,6 +49,14 @@ void jpl::PerspCamera::tick(float speedMov, float speedRot, unsigned int shaderP
         this->move(glm::cross(this->direction, this->up), speedMov);
         update = true;
     }
+    if(jpl::isKeyPressed(GLFW_KEY_SPACE)){
+        this->position.y += speedMov;
+        update = true;
+    }
+    if(isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
+        this->position.y -= speedMov;
+        update = true;
+    }
 
     //Let's check if mouse has been moved
     double currentX, currentY;

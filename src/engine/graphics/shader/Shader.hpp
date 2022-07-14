@@ -15,10 +15,14 @@
  *      this->VBO = VBOs[VBOs.size()-1];       //Now let's store in a local variable the address
  * 
  * 
- * I developed this library thinking to make my own cube game, then has already 3 shaders available:
- *  - 3D cube block
- *  - 2D Text Render
- *  - 2D Texture Render
+ * This framework has already some ready shader:
+ *  - ModelShader for rendering 3D
+ *  - TextureShader for rendering 2D stuff
+ *  - TextShader for rendering text either in 2D or 3D context 
+ * 
+ * If you're gonna calling render/draw method, you must know that useProgram() is called by them,
+ * but if you're sending combined matrix to the shader program, before have done the call to the
+ * render/draw method, you should call useProgram() before.
  * 
  * @author Gabriele-P03
  */ 
@@ -130,13 +134,6 @@ namespace jpl{
             inline virtual void draw();
 
             /**
-             * Set available this shader program via glUseProgram()
-             * Before to call the function, it checks the current shader in order 
-             * to not call glUseProgram() while it isn't needed
-             */ 
-            inline virtual void useProgram();
-
-            /**
              * Called by constrctor, it initializes vectors
              */ 
             virtual void initializeVectors();
@@ -166,6 +163,13 @@ namespace jpl{
              * update also up and right
              */ 
             virtual void updateUpAndRight();
+
+            /**
+             * Set available this shader program via glUseProgram()
+             * Before to call the function, it checks the current shader in order 
+             * to not call glUseProgram() while it isn't needed
+             */ 
+            inline virtual void useProgram();
 
 
             unsigned int* getVBO();

@@ -8,6 +8,10 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "engine/camera/PerspCamera.hpp"
 #include "engine/graphics/shader/ModelShader.hpp"
 #include "engine/graphics/model/ModelLoader.hpp"
@@ -16,6 +20,8 @@
 #include "engine/graphics/shader/TextShader.hpp"
 #include "engine/input/key/KeyInput.h"
 #include "engine/utils/WindowInfo.hpp"
+
+#include "engine/audio/Audio.h"
 
 //This will be the main window of the game
 GLFWwindow* window;

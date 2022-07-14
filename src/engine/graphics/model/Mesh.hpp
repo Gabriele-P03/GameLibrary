@@ -41,6 +41,10 @@ namespace jpl{
             unsigned int getVerticesPerFace();
             Mesh* setVerticesPerFace(unsigned int verticesPerFace);
 
+            //A Cube with different textures per face (Read doc for more details)
+            static Mesh* FACED_CUBE;
+
+            //A cube with the same texture for each face
             static Mesh* CUBE;
     };
 }

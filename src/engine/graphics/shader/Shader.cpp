@@ -159,8 +159,8 @@ inline void jpl::Shader::useProgram(){
 }
 
 void jpl::Shader::pushMatrixTransformation(){
-    glm::mat4 transform = glm::scale(this->rotation, this->scale);
-    transform = glm::translate(transform, this->translation);
+    glm::mat4 transform = glm::translate(this->rotation, this->translation);
+    transform = glm::scale(transform, this->scale);
     glUniformMatrix4fv(glGetUniformLocation(*this->getShaderProgram(), "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 }
 
