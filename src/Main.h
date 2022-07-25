@@ -20,8 +20,10 @@
 #include "engine/graphics/shader/TextShader.hpp"
 #include "engine/input/key/KeyInput.h"
 #include "engine/utils/WindowInfo.hpp"
-
 #include "engine/audio/Audio.h"
+
+
+#include "engine/physics/Kinematics.hpp"
 
 //This will be the main window of the game
 GLFWwindow* window;
