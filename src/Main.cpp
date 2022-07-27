@@ -5,7 +5,7 @@ using namespace jpl;
 int main(int argc, const char* argv[]){  
 
 
-    /*initializeGameLibrary();
+    initializeGameLibrary();
     int hints[] = {GLFW_RESIZABLE, GLFW_VISIBLE};
     int values[] = {GLFW_TRUE, GLFW_FALSE};
     createWindow(-1, -1, "Ciao", NULL, NULL, &hints[0], &values[0], 2, true);
@@ -40,7 +40,7 @@ int main(int argc, const char* argv[]){
     }
 
     terminateGameLibrary();
-    */
+    
     return 0;
 }
 

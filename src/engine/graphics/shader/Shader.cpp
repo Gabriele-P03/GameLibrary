@@ -108,56 +108,6 @@ void jpl::Shader::initializeVectors(){
     this->translation = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
-inline void jpl::Shader::bind(){
-    
-    //Check if this shader's objects are already bind
-    int currentVAO;
-    glGetProgramiv(*this->shaderProgram, GL_ARRAY_BUFFER_BINDING, &currentVAO);
-    if(currentVAO != *this->VAO){
-
-        //Before binding buffer(s), it's gonna binding array
-        glBindVertexArray(*this->VAO);
-
-        this->bindVBO();
-        this->bindEBO();
-        this->vertexAttrib();
-
-        glBindVertexArray(0);
-    }
-}
-
-inline void jpl::Shader::bindVBO(){
-    glBindBuffer(GL_ARRAY_BUFFER, *this->VBO);
-    glBufferData(GL_ARRAY_BUFFER, this->_sizeVertices * sizeof(vertices), vertices, GL_STATIC_DRAW);
-}
-
-inline void jpl::Shader::bindEBO(){
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *this->EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->_sizeIndices * sizeof(indices), indices, GL_STATIC_DRAW);
-}
-
-inline void jpl::Shader::vertexAttrib(){
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-}
-
-inline void jpl::Shader::draw(){
-    this->useProgram();
-    this->bind();
-    glBindVertexArray(*this->VAO);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)0);
-}
-
-inline void jpl::Shader::useProgram(){
-
-    //Retrieve the current shader program in order to not call glUseProgram()
-    int currentId;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);
-
-    if(currentId != *this->shaderProgram)
-        glUseProgram(*this->shaderProgram);
-}
-
 void jpl::Shader::pushMatrixTransformation(){
     glm::mat4 transform = glm::translate(this->rotation, this->translation);
     transform = glm::scale(transform, this->scale);

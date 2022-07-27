@@ -102,28 +102,52 @@ namespace jpl{
             /**
              *  Bind buffers calling bindVBO(), bindEBO() and vertexAttrib()
             */  
-            inline virtual void bind();
+            inline virtual void bind(){
+                //Check if this shader's objects are already bind
+                int currentVAO;
+                glGetProgramiv(*this->shaderProgram, GL_ARRAY_BUFFER_BINDING, &currentVAO);
+                if(currentVAO != *this->VAO){
+
+                    //Before binding buffer(s), it's gonna binding array
+                    glBindVertexArray(*this->VAO);
+
+                    this->bindVBO();
+                    this->bindEBO();
+                    this->vertexAttrib();
+
+                    glBindVertexArray(0);
+                }
+            }
 
             /**
              * Bind VBO.
              * You should never call this func, it is already done by bind().
              * But you can override it, if you need it  
              */ 
-            inline virtual void bindVBO();
+            inline virtual void bindVBO(){
+                glBindBuffer(GL_ARRAY_BUFFER, *this->VBO);
+                glBufferData(GL_ARRAY_BUFFER, this->_sizeVertices * sizeof(vertices), vertices, GL_STATIC_DRAW);
+            }
 
             /**
              * Bind EBO
              * You should never call this func, it is already done by bind().
              * But you can override it, if you need it  
              */ 
-            inline virtual void bindEBO();
+            inline virtual void bindEBO(){
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *this->EBO);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->_sizeIndices * sizeof(indices), indices, GL_STATIC_DRAW);
+            }
 
             /**
              * Make the calls to glVertexAttribArray() and enable it
              * You should never call this func, it is already done by bind().
              * But you can override it, if you need it 
              */ 
-            inline virtual void vertexAttrib();
+            inline virtual void vertexAttrib(){
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+                glEnableVertexAttribArray(0);
+            }
 
 
             /*
@@ -131,7 +155,12 @@ namespace jpl{
                 First call glUseProgram() in order to set this shader available for pipeline,
                 then call glBindVertexArray(VAO) and then draw elements via glDrawArrays()
             */
-            inline virtual void draw();
+            inline virtual void draw(){
+                this->useProgram();
+                this->bind();
+                glBindVertexArray(*this->VAO);
+                glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)0);
+            }
 
             /**
              * Called by constrctor, it initializes vectors
@@ -169,7 +198,14 @@ namespace jpl{
              * Before to call the function, it checks the current shader in order 
              * to not call glUseProgram() while it isn't needed
              */ 
-            inline virtual void useProgram();
+            inline virtual void useProgram(){
+                //Retrieve the current shader program in order to not call glUseProgram()
+                int currentId;
+                glGetIntegerv(GL_CURRENT_PROGRAM, &currentId);
+
+                if(currentId != *this->shaderProgram)
+                    glUseProgram(*this->shaderProgram);
+            }
 
 
             unsigned int* getVBO();
