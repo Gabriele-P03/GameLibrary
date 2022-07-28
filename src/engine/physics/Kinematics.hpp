@@ -156,26 +156,84 @@ namespace jpl{
     #endif
 
     //Parabolic Motion
+    /**
+     * @brief 
+     * PM_y should be called every tick in order to translate the projectile.
+     * Since it is a waste of time to pass every time all parameters, this function
+     * has been worked out as a member function whose object contains all those 
+     * parameters which do not need to re-passed on each tick, but only x coord
+     * 
+     */
     #if defined (PM_JPL) && defined (_USE_PHYSICS_DEFINES_JPL)
 
-        /**
-         * @param G gravity
-         * @param angle angle
-         * @param v0 initial speed
-         * @param t time
-         * @param x0 initial space traveled on X
-         * @param y0 initial space traveled on Y
-         */ 
-        inline glm::vec3 PM(GRAVITY G, float angle, float v0, float t, float x0, float y0){
-            
-            float V0x = v0*cos(angle);
-            float V0y = v0*sin(angle);
+        class PM{
 
-            float x = x0 + V0x*t;
-            float y = (-G*t*t)/2.0f + V0y*t + y0;
+            private:
+                GRAVITY G;
+                float angle, v0, x0, y0;
 
-            return glm::vec3(x, y, 0.f);
-        }
+                float v0_pow;
+                float cosAngle_pow;
+                float n;
+                float tanAngle;
+
+            public:
+
+                /**
+                 * @brief Construct a new PM object
+                 * 
+                 * @param G gravity
+                 * @param angle angle 
+                 * @param v0 speed
+                 * @param x0 x coord offset
+                 * @param y0 y coord offset
+                 */
+                PM(GRAVITY G, float angle, float v0, float x0, float y0){
+                    this->G = G;
+                    this->angle = angle;
+                    this->v0 = v0;
+                    this->x0 = x0;
+                    this->y0 = y0;
+
+                    this->v0_pow = v0*v0;
+                    this->cosAngle_pow = cos(angle)*cos(angle);
+                    this->n = v0_pow*cosAngle_pow;
+                    this->tanAngle = tan(angle);
+                }
+
+                /**
+                 * @param x x coord
+                 * 
+                 * @return y coord of parabolic motion at given x coord
+                 */ 
+                inline float PM_y(float x){
+
+                    float first = (-G/(2.0f*n))*x*x;
+                    float second = ((G*x0)/n + tanAngle)*x;
+                    float third = (-G*x0*x0)/n - tanAngle*x0 + y0;
+
+                    return first + second + third;
+                }
+
+                inline float PM_y_max(){
+                    return (this->v0_pow*pow(this->angle, 2))/(2.0f*this->G);
+                }
+
+                /**
+                 * @brief When the bullet reaches the max y, it will begin
+                 * to fall down due to gravity.
+                 * This function return how much it must be rotated 
+                 * 
+                 * @warning this function may have some bugs when angle is greater than M_PI_2,
+                 * since your camera has pitch locked, you should not have any problems
+                 *
+                 * @return angle wthe arrow/bullet  
+                 */
+                inline float PM_angle_falling(){
+                    return this->angle > 0.0f ? -2.0f*this->angle : 0.0f;
+                }
+
+        };
     #endif
 
     //Harmonic Motion
