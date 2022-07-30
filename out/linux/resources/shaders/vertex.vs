@@ -16,6 +16,6 @@ uniform mat4 combined;
 
 void main(){
 
-    gl_Position = combined * transform * vec4(pos.xyz, 1.0f);
+    gl_Position =  transform * vec4(pos.xyz, 1.0f);
     outTex = tex;
 }

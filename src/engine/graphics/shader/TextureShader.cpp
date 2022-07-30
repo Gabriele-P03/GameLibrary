@@ -73,7 +73,13 @@ void jpl::TextureShader::vertexAttrib(){
     glEnableVertexAttribArray(1);
 }
 
-void jpl::TextureShader::calculateTextureCoords(float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT){
+void jpl::TextureShader::calculateTextureCoords(
+
+    float x, float y, float z, int widthX, int heightY, 
+    int offsetX, int offsetY, int w, int h, int wT, int hT)
+
+{
+
     int widthWindow = jpl::WindowSize::INSTANCE.w, heightWindow = jpl::WindowSize::INSTANCE.h;
 
     //UVs are store in an array different by the one of shader's coordinates
@@ -91,9 +97,18 @@ void jpl::TextureShader::calculateTextureCoords(float x, float y, float z, int w
 
     float widthRatio = (float)widthX/(float)widthWindow;
     float heightRatio = (float)heightY/(float)heightWindow;
+    /*
+    float widthRatio = (float)widthX/(float)wT;
+    widthRatio *= w;
+    widthRatio /= widthWindow;
 
-    float newX = -1.0f + 2.0f * ( (float)(x+w/2.0f)/(float)widthWindow ),
-        newY = -1.0f + 2.0f * ( (float)(y+h/2.0f)/(float)heightWindow );
+    float heightRatio = (float)heightY/(float)hT;
+    heightRatio *= h;
+    heightRatio /= heightWindow;
+    */
+
+    float newX = -1.0f + 2.0f * ( (float)(x+widthX/2.0f)/(float)widthWindow ),
+        newY = -1.0f + 2.0f * ( (float)(y+heightY/2.0f)/(float)heightWindow );
 
     /*
         As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not

@@ -73,12 +73,15 @@ namespace jpl{
              * @param text
              * @param x
              * @param y
+             * @param z
+             * @param w
+             * @param h
              * @param red
              * @param green
              * @param blue
              * @param alpha
              */ 
-            void render(std::string text, float x, float y, float z, float red, float green, float blue, float alpha);
+            void render(std::string text, float x, float y, float z, float w, float h, float red, float green, float blue, float alpha);
             
 
 
@@ -87,9 +90,12 @@ namespace jpl{
              * @param text
              * @param x
              * @param y
+             * @param z
+             * @param w
+             * @param h
              * @param colors
              */ 
-            void render(std::string text, float x, float y, float z, float* colors);
+            void render(std::string text, float x, float y, float z, float w, float h, float* colors);
 
 
             /**
@@ -97,8 +103,11 @@ namespace jpl{
              * @param text
              * @param x
              * @param y
+             * @param z
+             * @param w
+             * @param h
              */ 
-            void render(std::string text, float x, float y, float z);
+            void render(std::string text, float x, float y, float z, float w, float h);
 
             /**
              * Called for loading font

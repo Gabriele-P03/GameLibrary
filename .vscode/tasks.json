@@ -32,7 +32,11 @@
                 "${workspaceFolder}/src/engine/parser/json/JSONArray.cpp",
                 "${workspaceFolder}/src/engine/parser/json/JSONMap.cpp",
                 "${workspaceFolder}/src/engine/parser/json/JSONReader.cpp",
+                "${workspaceFolder}/src/engine/scene/Scene.cpp",
+                "${workspaceFolder}/src/engine/scene/SceneManager.cpp",
                 "${workspaceFolder}/src/engine/view/View.cpp",
+                "${workspaceFolder}/src/engine/view/Button.cpp",
+                "${workspaceFolder}/src/engine/view/TextField.cpp",
                 "-o",
                 "${workspaceFolder}/out/linux/Main",
                 "-lGLEW",
@@ -44,7 +48,8 @@
                 "-lpthread",
                 "-lm",
                 "-ldl",
-                "-lGL"
+                "-lGL",
+                "-lncurses"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -94,6 +99,11 @@
                 "${workspaceFolder}/src/engine/parser/json/JSONArray.cpp",
                 "${workspaceFolder}/src/engine/parser/json/JSONMap.cpp",
                 "${workspaceFolder}/src/engine/parser/json/JSONReader.cpp",
+                "${workspaceFolder}/src/engine/scene/Scene.cpp",
+                "${workspaceFolder}/src/engine/scene/SceneManager.cpp",
+                "${workspaceFolder}/src/engine/view/View.cpp",
+                "${workspaceFolder}/src/engine/view/Button.cpp",
+                "${workspaceFolder}/src/engine/view/TextField.cpp",
                 "-o",
                 "${workspaceFolder}/out/window/Main",
                 "${workspaceFolder}/out/window/glew32.dll",

@@ -8,7 +8,15 @@ jpl::View::View(int x, int y, int w, int h){
 }
 
 void jpl::View::setOnClickListener(std::function<void(jpl::View*)> listener){
-    this->listener = listener;
+    this->clickListener = listener;
+}
+
+void jpl::View::setOnMouseOverListener(std::function<void(jpl::View*, unsigned int x, unsigned int y)> listener){
+    this->mouseOverListener = listener;
+}
+
+void jpl::View::setOnMouseOutViewListener(std::function<void(jpl::View*, unsigned int x, unsigned int y)> listener){
+    this->mouseOutListener = listener;
 }
 
 int jpl::View::getX(){

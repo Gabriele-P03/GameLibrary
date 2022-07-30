@@ -2,7 +2,7 @@
  * This class offers some static info about window:
  * 
  * Size
- * Fram
+ * Frame
  */ 
 
 #include <GLFW/glfw3.h>

@@ -41,15 +41,15 @@ void jpl::TextShader::loadFont(int rows, int cols, int size, int offset){
     }
 }
 
-void jpl::TextShader::render(std::string text, float x, float y, float z){
-    this->render(text, x, y, z, 1.0f, 1.0f, 1.0f, 1.0f);
+void jpl::TextShader::render(std::string text, float x, float y, float z, float w, float h){
+    this->render(text, x, y, z, w, h, 1.0f, 1.0f, 1.0f, 0.5f);
 }
 
-void jpl::TextShader::render(std::string text, float x, float y, float z, float red, float green, float blue, float alpha){
-    this->render(text, x, y, z, new float[4]{red, green, blue, alpha});
+void jpl::TextShader::render(std::string text, float x, float y, float z, float w, float h, float red, float green, float blue, float alpha){
+    this->render(text, x, y, z, w, h, new float[4]{red, green, blue, alpha});
 }
 
-void jpl::TextShader::render(std::string text, float x, float y, float z, float* colors){
+void jpl::TextShader::render(std::string text, float x, float y, float z, float w, float h, float* colors){
 
     this->useProgram();
 
@@ -63,7 +63,7 @@ void jpl::TextShader::render(std::string text, float x, float y, float z, float*
                 int dec = (int)buffer;
 
                 if(dec >= 33 || dec <= 126){
-                    this->draw(this->font, x+size*i, y, z, size, size, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
+                    this->draw(this->font, x+size*i, y, z, w, h, this->chars[dec-33].x, this->chars[dec-33].y, size, size);
                 }
             }
         }
