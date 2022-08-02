@@ -22,7 +22,7 @@ jpl::Shader::Shader(const char* vertexCode, const char* fragmentCode){
 }
 
 void jpl::Shader::genMainBuffers(){
-    std::cout<<"Generating new shader...Buffer...";
+    jpl::Logger::INSTANCE->print("Generating new shader...");
 
     //Gen VBO
     VBOs.push_back(new unsigned int);
@@ -30,13 +30,11 @@ void jpl::Shader::genMainBuffers(){
     this->VBO = VBOs[VBOs.size()-1];
 
     //Gen VAO
-    std::cout<<"Arrays...";
     VAOs.push_back(new unsigned int);
     glGenVertexArrays(1, VAOs[VAOs.size()-1]);
     this->VAO = VAOs[VAOs.size()-1];
 
     //Gen EBO
-    std::cout<<"Elements\n";
     EBOs.push_back(new unsigned int);
     glGenBuffers(1, EBOs[EBOs.size()-1]);
     this->EBO = EBOs[EBOs.size()-1];
@@ -45,7 +43,7 @@ void jpl::Shader::genMainBuffers(){
 void jpl::Shader::createShader(std::string vertexCode, std::string fragmentCode){
 
     //Creating and compiling vertex shader
-    std::cout<<"Compiling vertex...";
+    jpl::Logger::INSTANCE->print("Compiling vertex...");
     vertexShaders.push_back(new unsigned int(glCreateShader(GL_VERTEX_SHADER)));
     this->vertexShader = vertexShaders[vertexShaders.size()-1];
 
@@ -59,12 +57,12 @@ void jpl::Shader::createShader(std::string vertexCode, std::string fragmentCode)
     glGetShaderiv(*this->vertexShader, GL_COMPILE_STATUS, &success);
     if(!success){
         glGetShaderInfoLog(*this->vertexShader, 512, NULL, infoLog);
-        std::cout<<"Error during compile vertex shader"<<infoLog<<"\nCode: "<<std::string(vertexCode);
+        jpl::Logger::INSTANCE->print("Error during compile vertex shader" + std::string(infoLog) + "Code: " + std::string(vertexCode));
         exit(-1);
     }
 
     //Creating and compiling fragment shader
-    std::cout<<"Compling fragment...";
+    jpl::Logger::INSTANCE->print("Compling fragment...");
     fragmentShaders.push_back(new unsigned int(glCreateShader(GL_FRAGMENT_SHADER)));
 
     buffer = fragmentCode.c_str();
@@ -76,7 +74,7 @@ void jpl::Shader::createShader(std::string vertexCode, std::string fragmentCode)
     glGetShaderiv(*this->fragmentShader, GL_COMPILE_STATUS, &success);
     if(!success){
         glGetShaderInfoLog(*this->fragmentShader, 512, NULL, infoLog);
-        std::cout<<"Error during compile fragment shader"<<infoLog<<"\nCode: "<<std::string(fragmentCode);
+        jpl::Logger::INSTANCE->print("Error during compile fragment shader" + std::string(infoLog) + "Code: " + std::string(fragmentCode));
         exit(-1);
     }
 
@@ -84,22 +82,22 @@ void jpl::Shader::createShader(std::string vertexCode, std::string fragmentCode)
         shaderPrograms.push_back(new unsigned int(glCreateProgram()));
         this->shaderProgram = shaderPrograms[shaderPrograms.size()-1];
 
-        std::cout<<"Attaching vertex to shader...";
+        jpl::Logger::INSTANCE->print("Attaching vertex to shader...");
         glAttachShader(*this->shaderProgram, *this->vertexShader);
-        std::cout<<"Attaching fragment to shader...";
+        jpl::Logger::INSTANCE->print("Attaching fragment to shader...");
         glAttachShader(*this->shaderProgram, *this->fragmentShader);
-        std::cout<<"Linking...";
+        jpl::Logger::INSTANCE->print("Linking...");
         glLinkProgram(*this->shaderProgram);
 
         glGetProgramiv(*this->shaderProgram, GL_LINK_STATUS, &success);
         if(!success) {
             glGetProgramInfoLog(*this->shaderProgram, 512, NULL, infoLog);
-            std::cout<<"Error during linking shader program: "<<infoLog<<"\n";
+            jpl::Logger::INSTANCE->print("Error during linking shader program: " + std::string(infoLog));
             exit(-1);
         }
     }
 
-    std::cout<<"New shader created...\n";
+    jpl::Logger::INSTANCE->print("New shader created...");
 }
 
 void jpl::Shader::initializeVectors(){
@@ -122,37 +120,37 @@ void jpl::Shader::updateUpAndRight(){
 
 void termShaders(){
 
-    std::cout<<"Terminating Shaders...\n\nUnbinding current buffer and array\n";
+    jpl::Logger::INSTANCE->print("Terminating Shaders...Unbinding current buffer and array");
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glUseProgram(0);
 
-    std::cout<<"Amount of vertex shaders to delete: "<<jpl::Shader::getVertexShaders()->size();
+    jpl::Logger::INSTANCE->print("Amount of vertex shaders to delete: " + jpl::Shader::getVertexShaders()->size());
     for(int i = 0; i < jpl::Shader::getVertexShaders()->size(); i++){
         glDeleteShader(*jpl::Shader::getVertexShaders()->at(i));
     }
 
-    std::cout<<"Amount of fragment shaders to delete: "<<jpl::Shader::getFragmentShaders()->size()<<std::endl;
+    jpl::Logger::INSTANCE->print("Amount of fragment shaders to delete: " + jpl::Shader::getFragmentShaders()->size());
     for(int i = 0; i < jpl::Shader::getFragmentShaders()->size(); i++){
         glDeleteShader(*jpl::Shader::getFragmentShaders()->at(i));
     }
 
-    std::cout<<"Amount of arrays to delete: "<<jpl::Shader::getVAOs()->size()<<std::endl;
+    jpl::Logger::INSTANCE->print("Amount of arrays to delete: " + jpl::Shader::getVAOs()->size()) ;
     glDeleteVertexArrays(jpl::Shader::getVAOs()->size(), jpl::Shader::getVAOs()->at(0));
 
-    std::cout<<"Amount of buffers to delete: "<<jpl::Shader::getVBOs()->size()<<std::endl;
+    jpl::Logger::INSTANCE->print("Amount of buffers to delete: " + jpl::Shader::getVBOs()->size()) ;
     glDeleteBuffers(jpl::Shader::getVBOs()->size(), jpl::Shader::getVBOs()->at(0));
 
-    std::cout<<"Amount of elements buffer to delete: "<<jpl::Shader::getEBOs()->size()<<std::endl;
+    jpl::Logger::INSTANCE->print("Amount of elements buffer to delete: " + jpl::Shader::getEBOs()->size()) ;
     glDeleteBuffers(jpl::Shader::getEBOs()->size(), jpl::Shader::getEBOs()->at(0));
 
-    std::cout<<"Deleting shader...\n";
+    jpl::Logger::INSTANCE->print("Deleting shader...");
     for(int i = 0; i < jpl::Shader::getShaderPrograms()->size(); i++){
         glDeleteProgram(*jpl::Shader::getShaderPrograms()->at(i));
     }
 
-    std::cout<<"Shaders terminated\n\n";
+    jpl::Logger::INSTANCE->print("Shaders terminated");
 }
 
 unsigned int* jpl::Shader::getVBO(){return this->VBO;}

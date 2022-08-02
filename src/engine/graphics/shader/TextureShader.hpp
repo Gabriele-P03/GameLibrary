@@ -61,7 +61,54 @@ namespace jpl{
              * @param hT total height of texture
              * @return array of float containing the 4 points of quad of the texture
              */ 
-            virtual void calculateTextureCoords(float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h, int wT, int hT);
+            inline virtual void calculateTextureCoords(float x, float y, float z, int widthX, int heightY, 
+                
+                int offsetX, int offsetY, int w, int h, int wT, int hT)
+                
+                {
+
+                    int widthWindow = jpl::WindowSize::INSTANCE.w, heightWindow = jpl::WindowSize::INSTANCE.h;
+
+                    if(widthX < widthWindow){
+                        x *= (float)widthWindow/(float)jpl::MAX_WINDOW_W;
+                        widthX *= (float)widthWindow/(float)jpl::MAX_WINDOW_W;
+                    }
+                    if(heightY < heightWindow){
+                        y *= (float)heightWindow/(float)jpl::MAX_WINDOW_H;
+                        heightY *= (float)heightWindow/(float)jpl::MAX_WINDOW_H;
+                    }
+
+                    //UVs are store in an array different by the one of shader's coordinates
+                    this->vertices[18] = (float)offsetX/(float)wT;
+                    this->vertices[19] = (float)offsetY/(float)hT;
+
+                    this->vertices[3] = (float)offsetX/(float)wT;
+                    this->vertices[4] = this->vertices[19] + (float)h/(float)hT;
+
+                    this->vertices[8] = this->vertices[18] + (float)w/(float)wT; 
+                    this->vertices[9] = this->vertices[19] + (float)h/(float)hT;
+
+                    this->vertices[13] = this->vertices[18] + (float)w/(float)wT;
+                    this->vertices[14] = (float)offsetY/(float)hT;
+
+                    float widthRatio = (float)widthX/(float)widthWindow;
+                    float heightRatio = (float)heightY/(float)heightWindow;
+
+                    float newX = -1.0f + 2.0f * ( (float)(x+widthX/2.0f)/(float)widthWindow ),
+                        newY = -1.0f + 2.0f * ( (float)(y+heightY/2.0f)/(float)heightWindow );
+
+                    /*
+                        As already known OpenGl works in range [-1; +1]. Now, considering that most of monitors is not
+                        a quad, we need to scale down x and y as the texture supplies.
+                        Do not care if your texture width is greater than window's; It will do it
+                    */
+                    this->scale = glm::vec3(
+                                (wT < widthWindow ?  widthRatio : 1/widthRatio), 
+                                (hT < heightWindow ? heightRatio : 1/heightRatio),
+                                1.0f);
+
+                    this->translation = glm::vec3(newX, newY, z);
+            }
 
 
         public:
@@ -73,7 +120,9 @@ namespace jpl{
              * Draw whole texture beginning from bottom-left window
              * @param texture
              */ 
-            virtual void draw(Texture* texture);
+            inline virtual void draw(Texture* texture){
+                this->draw(texture, 0, 0, 0, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
+            }
 
             /**
              * @param texture
@@ -87,8 +136,19 @@ namespace jpl{
              * @param w width of texture to draw
              * @param h height of texture to draw
              */ 
-            void draw(Texture* texuture, float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h);
+            inline void draw(Texture* texture, float x, float y, float z, int widthX, int heightY, int offsetX, int offsetY, int w, int h){
 
+                this->calculateTextureCoords(x, y, z, widthX, heightY, offsetX, offsetY, w, h, texture->getWidth(), texture->getHeight());
+
+                this->useProgram();
+
+                this->bind();
+                glBindVertexArray(*this->VAO);
+            
+                this->pushMatrixTransformation();
+                texture->draw();
+                glDrawElements(GL_TRIANGLES, this->_sizeIndices, GL_UNSIGNED_INT, (void*)0);
+            }
 
             /**
              * Draw the whole texture beginning from x,y
@@ -98,7 +158,11 @@ namespace jpl{
              * @param z z coord of window to draw begin from
              * @param flag not used. Just for getting around the definition of two method with same parameters
              */ 
-            void draw(Texture* texuture, float x, float y, float z, bool flag);
+            inline void draw(Texture* texture, float x, float y, float z){
+                this->draw(texture, x, y, z, texture->getWidth(), texture->getHeight(), 0, 0, texture->getWidth(), texture->getHeight());
+            }
+            
+            
             /**
              * Draw the whole texture beginning from x,y and zooming it 'till lastX;lastY 
              * 
@@ -111,31 +175,24 @@ namespace jpl{
              * @param heightY height of quad
              * @param flag not used. Just for getting around the definition of two method with same parameters
              */ 
-            void draw(Texture* texuture, float x, float y, float z, int widthX, int heightY, bool flag);
+            inline void draw(Texture* texture, float x, float y, float z, int widthX, int heightY){
+                this->draw(texture, x, y, z, widthX, heightY, 0.0f, 0.0f, texture->getWidth(), texture->getHeight());
+            }
 
 
-            /**
-             * Draw the texture beginning from bottom-left of window
-             * @param texture
-             * @param widthX width of quad 
-             * @param heightY height of quad
-             * @param w width of texture to draw
-             * @param h height of texture to draw
-             */ 
-            void draw(Texture* texuture, int widthX, int heightY, int w, int h);
-
-            /**
-             * Draw the texture beginning from bottom-left of window
-             * @param texture
-             * @param w width of texture to draw
-             * @param h height of texture to draw
-             */ 
-            void draw(Texture* texuture, int w, int h);
 
             /**
              * Since VBO now has 5 value (3 vertices and 2 Texure Vertices), we need to override it
              */ 
-            virtual void vertexAttrib() override;
+            inline virtual void vertexAttrib() override{
+                    //Enabling coords on screen
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+                glEnableVertexAttribArray(0);
+
+                //Enabling texture coords
+                glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+                glEnableVertexAttribArray(1);
+            }
 
 
             static TextureShader* TEXTURE_SHADER_DEFAULT;

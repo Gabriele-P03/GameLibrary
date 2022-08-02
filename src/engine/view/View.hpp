@@ -14,6 +14,7 @@
 
 #include <functional>
 #include "../input/mouse/MouseInput.h"
+#include "../utils/WindowInfo.hpp"
 
 namespace jpl{
 
@@ -43,7 +44,11 @@ namespace jpl{
                 double xMouse, yMouse;
                 getMousePosition(&xMouse, &yMouse);
 
-                if(xMouse >= this->x && xMouse <= this->x + this->w && yMouse >= y && yMouse <= y+h){
+                float widthRatio = (float)jpl::WindowSize::INSTANCE.w/(float)jpl::MAX_WINDOW_W;
+                float heightRatio = (float)jpl::WindowSize::INSTANCE.h/(float)jpl::MAX_WINDOW_H;
+                float x1 = x*widthRatio, y1 = y*heightRatio, w1 = x1 + w*widthRatio, h1 = y1 + h*heightRatio;
+
+                if(xMouse >= x1 && xMouse <= w1 && yMouse >= y1 && yMouse <= h1){
                     
                     if(!this->mouseOver){
 

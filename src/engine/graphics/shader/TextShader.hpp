@@ -81,7 +81,9 @@ namespace jpl{
              * @param blue
              * @param alpha
              */ 
-            void render(std::string text, float x, float y, float z, float w, float h, float red, float green, float blue, float alpha);
+            inline void render(std::string text, float x, float y, float z, float w, float h, float red, float green, float blue, float alpha){
+                this->render(text, x, y, z, w, h, new float[4]{red, green, blue, alpha});
+            }
             
 
 
@@ -95,7 +97,25 @@ namespace jpl{
              * @param h
              * @param colors
              */ 
-            void render(std::string text, float x, float y, float z, float w, float h, float* colors);
+            inline void render(std::string text, float x, float y, float z, float w, float h, float* colors){
+                this->useProgram();
+
+                glUniform4f(glGetUniformLocation(*this->getShaderProgram(), "cols"), colors[0], colors[1], colors[2], colors[3]);
+                
+                if(!text.empty()){
+                    if(text.length() > 0){
+                        for(int i = 0; i < text.length(); i++){
+
+                            char buffer = text.at(i);
+                            int dec = (int)buffer;
+
+                            if(dec >= 32 && dec <= 126){
+                                this->draw(this->font, x+size*i, y, z, w, h, this->chars[dec-32].x, this->chars[dec-32].y, size, size);
+                            }
+                        }
+                    }
+                }
+            }
 
 
             /**
@@ -107,7 +127,9 @@ namespace jpl{
              * @param w
              * @param h
              */ 
-            void render(std::string text, float x, float y, float z, float w, float h);
+            inline void render(std::string text, float x, float y, float z, float w, float h){
+                this->render(text, x, y, z, w, h, 1.0f, 1.0f, 1.0f, 1.0f);
+            }
 
             /**
              * Called for loading font
@@ -133,7 +155,7 @@ namespace jpl{
             /**
              * @return the size of font's chars
              */
-            int getFontSize();
+            inline int getFontSize(){return this->size;}
 
             static TextShader* TEXT_SHADER_DEFAULT;
     };

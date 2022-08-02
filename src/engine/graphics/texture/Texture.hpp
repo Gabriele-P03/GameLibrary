@@ -22,6 +22,8 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+#include "../../logger/Logger.hpp"
+
 namespace jpl{
 
     class Texture{

@@ -29,6 +29,8 @@
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
 
+#include "../../logger/Logger.hpp"
+
 namespace JSON{
 
     typedef unsigned int READ_ERROR;

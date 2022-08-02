@@ -9,9 +9,7 @@ jpl::ModelShader::ModelShader(std::string pathToVertex, std::string pathToFragme
 
 }
 
-void jpl::ModelShader::render(jpl::Mesh* mesh, float x, float y, float z){
-
-    this->useProgram();
+void jpl::ModelShader::setMesh(jpl::Mesh* mesh){
 
     //Check if this shader's objects are already bind
     int currentVAO = 0;
@@ -41,22 +39,4 @@ void jpl::ModelShader::render(jpl::Mesh* mesh, float x, float y, float z){
 
         glBindVertexArray(0);
     }
-
-    //As model which is not a cube, or kinda of, it hardly ever will use indices
-    //We can check it via mesh->getIndices() != nullptr
-    glBindVertexArray(*this->VAO);
-
-    this->translation.x = x;
-    this->translation.y = y;
-    this->translation.z = z;
-
-    this->pushMatrixTransformation();
-
-    if(mesh->getIndices() != nullptr){  
-        glDrawElements(GL_TRIANGLES, mesh->getSizeIndices(), GL_UNSIGNED_INT, (void*)0);
-    }
-    else{
-        glDrawArrays(GL_TRIANGLES, 0, mesh->getSizeVertices()/5);
-    }
-    
 }

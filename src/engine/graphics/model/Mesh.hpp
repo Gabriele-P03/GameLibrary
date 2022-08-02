@@ -20,6 +20,7 @@ namespace jpl{
     class Mesh{
 
         private:
+
             unsigned int _sizeVertices;
             float* vertices;
 

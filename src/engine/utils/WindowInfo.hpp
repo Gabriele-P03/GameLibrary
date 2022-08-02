@@ -10,6 +10,9 @@
 
 namespace jpl{
 
+    //They contains width and height of the window as it was maximized
+    extern int MAX_WINDOW_W, MAX_WINDOW_H;
+
 
     /**
      * Callback for resizing window. This function is passed to GLFW#glfwSetWindowSizeCallback()

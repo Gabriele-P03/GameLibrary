@@ -52,7 +52,9 @@ namespace jpl{
              * 
              * @warning the function in BaseCamera ha an empty body. It will be defined in sub-classes 
              */ 
-            virtual void updateFrustum();
+            inline virtual void updateFrustum(){
+
+            }
 
             /**
              * update combined matrix. It calls also updateView().
@@ -64,7 +66,13 @@ namespace jpl{
              * 
              * @param shaderProgram id of the current shader program. 
              */ 
-            virtual void update(unsigned int shaderProgram);
+            inline virtual void update(unsigned int shaderProgram){
+                
+                this->updateView();
+                this->combined =  this->projection * this->view;
+                if(shaderProgram > 0)
+                    this->pushCombinedMatrix(shaderProgram);
+            }
 
             /**
              * This is the main camera's function. It listen for WASD keys
@@ -74,7 +82,9 @@ namespace jpl{
              * @param speedRot rotation speed
              * @param shaderProgram id of the current shader program
              */ 
-            virtual void tick(float speedMov, float speedRot, unsigned int shaderProgram);
+            inline virtual void tick(float speedMov, float speedRot, unsigned int shaderProgram){
+
+            }
 
             /**
              * @param viewportW 
@@ -85,12 +95,22 @@ namespace jpl{
             /**
              * Called by update(), it updates view matrix
              */ 
-            virtual void updateView();
+            inline virtual void updateView(){
+                this->view = glm::mat4(
+                    this->right.x, this->right.y, this->right.z, 0.0f,
+                    this->up.x, this->up.y, this->up.z, 0.0f,
+                    this->direction.x, this->direction.y, this->direction.z, 0.0f,
+                    this->position.x, this->position.y, this->position.z, 1.0f
+                );
+            }
 
             /**
              * Called by constructor and when camera rotates, it updates up and right vectors
              */ 
-            virtual void updateUpAndRight();
+            inline virtual void updateUpAndRight(){
+                this->right = glm::normalize(glm::cross(this->direction, glm::vec3(0.0f, 1.0f, 0.0f)));
+                this->up = glm::normalize(glm::cross(this->right, this->direction));
+            }
 
             /**
              * Push the new combined matrix to the current shader program pipeline

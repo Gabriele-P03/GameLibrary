@@ -11,7 +11,7 @@ jpl::Texture::Texture(std::string path, bool flipV){
     unsigned error_t = lodepng::decode(this->img->data, this->img->w, this->img->h, getInternalPath(path)->c_str());
 
     if(error_t){
-        std::cout<<"Texture loading error "<<error_t<<": "<<lodepng_error_text(error_t)<<std::endl;
+        jpl::Logger::INSTANCE->print("Texture loading error " + std::to_string(error_t) + ": " + std::string(lodepng_error_text(error_t)));
     }else{
 
         if(flipV)

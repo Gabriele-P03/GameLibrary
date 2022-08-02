@@ -16,7 +16,7 @@ jpl::Audio::Audio(jpl::AudioFile* audioFile){
     //Generating buffer
     alGenBuffers(1, &indexBuffersAudio[indexBuffersAudio.size()-1]);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"Error during generating buffer audio: "<<err<<" - "<<getErrorString(err)<<"\n\n";
+        jpl::Logger::INSTANCE->print("Error during generating buffer audio: " + std::to_string(err) + " - " + getErrorString(err));
         exit(-1);
     }
     //Store the address of this buffer index
@@ -30,7 +30,7 @@ jpl::Audio::Audio(jpl::AudioFile* audioFile){
                 this->audioFile->getDataLength(),
                 this->audioFile->getHeader()->BytesRate/this->audioFile->getHeader()->BlockAlign);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"OpenAl error: generating buffer "<<err;
+        jpl::Logger::INSTANCE->print("OpenAl error: generating buffer " + std::to_string(err));
         exit(-1);
     }
 
@@ -38,7 +38,7 @@ jpl::Audio::Audio(jpl::AudioFile* audioFile){
 
     alGenSources(1, &indexSourcesAudio[indexSourcesAudio.size()-1]);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"OpenAl error: generating source "<<err;
+        jpl::Logger::INSTANCE->print("OpenAl error: generating source " + err);
         exit(-1);
     }
     //Store the address of this source index
@@ -46,18 +46,18 @@ jpl::Audio::Audio(jpl::AudioFile* audioFile){
 
     alSourcei(*this->indexSource, AL_BUFFER, *this->indexBuffer);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"OpenAl error: attaching buffer "<<err;
+        jpl::Logger::INSTANCE->print("OpenAl error: attaching buffer " + err);
         exit(-1);
     }
 
-    std::cout<<"New audio created\n";
+    jpl::Logger::INSTANCE->print("New audio created");
 }
 
 void jpl::Audio::play(){
     int err;
     alSourcePlay(*this->indexSource);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"Could not play audio at buffer source: "<<this->indexSource<<". Error: "<<err<<"\n\n";
+        jpl::Logger::INSTANCE->print("Could not play audio at buffer source: " + std::to_string(*this->indexSource) + ". Error: " + std::to_string(err));
     }    
 
     /*
@@ -75,7 +75,7 @@ void jpl::Audio::stop(){
     int err;
     alSourceStop(*this->indexSource);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"Could not stop audio at buffer source: "<<this->indexSource<<". Error: "<<err<<"\n\n";
+        jpl::Logger::INSTANCE->print("Could not stop audio at buffer source: " + std::to_string(*this->indexSource) + ". Error: " + std::to_string(err));
     }  
 }
 
@@ -83,57 +83,55 @@ void jpl::Audio::rewind(){
     int err;
     alSourceRewind(*this->indexSource);
     if( (err = alGetError()) != AL_NO_ERROR){
-        std::cout<<"Could not reqind audio at buffer source: "<<this->indexSource<<". Error: "<<err<<"\n\n";
+        jpl::Logger::INSTANCE->print("Could not reqind audio at buffer source: " + std::to_string(*this->indexSource) + ". Error: " + std::to_string(err));
     }
 }
 
 void initAudio(){
     
-    std::cout<<"Initializing OpenAl...";
+    jpl::Logger::INSTANCE->print("Initializing OpenAl...");
 
     //Passing nullptr, it's gonna select the default device 
     defaultDev = alcOpenDevice(nullptr);
 
     if(!defaultDev){
-        std::cout<<"Could not initialize OpenAl. Error: "<<alcGetError(defaultDev)<<"\n\n";
+        jpl::Logger::INSTANCE->print("Could not initialize OpenAl. Error: " + alcGetError(defaultDev));
         exit(-1);
     }
 
     context = alcCreateContext(defaultDev, NULL);
     alcMakeContextCurrent(context);
-    std::cout<<"Done\n\n";
 }
 
 void termAudio(){
 
-    std::cout<<"Closing OpenAl...";
+    jpl::Logger::INSTANCE->print("Closing OpenAl...");
     alGetError();
 
-    std::cout<<"Stopping sounds...";
+    jpl::Logger::INSTANCE->print("Stopping sounds...");
     alSourceStopv(indexSourcesAudio.size(), &indexSourcesAudio[0]);
     int err = alGetError();
     if(err != AL_NO_ERROR){
-        std::cout<<"Error during closing sources: "<<err<<"I am not force closing game...";
+        jpl::Logger::INSTANCE->print("Error during closing sound sources: " + err);
     }
 
-    std::cout<<"Destroing sources...";
+    jpl::Logger::INSTANCE->print("Destroing sound sources...");
     alDeleteSources(indexSourcesAudio.size(), &indexSourcesAudio[0]);
     err = alGetError();
     if(err != AL_NO_ERROR){
-        std::cout<<"Error during destroing sources: "<<err<<"I am not force closing game...";
+        jpl::Logger::INSTANCE->print("Error during destroing sound sources: " + err);
     }
 
-    std::cout<<"Destroing buffers...";
+    jpl::Logger::INSTANCE->print("Destroing sound buffers...");
     alDeleteBuffers(indexBuffersAudio.size(), &indexBuffersAudio[0]);
     err = alGetError();
     if(err != AL_NO_ERROR){
-        std::cout<<"Error during destroing buffers: "<<err<<". I am not force closing game...";
+        jpl::Logger::INSTANCE->print("Error during destroing sound buffers: " + err);
     }
 
     alcMakeContextCurrent(NULL);
     alcDestroyContext(context);
     alcCloseDevice(defaultDev);
-    std::cout<<"Done\n\n";
 }
 
 std::string getErrorString(int err){

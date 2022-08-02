@@ -5,6 +5,7 @@ jpl::Mesh::Mesh(float* vertices, unsigned int _sizeVertices, unsigned int* indic
     this->_sizeVertices = _sizeVertices;
     this->indices = indices;
     this->_sizeIndices = _sizeIndices;
+
 }
 
 jpl::Mesh::Mesh(std::vector<float*> vertices){

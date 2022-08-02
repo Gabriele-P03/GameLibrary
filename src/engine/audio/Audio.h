@@ -22,6 +22,8 @@
 #include "AudioFile.h"
 #include <vector>
 
+#include "../logger/Logger.hpp"
+
 static ALCdevice* defaultDev;
 static ALCcontext* context;
 

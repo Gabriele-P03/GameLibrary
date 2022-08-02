@@ -23,7 +23,7 @@ std::string* JSON::read(std::fstream* &file){
             buffer[length] = '\0';
             return new std::string(buffer);
         }else{
-            std::cout<<"Error during file reading. I've read only: "<<std::string(buffer);
+            jpl::Logger::INSTANCE->print("Error during file reading. I've read only: " + std::string(buffer));
             return nullptr;
         }
     }else{
@@ -35,7 +35,7 @@ std::variant<JSON::JSONObject*, JSON::JSONArray*, JSON::READ_ERROR> JSON::parse(
 
     if(jsonAsString.length() > 0){
 
-        boost::replace_all(jsonAsString, "\n", "");
+        boost::replace_all(jsonAsString, "", "");
         boost::replace_all(jsonAsString, " ", "");
         boost::replace_all(jsonAsString, "\"", "");
 
@@ -70,7 +70,7 @@ JSON::JSONObject* JSON::getJSONObject(std::string jsonAsString){
     try{
         return std::get<JSON::JSONObject*>(JSON::parse(jsonAsString));
     }catch(std::bad_variant_access const& ex){
-        std::cout<<ex.what()<<std::endl;
+        jpl::Logger::INSTANCE->print(ex.what());
     }
 
     return nullptr;
@@ -81,7 +81,7 @@ JSON::JSONArray* JSON::getJSONArray(std::string jsonAsString){
     try{
         return std::get<JSON::JSONArray*>(JSON::parse(jsonAsString));
     }catch(std::bad_variant_access const& ex){
-        std::cout<<ex.what()<<std::endl;
+        jpl::Logger::INSTANCE->print(ex.what()) ;
     }
 
     return nullptr;

@@ -47,6 +47,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../../math/JMath.hpp"
 
+#include "../../utils/WindowInfo.hpp"
+
+#include "../../logger/Logger.hpp"
 
 typedef unsigned int JPLstartX;
 typedef unsigned int JPLstartY;

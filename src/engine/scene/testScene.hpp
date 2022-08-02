@@ -45,7 +45,7 @@ namespace jpl{
                 button->overMouseTexture = new Texture("ciao.png");
                 button->outMouseTexture = new Texture("ciao1.png");
                 button->setOnClickListener( [](View* v){
-                    //std::cout<<"Button pressed\n";
+                    //LOGGER->print("Button pressed";
                 } );
             }
 
